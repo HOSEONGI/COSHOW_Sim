@@ -1,0 +1,26 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_unknown_fleet_radio_cannot_silently_pass_static_config __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_unknown_fleet_radio_canno0')
+
+    def test_unknown_fleet_radio_cannot_silently_pass_static_config(tmp_path):
+        source = load_config(mock=True)
+        raw = copy.deepcopy(source.raw)
+        unconfigured = raw['fleet']['drones'][-1]
+        unconfigured['uri'] = None
+        raw['commands']['bt_cwd'] = str(source.bt_cwd)
+        raw['roster_file'] = str(tmp_path / 'roster.yaml')
+        (tmp_path / 'roster.yaml').write_text(yaml.safe_dump(source.roster))
+        (tmp_path / 'field.yaml').write_text(yaml.safe_dump(source.field))
+        path = tmp_path / 'dashboard.yaml'
+        path.write_text(yaml.safe_dump(raw))
+        cfg = load_config(path)
+>       assert any(unconfigured['id'] in error and 'URI' in error for error in cfg.errors)
+E       assert False
+E        +  where False = any(<generator object test_unknown_fleet_radio_cannot_silently_pass_static_config.<locals>.<genexpr> at 0xf4dbd5283e60>)
+
+dashboard/tests/test_core.py:219: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_core.py::test_unknown_fleet_radio_cannot_silently_pass_static_config
+1 failed in 0.09s

@@ -1,0 +1,19 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_mock_accepts_absolute_namespaced_nodes __________________
+
+    def test_mock_accepts_absolute_namespaced_nodes():
+        from dashboard.server import Dashboard
+        cfg = load_config(mock=True)
+        cfg.raw['nodes'] = {key: '/renamed/' + key for key in cfg.raw['nodes']}
+        app = Dashboard(cfg, True)
+        app.world.command('preflight')
+        app.world.checking -= 7
+        app.world.tick()
+>       assert not [r for r in app.state()['checklist'] if r['blocking'] and not r['ok']]
+E       AssertionError: assert not [{'blocking': True, 'detail': '/renamed/server', 'group': 'global', 'id': 'global.server', ...}, {'blocking': True, 'detail': '/renamed/aideck', 'group': 'global', 'id': 'global.aideck', ...}]
+
+dashboard/tests/test_core.py:204: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_core.py::test_mock_accepts_absolute_namespaced_nodes
+1 failed in 0.08s

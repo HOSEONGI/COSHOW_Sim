@@ -1,0 +1,2 @@
+Ubuntu / ROS Humble Docker: actual system ping to 127.0.0.1
+{'ip': '127.0.0.1', 'ok': True, 'rtt_ms': 0.018}

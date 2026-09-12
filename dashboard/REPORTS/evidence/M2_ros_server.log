@@ -1,0 +1,3 @@
+ROS_DOMAIN_ID=82 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8092 mock=False
+======== Running on http://127.0.0.1:8092 ========
+(Press CTRL+C to quit)

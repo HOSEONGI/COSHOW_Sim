@@ -1,7 +1,7 @@
 """Pure BT lawnmower geometry; usable without ROS or importing BT runtime code.
 
 Keep the lane count, centre and zigzag rules identical to
-``bt/scenarios/coshow/bt_nodes.py::_lawnmower``. The config helper reads the
+the scenario's ``bt_nodes._lawnmower``. The config helper reads the
 existing BT configuration, including each drone's search-altitude override.
 """
 

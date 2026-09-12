@@ -1,0 +1,6 @@
+Python: 3.10.12
+Runtime imports: aiohttp, argparse, asyncio, collections, contextlib, copy, dashboard, ipaddress, json, math, os, pathlib, platform, rclpy, re, rosidl_runtime_py, shlex, shutil, sys, threading, time, uuid, yaml
+PASS: 8 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+PASS: grep cf23|/preflight/|/coshow/ dashboard/*.py has no matches
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external URL/import in static HTML/JS/CSS (M2 has only local JPEG)

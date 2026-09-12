@@ -1,0 +1,15 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________________ test_mock_uses_actual_m1_json_shapes _____________________
+
+    def test_mock_uses_actual_m1_json_shapes():
+        cfg = load_config(mock=True)
+        row = scenario(47, cfg)
+>       assert isinstance(row['preflight']['stages'], list)
+E       AssertionError: assert False
+E        +  where False = isinstance({'1': 'pass', '2': 'pass', '3': 'pass', '4': 'pass'}, list)
+
+dashboard/tests/test_core.py:68: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_core.py::test_mock_uses_actual_m1_json_shapes - A...
+1 failed in 0.07s
