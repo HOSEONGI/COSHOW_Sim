@@ -1,0 +1,29 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_async_change_does_not_delay_next_heartbeat_for_two_seconds ________
+
+node = <dashboard_preflight.Preflight object at 0xf49b839367d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf49b839354e0>
+
+    def test_async_change_does_not_delay_next_heartbeat_for_two_seconds(node, monkeypatch):
+        recorder = record(node)
+        monkeypatch.setattr(preflight, "time", time)
+        node._publish_status()
+        # A receipt near the next periodic callback must not suppress the heartbeat
+        # until the following whole-second callback (almost two seconds later).
+        time.sleep(0.8)
+        node._on_status(node.names[0], Status())
+        count = len(recorder.messages)
+        deadline = time.monotonic() + 1.15
+        while len(recorder.messages) == count and time.monotonic() < deadline:
+            rclpy.spin_once(node, timeout_sec=0.02)
+>       assert len(recorder.messages) > count, "heartbeat gap exceeds one second plus timer tolerance"
+E       AssertionError: heartbeat gap exceeds one second plus timer tolerance
+E       assert 3 > 3
+E        +  where 3 = len([{'abort_reason': None, 'drones': {'cf230': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ......cf233': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ...}}, 'ready': False, 'stage': 0, ...}])
+E        +    where [{'abort_reason': None, 'drones': {'cf230': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ......cf233': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ...}}, 'ready': False, 'stage': 0, ...}] = <test_preflight.Recorder object at 0xf49b83ef5d50>.messages
+
+dashboard/tests/test_preflight.py:147: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_preflight.py::test_async_change_does_not_delay_next_heartbeat_for_two_seconds
+1 failed, 14 deselected in 2.13s

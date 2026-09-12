@@ -1,0 +1,6 @@
+BT original control/safety definitions unchanged: 38
+Preflight safety methods + main unchanged: 7
+Preflight original logger calls unchanged: 22
+Python 3.10 grammar: 13 files PASS
+Upstream changed paths: ['bt/scenarios/coshow/bt_nodes.py', 'ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py', 'ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py', 'tools/preflight_node.py']
+PASS: protected files and existing control/safety definitions preserved

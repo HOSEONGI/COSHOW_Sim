@@ -1,0 +1,119 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+________________ test_display_state_is_ready_before_first_pose _________________
+
+channel = <DroneChannel object at 0xf3fb69c25cf0>
+
+    def test_display_state_is_ready_before_first_pose(channel):
+>       assert channel.window == 'AI-Deck UDP ArUco - cf231'
+E       AttributeError: 'DroneChannel' object has no attribute 'window'
+
+dashboard/tests/test_aideck.py:49: AttributeError
+_____________________ test_pose_callback_only_updates_pose _____________________
+
+channel = <DroneChannel object at 0xf3fb69dc1cf0>
+
+    def test_pose_callback_only_updates_pose(channel):
+        display, detections = object(), [{'id': 3}]
+        channel.latest_display = display
+        channel.latest_fps = 10.0
+        channel.shape_logged = True
+        channel.latest_found = detections
+        channel.window_created = True
+        pose = PoseStamped()
+>       channel._on_pose(pose)
+
+dashboard/tests/test_aideck.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <DroneChannel object at 0xf3fb69dc1cf0>
+msg = geometry_msgs.msg.PoseStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id...on=geometry_msgs.msg.Point(x=0.0, y=0.0, z=0.0), orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)))
+
+    def _on_pose(self, msg):
+        self.latest_pose = msg
+    
+>       self.window = "AI-Deck UDP ArUco - {}".format(name)
+E       NameError: name 'name' is not defined
+
+ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py:271: NameError
+_ test_launch_compressed_default_overrides_yaml_and_is_configurable[None-true] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf3fb69cca2f0>
+override = None, expected = 'true'
+
+    @pytest.mark.parametrize('override,expected', [(None, 'true'), ('false', 'false')])
+    def test_launch_compressed_default_overrides_yaml_and_is_configurable(monkeypatch, override, expected):
+        from launch import LaunchContext
+        from launch.actions import DeclareLaunchArgument
+        from launch_ros.actions import Node as LaunchNode
+    
+        path = AIDECK / 'launch/aideck_aruco.launch.py'
+        spec = importlib.util.spec_from_file_location('aideck_launch_m1_test', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        monkeypatch.setattr(module, 'get_package_share_directory', lambda package: str(AIDECK))
+        parameters = []
+    
+        class RecordingNode(LaunchNode):
+            def __init__(self, **kwargs):
+                parameters.extend(kwargs['parameters'])
+                super().__init__(**kwargs)
+    
+        monkeypatch.setattr(module, 'Node', RecordingNode)
+        description = module.generate_launch_description()
+        context = LaunchContext()
+        if override is not None:
+            context.launch_configurations['publish_compressed'] = override
+        for action in description.entities:
+            if isinstance(action, DeclareLaunchArgument):
+                action.execute(context)
+>       assert context.launch_configurations.get('publish_compressed') == expected
+E       AssertionError: assert None == 'true'
+E        +  where None = <built-in method get of dict object at 0xf3fb69cc5800>('publish_compressed')
+E        +    where <built-in method get of dict object at 0xf3fb69cc5800> = {'display': 'false', 'log_detections': 'false', 'namespace': 'aideck', 'params_file': '/ws/ros2_ws/src/aideck_aruco_ros/config/drones.yaml', ...}.get
+E        +      where {'display': 'false', 'log_detections': 'false', 'namespace': 'aideck', 'params_file': '/ws/ros2_ws/src/aideck_aruco_ros/config/drones.yaml', ...} = <launch.launch_context.LaunchContext object at 0xf3fb6a31ce50>.launch_configurations
+
+dashboard/tests/test_aideck.py:101: AssertionError
+_ test_launch_compressed_default_overrides_yaml_and_is_configurable[false-false] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf3fb69b50850>
+override = 'false', expected = 'false'
+
+    @pytest.mark.parametrize('override,expected', [(None, 'true'), ('false', 'false')])
+    def test_launch_compressed_default_overrides_yaml_and_is_configurable(monkeypatch, override, expected):
+        from launch import LaunchContext
+        from launch.actions import DeclareLaunchArgument
+        from launch_ros.actions import Node as LaunchNode
+    
+        path = AIDECK / 'launch/aideck_aruco.launch.py'
+        spec = importlib.util.spec_from_file_location('aideck_launch_m1_test', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        monkeypatch.setattr(module, 'get_package_share_directory', lambda package: str(AIDECK))
+        parameters = []
+    
+        class RecordingNode(LaunchNode):
+            def __init__(self, **kwargs):
+                parameters.extend(kwargs['parameters'])
+                super().__init__(**kwargs)
+    
+        monkeypatch.setattr(module, 'Node', RecordingNode)
+        description = module.generate_launch_description()
+        context = LaunchContext()
+        if override is not None:
+            context.launch_configurations['publish_compressed'] = override
+        for action in description.entities:
+            if isinstance(action, DeclareLaunchArgument):
+                action.execute(context)
+        assert context.launch_configurations.get('publish_compressed') == expected
+        assert parameters[0].perform(context) == str(AIDECK / 'config/drones.yaml')
+>       assert parameters[-1]['publish_compressed'].perform(context) == expected
+E       KeyError: 'publish_compressed'
+
+dashboard/tests/test_aideck.py:103: KeyError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_aideck.py::test_display_state_is_ready_before_first_pose
+FAILED dashboard/tests/test_aideck.py::test_pose_callback_only_updates_pose
+FAILED dashboard/tests/test_aideck.py::test_launch_compressed_default_overrides_yaml_and_is_configurable[None-true]
+FAILED dashboard/tests/test_aideck.py::test_launch_compressed_default_overrides_yaml_and_is_configurable[false-false]
+4 failed in 0.20s

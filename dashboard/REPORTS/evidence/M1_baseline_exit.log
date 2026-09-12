@@ -1,0 +1,19 @@
+bt=/ws/dashboard/run/baseline/bt attempt=1 rc=0 after_SIGINT=8.787s
+
+[BT] Ctrl+C — 전 기체 착륙 후 종료 (8초 대기)
+[BT] land 전송: 없음 (서비스 미준비)
+[BT] 착륙 완료. 종료한다.
+
+bt=/ws/dashboard/run/baseline/bt attempt=2 rc=-6 after_SIGINT=8.608s
+
+[BT] Ctrl+C — 전 기체 착륙 후 종료 (8초 대기)
+[BT] land 전송: 없음 (서비스 미준비)
+[BT] 착륙 완료. 종료한다.
+terminate called without an active exception
+
+bt=/ws/dashboard/run/baseline/bt attempt=3 rc=0 after_SIGINT=8.673s
+
+[BT] Ctrl+C — 전 기체 착륙 후 종료 (8초 대기)
+[BT] land 전송: 없음 (서비스 미준비)
+[BT] 착륙 완료. 종료한다.
+

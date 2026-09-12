@@ -5,6 +5,7 @@ safe_two_cf_square_final.py 의 pre-flight / in-flight 검사를 ROS 노드로 �
 기체 수를 고정하지 않고, 검사 결과를 토픽 하나로 알린다.
 
   /preflight/ready   std_msgs/Bool   (transient_local, 1 Hz)
+  /preflight/status  std_msgs/String JSON (transient_local, 변경 시 + 1 Hz)
 
 BT 의 IsReady 조건이 이 토픽을 보고 트리 전체를 막는다. True 가 되기 전에는
 어떤 이륙·이동 명령도 나가지 않는다.
@@ -28,7 +29,9 @@ ready 가 False 가 되면 BT 는 그 tick 부터 명령을 멈추므로, 착륙
       -p expected_x:="[-1.0,-1.5,-1.5,-1.5]" \
       -p expected_y:="[ 0.0, 1.5, 0.0,-1.5]"
 """
+import json
 import math
+import threading
 import time
 from collections import deque
 
@@ -41,7 +44,7 @@ from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from geometry_msgs.msg import PoseStamped
 from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import SetParameters
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, String
 
 from crazyflie_interfaces.msg import LogDataGeneric, Status
 from crazyflie_interfaces.srv import AddLogging, Arm, Land
@@ -102,6 +105,20 @@ class Preflight(Node):
         self.kal = {n: [deque(maxlen=self.hist_len) for _ in range(3)] for n in self.names}
         self.pose_good_since = {n: None for n in self.names}
         self.low_power_warned = set()
+        # Executor 콜백과 점검 스레드가 공유하는 표시용 상태. 관문 판정은
+        # 원래 검사 자리에서 한 번만 수행하고 그 결과를 보존한다.
+        self._status_lock = threading.RLock()
+        self._stage = 0
+        self._stages = [{'name': name, 'result': 'pending'} for name in (
+            'server_ready', 'reset_estimators', 'gate', 'arm')]
+        self._drone_reports = {n: {
+            'kal_ok': False, 'kal_range': None, 'pose_ok': False, 'pose_err': None,
+            'sup_ok': False, 'sup_why': 'no fresh /status', 'battery_v': None,
+            'armed': False, 'can_fly': False,
+        } for n in self.names}
+        self._abort_reason = None
+        self._last_status_content = None
+        self._last_status_pub = None
 
         for n in self.names:
             self.create_subscription(PoseStamped, '/{}/pose'.format(n),
@@ -121,8 +138,17 @@ class Preflight(Node):
                        reliability=ReliabilityPolicy.RELIABLE,
                        durability=DurabilityPolicy.TRANSIENT_LOCAL))
         self.ready = False
+        self.pub_status = self.create_publisher(
+            String, '/preflight/status',
+            QoSProfile(depth=1,
+                       reliability=ReliabilityPolicy.RELIABLE,
+                       durability=DurabilityPolicy.TRANSIENT_LOCAL))
         self._publish_ready()
+        self._publish_status()
         self.create_timer(1.0, self._publish_ready, callback_group=self.cb)
+        # 변경 발행 직후에도 다음 하트비트가 2초까지 밀리지 않도록
+        # 짧게 확인하고 _publish_status 안에서 단조 시각으로 1 Hz를 제한한다.
+        self.create_timer(0.1, self._publish_status, callback_group=self.cb)
 
         self.cli_params = self.create_client(
             SetParameters, '/crazyflie_server/set_parameters', callback_group=self.cb)
@@ -138,33 +164,73 @@ class Preflight(Node):
 
     # ── 콜백 ──
     def _on_pose(self, name, msg):
-        self.pose[name] = (msg, time.monotonic())
+        with self._status_lock:
+            self.pose[name] = (msg, time.monotonic())
 
     def _on_status(self, name, msg):
-        self.status[name] = (msg, time.monotonic())
+        with self._status_lock:
+            self.status[name] = (msg, time.monotonic())
+            info = int(msg.supervisor_info)
+            self._drone_reports[name].update(
+                battery_v=float(msg.battery_voltage),
+                armed=bool(info & Status.SUPERVISOR_INFO_IS_ARMED),
+                can_fly=bool(info & Status.SUPERVISOR_INFO_CAN_FLY))
+            self._publish_status()
 
     def _on_kalman(self, name, msg):
         if len(msg.values) < 3:
             return
-        for axis in range(3):
-            self.kal[name][axis].append(float(msg.values[axis]))
+        with self._status_lock:
+            for axis in range(3):
+                self.kal[name][axis].append(float(msg.values[axis]))
 
     def _publish_ready(self):
         self.pub_ready.publish(Bool(data=bool(self.ready)))
 
     def _set_ready(self, value, reason=''):
-        if self.ready != value:
-            self.ready = value
-            self.get_logger().info(
-                '[READY] {} {}'.format('True' if value else 'False', reason))
-        self._publish_ready()
+        with self._status_lock:
+            if self.ready != value:
+                if not value:
+                    self._abort_reason = reason or None
+                self.ready = value
+                self.get_logger().info(
+                    '[READY] {} {}'.format('True' if value else 'False', reason))
+            self._publish_ready()
+            self._publish_status()
+
+    def _publish_status(self):
+        # t 만 비교에서 제외한다. 스냅샷과 발행 순서를 같은 잠금으로 묶어
+        # 하트비트가 더 새로운 단계/ready 결과 뒤에 옛 상태를 내지 않게 한다.
+        with self._status_lock:
+            now = time.monotonic()
+            payload = {
+                'stage': self._stage, 'stages': self._stages,
+                'drones': self._drone_reports, 'ready': bool(self.ready),
+                'abort_reason': self._abort_reason,
+            }
+            content = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+            if (content == self._last_status_content
+                    and self._last_status_pub is not None
+                    and now - self._last_status_pub < 1.0):
+                return
+            payload['t'] = now
+            self.pub_status.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+            self._last_status_content = content
+            self._last_status_pub = now
+
+    def _set_stage(self, stage, result):
+        with self._status_lock:
+            self._stage = stage
+            self._stages[stage - 1]['result'] = result
+            self._publish_status()
 
     # ── 관문 ──
     def _kal_ranges(self, name):
-        h = self.kal[name]
-        if any(len(a) < self.hist_len for a in h):
-            return None
-        return tuple(max(a) - min(a) for a in h)
+        with self._status_lock:
+            h = self.kal[name]
+            if any(len(a) < self.hist_len for a in h):
+                return None
+            return tuple(max(a) - min(a) for a in h)
 
     def _pose_ok(self, name):
         entry = self.pose.get(name)
@@ -217,6 +283,7 @@ class Preflight(Node):
     # ── 단계 ──
     def wait_server_ready(self):
         self.get_logger().info('[1/4] crazyflie_server 로깅 초기화 대기...')
+        self._set_stage(1, 'running')
         deadline = time.monotonic() + self.t_server
         while time.monotonic() < deadline:
             svc = all(c.service_is_ready() for c in self.cli_addlog.values())
@@ -224,6 +291,7 @@ class Preflight(Node):
             if svc and stream:
                 time.sleep(0.5)      # 파라미터 콜백 등록까지 여유
                 self.get_logger().info('[1/4] PASS: 서버 준비 완료')
+                self._set_stage(1, 'pass')
                 return True
             time.sleep(0.1)
         self.get_logger().error(
@@ -231,16 +299,20 @@ class Preflight(Node):
             'crazyflies.yaml 의 custom_topics 와 기체 연결을 확인하라.'.format(
                 all(c.service_is_ready() for c in self.cli_addlog.values()),
                 all(len(self.kal[n][0]) >= 3 for n in self.names)))
+        self._set_stage(1, 'fail')
         return False
 
     def reset_estimators(self):
         self.get_logger().info('[2/4] 칼만 추정기 초기화...')
-        for n in self.names:
-            for a in self.kal[n]:
-                a.clear()
-            self.pose_good_since[n] = None
+        self._set_stage(2, 'running')
+        with self._status_lock:
+            for n in self.names:
+                for a in self.kal[n]:
+                    a.clear()
+                self.pose_good_since[n] = None
         if not self.cli_params.wait_for_service(timeout_sec=3.0):
             self.get_logger().error('[2/4] FAIL: set_parameters 서비스 없음')
+            self._set_stage(2, 'fail')
             return False
         req = SetParameters.Request()
         req.parameters = [Parameter(
@@ -252,29 +324,38 @@ class Preflight(Node):
             time.sleep(0.02)
         if not fut.done() or fut.result() is None:
             self.get_logger().error('[2/4] FAIL: resetEstimation 응답 없음')
+            self._set_stage(2, 'fail')
             return False
         bad = [r.reason for r in fut.result().results if not r.successful]
         if bad:
             self.get_logger().error('[2/4] FAIL: {}'.format(bad))
+            self._set_stage(2, 'fail')
             return False
         time.sleep(0.3)
-        for n in self.names:            # 초기화 전환 중 샘플 폐기
-            for a in self.kal[n]:
-                a.clear()
+        with self._status_lock:
+            for n in self.names:            # 초기화 전환 중 샘플 폐기
+                for a in self.kal[n]:
+                    a.clear()
         self.get_logger().info('[2/4] PASS: 추정기 초기화 완료')
+        self._set_stage(2, 'pass')
         return True
 
     def wait_preflight(self):
         self.get_logger().info('[3/4] 전 기체 준비 관문 대기...')
+        self._set_stage(3, 'running')
         start = time.monotonic()
         last = 0.0
         while time.monotonic() - start < self.t_pre:
             lines, all_ok = [], True
             for n in self.names:
-                rng = self._kal_ranges(n)
-                kal_ok = rng is not None and all(r < self.kal_thr for r in rng)
-                pose_ok, err = self._pose_ok(n)
-                sup_ok, sup_why = self._supervisor_ok(n)
+                with self._status_lock:
+                    rng = self._kal_ranges(n)
+                    kal_ok = rng is not None and all(r < self.kal_thr for r in rng)
+                    pose_ok, err = self._pose_ok(n)
+                    sup_ok, sup_why = self._supervisor_ok(n)
+                    self._drone_reports[n].update(
+                        kal_ok=kal_ok, kal_range=rng, pose_ok=pose_ok,
+                        pose_err=err, sup_ok=sup_ok, sup_why=sup_why)
                 all_ok = all_ok and kal_ok and pose_ok and sup_ok
                 lines.append(
                     '  {}: kalman={} {} | pose={} {} | supervisor={} ({})'.format(
@@ -285,8 +366,10 @@ class Preflight(Node):
                         'no pose' if err is None else
                         'err=({:.3f},{:.3f},{:.3f})'.format(*err),
                         sup_ok, sup_why))
+            self._publish_status()
             if all_ok:
                 self.get_logger().info('[3/4] PASS: 전 기체 준비 완료\n' + '\n'.join(lines))
+                self._set_stage(3, 'pass')
                 return True
             now = time.monotonic()
             if now - last >= 1.0:
@@ -295,13 +378,16 @@ class Preflight(Node):
             time.sleep(0.05)
         self.get_logger().error(
             '[3/4] FAIL: {:.0f}초 안에 수렴하지 못했다'.format(self.t_pre))
+        self._set_stage(3, 'fail')
         return False
 
     def arm_all(self):
         self.get_logger().info('[4/4] 무장 요청...')
+        self._set_stage(4, 'running')
         for n, cli in self.cli_arm.items():
             if not cli.wait_for_service(timeout_sec=2.0):
                 self.get_logger().error('[4/4] FAIL: {} arm 서비스 없음'.format(n))
+                self._set_stage(4, 'fail')
                 return False
             req = Arm.Request()
             req.arm = True
@@ -310,6 +396,7 @@ class Preflight(Node):
         while time.monotonic() < deadline:
             if all(self._postarm_ok(n) for n in self.names):
                 self.get_logger().info('[4/4] PASS: IS_ARMED + CAN_FLY 확인')
+                self._set_stage(4, 'pass')
                 return True
             time.sleep(0.05)
         for n in self.names:
@@ -317,6 +404,7 @@ class Preflight(Node):
             req.arm = False
             self.cli_arm[n].call_async(req)
         self.get_logger().error('[4/4] FAIL: 무장 확인 실패. 해제했다.')
+        self._set_stage(4, 'fail')
         return False
 
     # ── 비행 중 감시 ──

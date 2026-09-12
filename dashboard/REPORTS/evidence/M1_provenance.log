@@ -1,0 +1,7 @@
+Baseline commit: 2a464d4007edfed09760f42c0391de6f38cb5f9a
+bt/scenarios/coshow/bt_nodes.py: reference matches baseline = True
+tools/preflight_node.py: reference matches baseline = True
+ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py: reference matches baseline = True
+ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py: reference matches baseline = True
+bt/scenarios/coshow/configs/coshow_rehearsal.yaml: reference matches baseline = True
+Package ZIP SHA256: 0108f0d19e6d4220a3a9389a144c37ebcb54ea49ab9b53b62a280edc185d8d8c

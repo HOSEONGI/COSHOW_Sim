@@ -21,6 +21,7 @@
   cmd[robot]               : 마지막 명령 {kind, goal, t}
   led[robot]               : 마지막 LED 색
 """
+import json
 import math
 import signal
 import threading
@@ -239,6 +240,14 @@ class UpdateBlackboard(ConditionWithROSTopics):
 
         self._target_id_snapshot = None      # 콜백 스레드가 참조할 target_id 사본
 
+        self._pub_mission = node.create_publisher(
+            String, '/coshow/mission_state',
+            QoSProfile(depth=1,
+                       reliability=ReliabilityPolicy.RELIABLE,
+                       durability=DurabilityPolicy.TRANSIENT_LOCAL))
+        self._mission_signature = None
+        self._mission_last_pub = 0.0
+
         # Ctrl+C 로 BT 를 끌 때 기체를 공중에 두고 나가지 않도록.
         # 트리 구성은 메인 스레드에서 일어나므로 여기서 시그널을 잡을 수 있다.
         _install_emergency_land(node)
@@ -305,6 +314,33 @@ class UpdateBlackboard(ConditionWithROSTopics):
                 self._seen_now[drone] = t
 
     # ---- tick (BT 스레드) ----
+    def _publish_mission_state(self, bb):
+        """단일 작성자인 BT tick에서만 상태 변경과 1 Hz heartbeat를 발행한다."""
+        payload = {
+            'phase': _phase(bb),
+            'mission_marker_id': bb.get('mission_marker', {}).get('id'),
+            'target_id': bb.get('target_id'),
+            'finder': bb.get('finder'),
+            'P_N': bb.get('P_N'),
+            'target_confirmed': bool(bb.get('target_confirmed', False)),
+            'target_confirm_note': bb.get('target_confirm_note'),
+            'search_progress': bb.get('search_progress', {}),
+            'missing_pose': bb['missing_pose'],
+            'preflight_required': bool(C.get('preflight', {}).get('required', False)),
+            'preflight_ready': bool(bb.get('preflight_ready', False)),
+            'cmd': bb.get('cmd', {}),
+            'led': bb.get('led', {}),
+            'rescue_done_t': bb.get('rescue_done_t', 0.0),
+        }
+        # 문자열을 보관해 cmd/led의 제자리 변경도 감지한다. cmd.*.t는 비교에 남긴다.
+        signature = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+        t = bb['now']
+        if signature != self._mission_signature or t - self._mission_last_pub >= 1.0:
+            payload['t'] = t
+            self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+            self._mission_signature = signature
+            self._mission_last_pub = t
+
     def _predicate(self, agent, bb):
         t = now()
         bb['now'] = t
@@ -333,9 +369,9 @@ class UpdateBlackboard(ConditionWithROSTopics):
 
         # 필수 pose 수신 확인
         required = list(DRONES) + list(LIMOS)
-        if any(r not in bb['pose'] for r in required):
-            missing = [r for r in required if r not in bb['pose']]
-            bb['missing_pose'] = missing
+        bb['missing_pose'] = [r for r in required if r not in bb['pose']]
+        if bb['missing_pose']:
+            self._publish_mission_state(bb)
             return False
 
         # [미션 마커 확정] 게이팅: 발신=cf230, ID 범위(콜백에서 필터), cf230 가 관측점에 도착한 이후 스탬프
@@ -371,6 +407,7 @@ class UpdateBlackboard(ConditionWithROSTopics):
         # 편의 키: P_N (LimoNavigateTo/DroneGoTo 의 target_key 로 사용)
         if bb['target_marker']['found']:
             bb['P_N'] = bb['target_marker']['pose']
+        self._publish_mission_state(bb)
         return True
 
 
@@ -464,6 +501,34 @@ def _limo_home(bb, robot):
         return False
     bx, by = LIMOS[robot]['base']
     return _dist2(arr['goal'][0], arr['goal'][1], bx, by) <= float(TOL['limo_at'])
+
+
+def _phase(bb):
+    """표시용 읽기 전용 상태. 완료 latch를 쓰거나 제어 조건을 실행하지 않는다.
+
+    수신/안전 관문 다음에는 확정된 후기 상태를 먼저 읽는다. 관측 드론의
+    위치가 잠시 바뀌어도 구조·복귀를 이전 handover 단계로 되돌리지 않는다.
+    """
+    if bb.get('missing_pose'):
+        return 'waiting_poses'
+    if bool(C.get('preflight', {}).get('required', False)) and not bb.get('preflight_ready', False):
+        return 'blocked_preflight'
+    if bb.get('rescue_done_t', 0.0) > 0:
+        complete = all(_drone_home(bb, d) for d in DRONES) and all(_limo_home(bb, l) for l in LIMOS)
+        return 'done' if complete else 'return'
+    if bb.get('target_marker', {}).get('found', False):
+        if not bb.get('target_confirmed', False):
+            return 'capture'
+        arr = bb.get('limo_arrived', {}).get('limo_b')
+        pn = bb.get('P_N')
+        # IsRescue와 같은 도착 반경. 경과 시간에 의한 rescue_done_t latch는 BT만 쓴다.
+        arrived = (arr is not None and pn is not None
+                   and _dist2(arr['goal'][0], arr['goal'][1], pn['x'], pn['y'])
+                   <= float(TOL['limo_at']) + 0.1)
+        return 'rescue' if arrived else 'rescue_dispatch'
+    if bb.get('mission_marker', {}).get('found', False):
+        return 'search' if _drone_home(bb, C['observe_drone']) else 'handover'
+    return 'observe'
 
 
 class IsMissionComplete(BBCondition):

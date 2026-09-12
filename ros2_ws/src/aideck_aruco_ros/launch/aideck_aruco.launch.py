@@ -27,6 +27,7 @@ def generate_launch_description():
     display = LaunchConfiguration('display')
     log_detections = LaunchConfiguration('log_detections')
     publish_empty_text = LaunchConfiguration('publish_empty_text')
+    publish_compressed = LaunchConfiguration('publish_compressed')
 
     return LaunchDescription([
         DeclareLaunchArgument('params_file', default_value=default_params),
@@ -34,6 +35,7 @@ def generate_launch_description():
         DeclareLaunchArgument('display', default_value='false'),
         DeclareLaunchArgument('log_detections', default_value='false'),
         DeclareLaunchArgument('publish_empty_text', default_value='false'),
+        DeclareLaunchArgument('publish_compressed', default_value='true'),
 
         Node(
             package='aideck_aruco_ros',
@@ -48,6 +50,7 @@ def generate_launch_description():
                     'display': display,
                     'log_detections': log_detections,
                     'publish_empty_text': publish_empty_text,
+                    'publish_compressed': publish_compressed,
                 },
             ],
         ),

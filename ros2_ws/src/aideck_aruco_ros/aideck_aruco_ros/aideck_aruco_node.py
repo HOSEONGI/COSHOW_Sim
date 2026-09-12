@@ -265,15 +265,15 @@ class DroneChannel(object):
             MarkerDetections, "/{}/marker_detections".format(name), data_qos
         )
 
-    def _on_pose(self, msg):
-        self.latest_pose = msg
-
         self.window = "AI-Deck UDP ArUco - {}".format(name)
         self.latest_display = None
         self.latest_fps = 0.0
         self.shape_logged = False
         self.latest_found = []
         self.window_created = False
+
+    def _on_pose(self, msg):
+        self.latest_pose = msg
 
 
 class AideckArucoNode(Node):

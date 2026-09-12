@@ -1,0 +1,1243 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF             [100%]
+=================================== FAILURES ===================================
+________________ test_phase_contract_and_purity[waiting_poses] _________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': ['cf230'], 'mission_marker': {'found': True, 'id': 13}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e29b6290>
+phase = 'waiting_poses'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+---------------------------- Captured stdout setup -----------------------------
+pygame 2.1.2 (SDL 2.0.20, Python 3.10.12)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+______________ test_phase_contract_and_purity[blocked_preflight] _______________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e0465750>
+phase = 'blocked_preflight'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+___________________ test_phase_contract_and_purity[observe] ____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': False}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e02005b0>
+phase = 'observe'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+___________________ test_phase_contract_and_purity[handover] ___________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e269a980>
+phase = 'handover'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+____________________ test_phase_contract_and_purity[search] ____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e021bac0>
+phase = 'search'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+___________________ test_phase_contract_and_purity[capture] ____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0, 'z': 0.8}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e01e49a0>
+phase = 'capture'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+_______________ test_phase_contract_and_purity[rescue_dispatch] ________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0, 'z': 0.8}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e029d540>
+phase = 'rescue_dispatch'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+____________________ test_phase_contract_and_purity[rescue] ____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0, 'z': 0.8}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (0.0, 0.0), 't': -1000.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e01d8cd0>
+phase = 'rescue'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+____________________ test_phase_contract_and_purity[return] ____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0, 'z': 0.8}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e02b4880>
+phase = 'return'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+_____________________ test_phase_contract_and_purity[done] _____________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0, 'z': 0.8}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True, 'id': 13}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e02e2350>
+phase = 'done'
+
+    @pytest.mark.parametrize('phase', [
+        'waiting_poses', 'blocked_preflight', 'observe', 'handover', 'search',
+        'capture', 'rescue_dispatch', 'rescue', 'return', 'done',
+    ])
+    def test_phase_contract_and_purity(bt_nodes, home_bb, monkeypatch, phase):
+        bb = home_bb
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': True})
+        if phase != 'observe':
+            bb['mission_marker'] = {'found': True, 'id': 13}
+        if phase == 'waiting_poses':
+            bb['missing_pose'] = ['cf230']
+            bb['preflight_ready'] = False
+        elif phase == 'blocked_preflight':
+            bb['preflight_ready'] = False
+        elif phase == 'handover':
+            bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        elif phase in ('capture', 'rescue_dispatch', 'rescue', 'return', 'done'):
+            bb['target_marker'] = {'found': True}
+            bb['P_N'] = {'x': 0.0, 'y': 0.0, 'z': 0.8}
+            bb['target_confirmed'] = phase != 'capture'
+            if phase == 'rescue':
+                # The display cannot perform IsRescue's elapsed-time latch.
+                bb['limo_arrived']['limo_b'] = {'goal': (0.0, 0.0), 't': -1000.0}
+            if phase in ('return', 'done'):
+                bb['rescue_done_t'] = 90.0
+            if phase == 'return':
+                bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+        before = copy.deepcopy(bb)
+>       assert bt_nodes._phase(bb) == phase
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:40: AttributeError
+__________________________ test_preflight_is_optional __________________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': False}, 'now': 100.0, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e2698f10>
+
+    def test_preflight_is_optional(bt_nodes, home_bb, monkeypatch):
+        monkeypatch.setitem(bt_nodes.C, 'preflight', {'required': False})
+        home_bb['preflight_ready'] = False
+>       assert bt_nodes._phase(home_bb) == 'observe'
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:47: AttributeError
+____ test_target_latch_takes_priority_over_observer_movement[False-capture] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, ...}
+confirmed = False, expected = 'capture'
+
+    @pytest.mark.parametrize('confirmed,expected', [(False, 'capture'), (True, 'rescue_dispatch')])
+    def test_target_latch_takes_priority_over_observer_movement(bt_nodes, home_bb, confirmed, expected):
+        home_bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                       target_confirmed=confirmed, P_N={'x': 0.0, 'y': 0.0})
+        home_bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+>       assert bt_nodes._phase(home_bb) == expected
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:55: AttributeError
+_ test_target_latch_takes_priority_over_observer_movement[True-rescue_dispatch] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, ...}
+confirmed = True, expected = 'rescue_dispatch'
+
+    @pytest.mark.parametrize('confirmed,expected', [(False, 'capture'), (True, 'rescue_dispatch')])
+    def test_target_latch_takes_priority_over_observer_movement(bt_nodes, home_bb, confirmed, expected):
+        home_bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                       target_confirmed=confirmed, P_N={'x': 0.0, 'y': 0.0})
+        home_bb['pose'][bt_nodes.C['observe_drone']]['z'] = 0.5
+>       assert bt_nodes._phase(home_bb) == expected
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:55: AttributeError
+_______ test_rescue_uses_same_inclusive_radius_as_is_rescue[0.0-rescue] ________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (0.4, 0.0), 't': 99.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, ...}
+offset = 0.0, expected = 'rescue'
+
+    @pytest.mark.parametrize('offset,expected', [(0.0, 'rescue'), (1e-9, 'rescue_dispatch')])
+    def test_rescue_uses_same_inclusive_radius_as_is_rescue(bt_nodes, home_bb, offset, expected):
+        home_bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                       target_confirmed=True, P_N={'x': 0.0, 'y': 0.0})
+        radius = float(bt_nodes.TOL['limo_at']) + 0.1
+        home_bb['limo_arrived']['limo_b'] = {'goal': (radius + offset, 0.0), 't': 99.0}
+>       assert bt_nodes._phase(home_bb) == expected
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:64: AttributeError
+__ test_rescue_uses_same_inclusive_radius_as_is_rescue[1e-09-rescue_dispatch] __
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (0.40000000100000005, 0.0), 't': 99.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, ...}
+offset = 1e-09, expected = 'rescue_dispatch'
+
+    @pytest.mark.parametrize('offset,expected', [(0.0, 'rescue'), (1e-9, 'rescue_dispatch')])
+    def test_rescue_uses_same_inclusive_radius_as_is_rescue(bt_nodes, home_bb, offset, expected):
+        home_bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                       target_confirmed=True, P_N={'x': 0.0, 'y': 0.0})
+        radius = float(bt_nodes.TOL['limo_at']) + 0.1
+        home_bb['limo_arrived']['limo_b'] = {'goal': (radius + offset, 0.0), 't': 99.0}
+>       assert bt_nodes._phase(home_bb) == expected
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:64: AttributeError
+________ test_rescue_requires_matching_arrival_record_not_current_pose _________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'P_N': {'x': 0.0, 'y': 0.0}, 'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, ...}
+
+    def test_rescue_requires_matching_arrival_record_not_current_pose(bt_nodes, home_bb):
+        home_bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                       target_confirmed=True, P_N={'x': 0.0, 'y': 0.0})
+        home_bb['pose']['limo_b'] = {'x': 0.0, 'y': 0.0}
+>       assert bt_nodes._phase(home_bb) == 'rescue_dispatch'
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:71: AttributeError
+_____ test_done_matches_existing_mission_complete_boundaries[cf231-z-0.0] ______
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'cf231', field = 'z', extra = 0.0
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+____ test_done_matches_existing_mission_complete_boundaries[cf231-z-1e-09] _____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'cf231', field = 'z', extra = 1e-09
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+_____ test_done_matches_existing_mission_complete_boundaries[cf231-x-0.0] ______
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'cf231', field = 'x', extra = 0.0
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+____ test_done_matches_existing_mission_complete_boundaries[cf231-x-1e-09] _____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-4.0, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'cf231', field = 'x', extra = 1e-09
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+___ test_done_matches_existing_mission_complete_boundaries[limo_a-goal-0.0] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-3.7, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'limo_a', field = 'goal', extra = 0.0
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+__ test_done_matches_existing_mission_complete_boundaries[limo_a-goal-1e-09] ___
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+home_bb = {'limo_arrived': {'limo_a': {'goal': (-3.699999999, 2.0), 't': 0.0}, 'limo_b': {'goal': (-4.0, -2.0), 't': 0.0}}, 'missing_pose': [], 'mission_marker': {'found': True}, 'now': 100.0, ...}
+robot = 'limo_a', field = 'goal', extra = 1e-09
+
+    @pytest.mark.parametrize('robot,field,extra', [
+        ('cf231', 'z', 0.0), ('cf231', 'z', 1e-9),
+        ('cf231', 'x', 0.0), ('cf231', 'x', 1e-9),
+        ('limo_a', 'goal', 0.0), ('limo_a', 'goal', 1e-9),
+    ])
+    def test_done_matches_existing_mission_complete_boundaries(bt_nodes, home_bb, robot, field, extra):
+        bb = home_bb
+        bb.update(mission_marker={'found': True}, target_marker={'found': True},
+                  target_confirmed=True, rescue_done_t=50.0)
+        if field == 'z':
+            bb['pose'][robot]['z'] = float(bt_nodes.TOL['landed_z']) + extra
+        elif field == 'x':
+            bb['pose'][robot]['x'] += float(bt_nodes.TOL['drone_at']) * 2 + extra
+        else:
+            bx, by = bt_nodes.LIMOS[robot]['base']
+            bb['limo_arrived'][robot]['goal'] = (bx + float(bt_nodes.TOL['limo_at']) + extra, by)
+        complete = bt_nodes.IsMissionComplete('complete', None)._check(None, bb)
+>       assert (bt_nodes._phase(bb) == 'done') == (complete == bt_nodes.Status.SUCCESS)
+E       AttributeError: module 'scenarios.coshow.bt_nodes' has no attribute '_phase'
+
+dashboard/tests/test_phase.py:93: AttributeError
+__________ test_mission_publishes_missing_pose_and_recovers_each_tick __________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xf4c1e0226c80>, [100.0], [], {})
+
+    def test_mission_publishes_missing_pose_and_recovers_each_tick(bt_nodes, updater):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        assert tick._predicate(None, bb) is False
+>       assert messages[-1]['phase'] == 'waiting_poses'
+E       IndexError: list index out of range
+
+dashboard/tests/test_phase.py:130: IndexError
+_______ test_mission_excludes_only_top_level_time_from_change_detection ________
+
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xf4c1e0226ce0>, [100.99], [], {})
+
+    def test_mission_excludes_only_top_level_time_from_change_detection(updater):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        tick._predicate(None, bb)
+        for t in (100.1, 100.5, 100.99):
+            clock[0] = t
+            tick._predicate(None, bb)
+>       assert len(messages) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+dashboard/tests/test_phase.py:154: AssertionError
+___________________ test_mission_schema_and_integer_progress ___________________
+
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xf4c1e0269600>, [100.0], [], {})
+
+    def test_mission_schema_and_integer_progress(updater):
+        tick, clock, messages, pubs = updater
+        bb = {'mission_marker': {'found': True, 'id': 13},
+              'search_progress': {'cf231': 1}, 'led': {'cf231': 'blue'}}
+        tick._predicate(None, bb)
+>       assert set(messages[-1]) == {
+            'phase', 't', 'mission_marker_id', 'target_id', 'finder', 'P_N',
+            'target_confirmed', 'target_confirm_note', 'search_progress', 'missing_pose',
+            'preflight_required', 'preflight_ready', 'cmd', 'led', 'rescue_done_t',
+        }
+E       IndexError: list index out of range
+
+dashboard/tests/test_phase.py:176: IndexError
+__________________ test_rehearsal_matches_actual_bt_lawnmower __________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None
+
+    def test_rehearsal_matches_actual_bt_lawnmower(bt_nodes, lanes):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:17: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-0.4-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.4, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-0.4-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.4, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-0.5-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.5, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-0.5-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.5, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-2.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 2.0, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-2.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 2.0, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-9.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 9.0, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+____ test_paths_match_original_with_axes_rounding_and_overrides[None-9.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 9.0, robot = None
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.4-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.4, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.4-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.4, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.5-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.5, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.5-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.5, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-2.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 2.0, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-2.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 2.0, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-9.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 9.0, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf231-9.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 9.0, robot = 'cf231'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.4-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.4, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.4-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.4, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.5-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.5, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.5-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.5, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-2.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 2.0, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-2.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 2.0, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-9.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 9.0, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf232-9.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 9.0, robot = 'cf232'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.4-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.4, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.4-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.4, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.5-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 0.5, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.5-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 0.5, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-2.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 2.0, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-2.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 2.0, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-9.0-x] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'x', spacing = 9.0, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+___ test_paths_match_original_with_axes_rounding_and_overrides[cf233-9.0-y] ____
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None, axis = 'y', spacing = 9.0, robot = 'cf233'
+
+    @pytest.mark.parametrize('axis', ['x', 'y'])
+    @pytest.mark.parametrize('spacing', [0.4, 0.5, 2.0, 9.0])
+    @pytest.mark.parametrize('robot', [None, 'cf231', 'cf232', 'cf233'])
+    def test_paths_match_original_with_axes_rounding_and_overrides(bt_nodes, lanes, axis, spacing, robot):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:35: AssertionError
+__________________ test_lanes_config_global_fallback_and_axis __________________
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+lanes = None
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf4c1e01b5d50>
+
+    def test_lanes_config_global_fallback_and_axis(bt_nodes, lanes, monkeypatch):
+>       assert lanes is not None, 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert None is not None
+
+dashboard/tests/test_lanes.py:43: AssertionError
+_________________ test_lanes_module_imports_without_ros_or_bt __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_lanes_module_imports_with0')
+
+    def test_lanes_module_imports_without_ros_or_bt(tmp_path):
+        """A fresh isolated Python process cannot borrow the test fixture's imports."""
+        import os
+        from pathlib import Path
+        import subprocess
+        import sys
+    
+        module = Path(__file__).resolve().parents[1] / 'lanes.py'
+>       assert module.is_file(), 'dashboard.lanes is missing'
+E       AssertionError: dashboard.lanes is missing
+E       assert False
+E        +  where False = <bound method Path.is_file of PosixPath('/ws/dashboard/lanes.py')>()
+E        +    where <bound method Path.is_file of PosixPath('/ws/dashboard/lanes.py')> = PosixPath('/ws/dashboard/lanes.py').is_file
+
+dashboard/tests/test_lanes.py:65: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[waiting_poses]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[blocked_preflight]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[observe]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[handover]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[search]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[capture]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[rescue_dispatch]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[rescue]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[return]
+FAILED dashboard/tests/test_phase.py::test_phase_contract_and_purity[done] - ...
+FAILED dashboard/tests/test_phase.py::test_preflight_is_optional - AttributeE...
+FAILED dashboard/tests/test_phase.py::test_target_latch_takes_priority_over_observer_movement[False-capture]
+FAILED dashboard/tests/test_phase.py::test_target_latch_takes_priority_over_observer_movement[True-rescue_dispatch]
+FAILED dashboard/tests/test_phase.py::test_rescue_uses_same_inclusive_radius_as_is_rescue[0.0-rescue]
+FAILED dashboard/tests/test_phase.py::test_rescue_uses_same_inclusive_radius_as_is_rescue[1e-09-rescue_dispatch]
+FAILED dashboard/tests/test_phase.py::test_rescue_requires_matching_arrival_record_not_current_pose
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[cf231-z-0.0]
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[cf231-z-1e-09]
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[cf231-x-0.0]
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[cf231-x-1e-09]
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[limo_a-goal-0.0]
+FAILED dashboard/tests/test_phase.py::test_done_matches_existing_mission_complete_boundaries[limo_a-goal-1e-09]
+FAILED dashboard/tests/test_phase.py::test_mission_publishes_missing_pose_and_recovers_each_tick
+FAILED dashboard/tests/test_phase.py::test_mission_excludes_only_top_level_time_from_change_detection
+FAILED dashboard/tests/test_phase.py::test_mission_schema_and_integer_progress
+FAILED dashboard/tests/test_lanes.py::test_rehearsal_matches_actual_bt_lawnmower
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-0.4-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-0.4-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-0.5-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-0.5-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-2.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-2.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-9.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[None-9.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.4-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.4-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.5-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-0.5-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-2.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-2.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-9.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf231-9.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.4-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.4-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.5-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-0.5-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-2.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-2.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-9.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf232-9.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.4-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.4-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.5-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-0.5-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-2.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-2.0-y]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-9.0-x]
+FAILED dashboard/tests/test_lanes.py::test_paths_match_original_with_axes_rounding_and_overrides[cf233-9.0-y]
+FAILED dashboard/tests/test_lanes.py::test_lanes_config_global_fallback_and_axis
+FAILED dashboard/tests/test_lanes.py::test_lanes_module_imports_without_ros_or_bt
+60 failed in 0.35s

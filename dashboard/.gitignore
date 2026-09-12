@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+logs/
+run/
+
+# Reviewed milestone evidence is intentionally versioned (root ignores *.log).
+!REPORTS/evidence/*.log

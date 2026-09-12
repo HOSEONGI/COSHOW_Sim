@@ -1,0 +1,227 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+__________________ test_initial_status_schema_and_latched_qos __________________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8ee8ac0>
+
+    def test_initial_status_schema_and_latched_qos(node):
+>       assert hasattr(node, "pub_status"), "missing /preflight/status publisher"
+E       AssertionError: missing /preflight/status publisher
+E       assert False
+E        +  where False = hasattr(<dashboard_preflight.Preflight object at 0xf7c7e8ee8ac0>, 'pub_status')
+
+dashboard/tests/test_preflight.py:78: AssertionError
+__________ test_only_content_changes_or_one_second_heartbeat_publish ___________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eb8760>
+
+    def test_only_content_changes_or_one_second_heartbeat_publish(node):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eb8760>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+_______ test_failure_marks_original_stage_decision[wait_server_ready-1] ________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e9040be0>
+method = 'wait_server_ready', stage = 1
+
+    @pytest.mark.parametrize("method,stage", [
+        ("wait_server_ready", 1), ("reset_estimators", 2),
+        ("wait_preflight", 3), ("arm_all", 4),
+    ])
+    def test_failure_marks_original_stage_decision(node, method, stage):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e9040be0>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+________ test_failure_marks_original_stage_decision[reset_estimators-2] ________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f2950>
+method = 'reset_estimators', stage = 2
+
+    @pytest.mark.parametrize("method,stage", [
+        ("wait_server_ready", 1), ("reset_estimators", 2),
+        ("wait_preflight", 3), ("arm_all", 4),
+    ])
+    def test_failure_marks_original_stage_decision(node, method, stage):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f2950>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+_________ test_failure_marks_original_stage_decision[wait_preflight-3] _________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94a2320>
+method = 'wait_preflight', stage = 3
+
+    @pytest.mark.parametrize("method,stage", [
+        ("wait_server_ready", 1), ("reset_estimators", 2),
+        ("wait_preflight", 3), ("arm_all", 4),
+    ])
+    def test_failure_marks_original_stage_decision(node, method, stage):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94a2320>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+____________ test_failure_marks_original_stage_decision[arm_all-4] _____________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f1630>
+method = 'arm_all', stage = 4
+
+    @pytest.mark.parametrize("method,stage", [
+        ("wait_server_ready", 1), ("reset_estimators", 2),
+        ("wait_preflight", 3), ("arm_all", 4),
+    ])
+    def test_failure_marks_original_stage_decision(node, method, stage):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f1630>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+________ test_gate_observation_is_cached_and_flight_status_remains_live ________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8e2a500>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7c7e8e2a650>
+
+    def test_gate_observation_is_cached_and_flight_status_remains_live(node, monkeypatch):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8e2a500>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+_____________ test_stage_success_is_reported_at_each_existing_pass _____________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eb9180>
+
+    def test_stage_success_is_reported_at_each_existing_pass(node):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:178: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eb9180>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+___________ test_arm_timeout_still_disarms_before_reporting_failure ____________
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f31f0>
+
+    def test_arm_timeout_still_disarms_before_reporting_failure(node):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e94f31f0>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+__ test_inflight_abort_publishes_exact_reason_and_ready_false_before_landing ___
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eeba90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7c7e8eea020>
+
+    def test_inflight_abort_publishes_exact_reason_and_ready_false_before_landing(node, monkeypatch):
+>       recorder = record(node)
+
+dashboard/tests/test_preflight.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = <dashboard_preflight.Preflight object at 0xf7c7e8eeba90>
+
+    def record(node):
+        recorder = Recorder()
+        node.pub_status = recorder
+        node.test_clock.now += 1.01
+>       node._publish_status()
+E       AttributeError: 'Preflight' object has no attribute '_publish_status'
+
+dashboard/tests/test_preflight.py:59: AttributeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_preflight.py::test_initial_status_schema_and_latched_qos
+FAILED dashboard/tests/test_preflight.py::test_only_content_changes_or_one_second_heartbeat_publish
+FAILED dashboard/tests/test_preflight.py::test_failure_marks_original_stage_decision[wait_server_ready-1]
+FAILED dashboard/tests/test_preflight.py::test_failure_marks_original_stage_decision[reset_estimators-2]
+FAILED dashboard/tests/test_preflight.py::test_failure_marks_original_stage_decision[wait_preflight-3]
+FAILED dashboard/tests/test_preflight.py::test_failure_marks_original_stage_decision[arm_all-4]
+FAILED dashboard/tests/test_preflight.py::test_gate_observation_is_cached_and_flight_status_remains_live
+FAILED dashboard/tests/test_preflight.py::test_stage_success_is_reported_at_each_existing_pass
+FAILED dashboard/tests/test_preflight.py::test_arm_timeout_still_disarms_before_reporting_failure
+FAILED dashboard/tests/test_preflight.py::test_inflight_abort_publishes_exact_reason_and_ready_false_before_landing
+10 failed in 0.28s

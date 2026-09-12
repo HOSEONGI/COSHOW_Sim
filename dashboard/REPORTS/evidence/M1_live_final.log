@@ -1,0 +1,32 @@
+BEFORE POSES: {"phase": "waiting_poses", "mission_marker_id": null, "target_id": null, "finder": null, "P_N": null, "target_confirmed": false, "target_confirm_note": null, "search_progress": {}, "missing_pose": ["cf230", "cf231", "cf232", "cf233", "limo_a", "limo_b"], "preflight_required": false, "preflight_ready": false, "cmd": {}, "led": {}, "rescue_done_t": 0.0, "t": 22674.655786046}
+$ ros2 topic echo /coshow/mission_state std_msgs/msg/String --qos-durability transient_local --once
+data: '{"phase": "waiting_poses", "mission_marker_id": null, "target_id": null, "finder": null, "P_N": null, "target_confirmed": false,...'
+---
+/coshow/mission_state: RELIABLE / TRANSIENT_LOCAL (depth verified in unit test)
+mission: 6 unchanged-state frames / 6.4 s; gaps=[1.027, 1.028, 1.038, 1.022, 1.032]
+AFTER POSES: {"phase": "observe", "mission_marker_id": null, "target_id": null, "finder": null, "P_N": null, "target_confirmed": false, "target_confirm_note": null, "search_progress": {}, "missing_pose": [], "preflight_required": false, "preflight_ready": false, "cmd": {}, "led": {}, "rescue_done_t": 0.0, "t": 22682.434696631}
+$ ros2 topic echo /coshow/mission_state std_msgs/msg/String --qos-durability transient_local --once
+data: '{"phase": "observe", "mission_marker_id": null, "target_id": null, "finder": null, "P_N": null, "target_confirmed": false, "targ...'
+---
+mission: 6 unchanged-state frames / 6.4 s; gaps=[1.007, 1.01, 1.031, 1.024, 1.021]
+PREFLIGHT FAILURE: {"stage": 1, "stages": [{"name": "server_ready", "result": "fail"}, {"name": "reset_estimators", "result": "pending"}, {"name": "gate", "result": "pending"}, {"name": "arm", "result": "pending"}], "drones": {"cf230": {"kal_ok": false, "kal_range": null, "pose_ok": false, "pose_err": null, "sup_ok": false, "sup_why": "no fresh /status", "battery_v": null, "armed": false, "can_fly": false}, "cf231": {"kal_ok": false, "kal_range": null, "pose_ok": false, "pose_err": null, "sup_ok": false, "sup_why": "no fresh /status", "battery_v": null, "armed": false, "can_fly": false}, "cf232": {"kal_ok": false, "kal_range": null, "pose_ok": false, "pose_err": null, "sup_ok": false, "sup_why": "no fresh /status", "battery_v": null, "armed": false, "can_fly": false}, "cf233": {"kal_ok": false, "kal_range": null, "pose_ok": false, "pose_err": null, "sup_ok": false, "sup_why": "no fresh /status", "battery_v": null, "armed": false, "can_fly": false}}, "ready": false, "abort_reason": null, "t": 22692.18031074}
+$ ros2 topic echo /preflight/status std_msgs/msg/String --qos-durability transient_local --once
+data: '{"stage": 1, "stages": [{"name": "server_ready", "result": "fail"}, {"name": "reset_estimators", "result": "pending"}, {"name": ...'
+---
+/preflight/status: RELIABLE / TRANSIENT_LOCAL (depth verified in unit test)
+preflight: 5 unchanged-state frames / 6.4 s; gaps=[1.047, 1.1, 1.1, 1.004]
+PASS: actual BT waiting_poses -> observe, both transient publishers and 1 Hz heartbeat
+CHILD EXIT: pid=34 rc=-6
+CHILD EXIT: pid=85 rc=0
+BT LOG:
+
+[BT] Ctrl+C — 전 기체 착륙 후 종료 (8초 대기)
+[BT] land 전송: 없음 (서비스 미준비)
+[BT] 착륙 완료. 종료한다.
+terminate called without an active exception
+
+PREFLIGHT LOG:
+[INFO] [1789224474.414591974] [preflight]: [1/4] crazyflie_server 로깅 초기화 대기...
+[ERROR] [1789224476.462604458] [preflight]: [1/4] FAIL: add_logging=False kalman_stream=False. crazyflies.yaml 의 custom_topics 와 기체 연결을 확인하라.
+[ERROR] [1789224476.463862293] [preflight]: 점검 실패. ready 를 올리지 않는다. BT 는 시작하지 않는다.
+

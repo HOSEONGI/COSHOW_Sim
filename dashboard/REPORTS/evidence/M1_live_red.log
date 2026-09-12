@@ -1,0 +1,16 @@
+BT LOG:
+
+[BT] Ctrl+C — 전 기체 착륙 후 종료 (8초 대기)
+[BT] land 전송: 없음 (서비스 미준비)
+[BT] 착륙 완료. 종료한다.
+
+PREFLIGHT LOG:
+
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m1_ros.py", line 171, in <module>
+    main()
+  File "/ws/dashboard/tests/verify_m1_ros.py", line 127, in main
+    wait_for(lambda: any(s['phase'] == 'waiting_poses' for _, s in node.samples['mission']))
+  File "/ws/dashboard/tests/verify_m1_ros.py", line 39, in wait_for
+    raise AssertionError("Timed out waiting for ROS evidence")
+AssertionError: Timed out waiting for ROS evidence
