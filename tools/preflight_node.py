@@ -185,7 +185,8 @@ class Preflight(Node):
                 self.kal[name][axis].append(float(msg.values[axis]))
 
     def _publish_ready(self):
-        self.pub_ready.publish(Bool(data=bool(self.ready)))
+        with self._status_lock:
+            self.pub_ready.publish(Bool(data=bool(self.ready)))
 
     def _set_ready(self, value, reason=''):
         with self._status_lock:
@@ -199,8 +200,8 @@ class Preflight(Node):
             self._publish_status()
 
     def _publish_status(self):
-        # t 만 비교에서 제외한다. 스냅샷과 발행 순서를 같은 잠금으로 묶어
-        # 하트비트가 더 새로운 단계/ready 결과 뒤에 옛 상태를 내지 않게 한다.
+        # 전이 필드만 즉시 발행한다. 연속값은 다음 1 Hz 하트비트에 싣는다.
+        # 스냅샷과 발행 순서를 묶어 새 단계/ready 뒤에 옛 상태가 나오지 않게 한다.
         with self._status_lock:
             now = time.monotonic()
             payload = {
@@ -208,7 +209,11 @@ class Preflight(Node):
                 'drones': self._drone_reports, 'ready': bool(self.ready),
                 'abort_reason': self._abort_reason,
             }
-            content = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+            transitions = dict(payload, drones={name: {
+                key: report[key] for key in (
+                    'kal_ok', 'pose_ok', 'sup_ok', 'sup_why', 'armed', 'can_fly')
+            } for name, report in self._drone_reports.items()})
+            content = json.dumps(transitions, ensure_ascii=False, sort_keys=True)
             if (content == self._last_status_content
                     and self._last_status_pub is not None
                     and now - self._last_status_pub < 1.0):

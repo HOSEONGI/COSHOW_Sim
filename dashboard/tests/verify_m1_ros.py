@@ -21,6 +21,7 @@ from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from geometry_msgs.msg import PoseStamped
+from crazyflie_interfaces.msg import Status
 from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 import yaml
@@ -46,6 +47,9 @@ class EvidenceNode(Node):
         self.samples = {'mission': [], 'preflight': []}
         self.publish_poses = False
         self.pose_publishers = []
+        self.publish_status = False
+        self.status_publishers = []
+        self.status_ticks = 0
         for key, topic in (('mission', '/coshow/mission_state'),
                            ('preflight', '/preflight/status')):
             self.create_subscription(
@@ -58,6 +62,7 @@ class EvidenceNode(Node):
             msg.pose.orientation.w = 1.0
             self.pose_publishers.append(
                 (self.create_publisher(PoseStamped, '/{}/pose'.format(robot), 10), msg))
+            self.status_publishers.append(self.create_publisher(Status, '/{}/status'.format(robot), 10))
         for robot, data in config['coshow']['limos'].items():
             msg = Odometry()
             msg.pose.pose.position.x, msg.pose.pose.position.y = map(float, data['base'])
@@ -69,6 +74,14 @@ class EvidenceNode(Node):
     def publish(self):
         if self.publish_poses:
             for publisher, message in self.pose_publishers:
+                publisher.publish(message)
+        if self.publish_status:
+            self.status_ticks += 1
+            for index, publisher in enumerate(self.status_publishers):
+                message = Status()
+                # Change only continuous telemetry; safety flags stay fixed.
+                message.battery_voltage = 3.9 + index * 0.01 + (self.status_ticks % 100) * 0.0001
+                message.supervisor_info = Status.SUPERVISOR_INFO_CAN_BE_ARMED
                 publisher.publish(message)
 
 
@@ -91,14 +104,15 @@ def check_qos(node, topic):
     print('{}: RELIABLE / TRANSIENT_LOCAL (depth verified in unit test)'.format(topic), flush=True)
 
 
-def check_heartbeat(node, key):
+def check_heartbeat(node, key, condition='unchanged payload'):
     start = time.monotonic()
     time.sleep(6.4)
     received = [t for t, _ in list(node.samples[key]) if t >= start]
-    assert 5 <= len(received) <= 7, (key, received)
     gaps = [round(b - a, 3) for a, b in zip(received, received[1:])]
+    print('{} ({}): {} frames / 6.4 s; gaps={}'.format(
+        key, condition, len(received), gaps), flush=True)
+    assert 5 <= len(received) <= 7, (key, 'frame count', len(received))
     assert all(0.85 <= gap <= 1.25 for gap in gaps), gaps
-    print('{}: {} unchanged-state frames / 6.4 s; gaps={}'.format(key, len(received), gaps), flush=True)
 
 
 def main():
@@ -150,6 +164,15 @@ def main():
                     echo_once('/preflight/status')
                     check_qos(node, '/preflight/status')
                     check_heartbeat(node, 'preflight')
+                    node.publish_status = True
+                    wait_for(lambda: any(s['drones'][next(iter(config['coshow']['drones']))]['battery_v']
+                                         is not None for _, s in node.samples['preflight']))
+                    ticks_before = node.status_ticks
+                    check_heartbeat(node, 'preflight', 'changing /cfX/status battery at 10 Hz per drone')
+                    print('STATUS FIXTURE: {} messages across {} drones during measurement'.format(
+                        (node.status_ticks - ticks_before) * len(node.status_publishers),
+                        len(node.status_publishers)), flush=True)
+                    assert node.status_ticks - ticks_before >= 55, 'status traffic did not run'
                     print('PASS: actual BT waiting_poses -> observe, both transient publishers and 1 Hz heartbeat', flush=True)
                 finally:
                     for child in children:

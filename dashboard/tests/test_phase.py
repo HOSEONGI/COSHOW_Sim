@@ -1,5 +1,6 @@
 """Pure phase derivation and tick-thread mission publication contracts."""
 import copy
+import asyncio
 import json
 from types import SimpleNamespace
 
@@ -181,3 +182,78 @@ def test_mission_schema_and_integer_progress(updater):
     assert messages[-1]['search_progress'] == {'cf231': 1}
     assert messages[-1]['mission_marker_id'] == 13
     assert messages[-1]['target_confirm_note'] is None
+
+
+@pytest.mark.parametrize('action_name,attrs,goal', [
+    ('DroneGoTo', {'x': 0.0, 'y': 0.0, 'z': 1.0}, [0.0, 0.0, 1.0]),
+    ('DroneTakeoff', {'height': 1.0}, [1.0]),
+    ('DroneLand', {}, []),
+])
+def test_drone_service_command_goal_contains_only_numbers(
+        bt_nodes, updater, monkeypatch, action_name, attrs, goal):
+    tick, clock, messages, pubs = updater
+    bb = {'cmd': {}, 'pose': {}, 'now': clock[0]}
+    calls = []
+    client = SimpleNamespace(wait_for_service=lambda **kw: True,
+                             call_async=calls.append)
+    action = getattr(bt_nodes, action_name)(
+        'numeric_goal', SimpleNamespace(ros_bridge=tick.ros), robot='cf230', **attrs)
+    monkeypatch.setattr(action, '_client_for', lambda robot: client)
+    assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+    assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+    assert len(calls) == 1, 'telemetry changes must not defeat service deduplication'
+    tick._predicate(None, bb)
+    command = messages[-1]['cmd']['cf230']
+    assert command['goal'] == goal
+    assert all(isinstance(value, (float, int)) for value in command['goal'])
+
+
+@pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+@pytest.mark.parametrize('poses_available', [False, True])
+def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+        bt_nodes, updater, monkeypatch, failure, poses_available):
+    tick, clock, messages, pubs = updater
+    bb = {}
+    warnings = []
+    monkeypatch.setattr(tick.ros.node, 'get_logger',
+                        lambda: SimpleNamespace(warning=warnings.append))
+    if poses_available:
+        for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+            tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+
+    def broken(*args, **kwargs):
+        raise RuntimeError('injected telemetry failure')
+
+    with monkeypatch.context() as failing:
+        if failure == 'phase':
+            failing.setattr(bt_nodes, '_phase', broken)
+        elif failure == 'serialize':
+            bb['led'] = {'cf230': object()}
+        else:
+            failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+        for _ in range(3):
+            assert tick._predicate(None, bb) is poses_available
+            clock[0] += 0.1
+    assert len(warnings) == 1
+    bb['led'] = {}
+    assert tick._predicate(None, bb) is poses_available
+    assert messages[-1]['phase'] == ('observe' if poses_available else 'waiting_poses')
+
+
+def test_mission_warning_failure_cannot_interrupt_control_ticks(updater, monkeypatch):
+    tick, clock, messages, pubs = updater
+    warnings = []
+
+    def broken_publish(message):
+        raise RuntimeError('publisher unavailable')
+
+    def broken_warning(message):
+        warnings.append(message)
+        raise RuntimeError('logger unavailable')
+
+    monkeypatch.setattr(pubs['/coshow/mission_state'], 'publish', broken_publish)
+    monkeypatch.setattr(tick.ros.node, 'get_logger',
+                        lambda: SimpleNamespace(warning=broken_warning))
+    for _ in range(2):
+        assert tick._predicate(None, {}) is False
+    assert len(warnings) == 1

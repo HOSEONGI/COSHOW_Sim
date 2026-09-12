@@ -3,6 +3,7 @@ import importlib.util
 import json
 from pathlib import Path
 import time
+import threading
 from types import SimpleNamespace
 
 import pytest
@@ -139,7 +140,12 @@ def test_async_change_does_not_delay_next_heartbeat_for_two_seconds(node, monkey
     # A receipt near the next periodic callback must not suppress the heartbeat
     # until the following whole-second callback (almost two seconds later).
     time.sleep(0.8)
-    node._on_status(node.names[0], Status())
+    status = Status()
+    status.supervisor_info = Status.SUPERVISOR_INFO_IS_ARMED
+    count_before_transition = len(recorder.messages)
+    node._on_status(node.names[0], status)
+    assert len(recorder.messages) == count_before_transition + 1
+    assert recorder.messages[-1]['drones'][node.names[0]]['armed'] is True
     count = len(recorder.messages)
     deadline = time.monotonic() + 1.15
     while len(recorder.messages) == count and time.monotonic() < deadline:
@@ -275,3 +281,121 @@ def test_inflight_abort_publishes_exact_reason_and_ready_false_before_landing(no
     assert land[0][0] == reason
     assert land[0][1]["ready"] is False
     assert land[0][1]["abort_reason"] == reason
+
+
+def test_gate_continuous_samples_are_coalesced_but_kalman_transition_is_immediate(node, monkeypatch):
+    recorder = record(node)
+    seed_gate(node)
+    node.pose_stable = 0.0
+    node.t_pre = 0.99
+    # Keep stage 3 running while pose/kalman numeric values change, without
+    # making a Boolean transition until the explicitly tested kal_ok change.
+    for name in node.names:
+        for history in node.kal[name]:
+            history.clear()
+    real_sleep = node.test_clock.sleep
+    samples = []
+
+    def feed_sample(seconds):
+        real_sleep(seconds)
+        i = len(samples)
+        samples.append(i)
+        for name in node.names:
+            pose = PoseStamped()
+            pose.pose.position.x = node.expected[name][0] + i * 0.0001
+            pose.pose.position.y = node.expected[name][1]
+            node._on_pose(name, pose)
+            status = Status()
+            status.battery_voltage = 3.9 + i * 0.0001
+            status.supervisor_info = Status.SUPERVISOR_INFO_CAN_BE_ARMED
+            node._on_status(name, status)
+            # Alternating samples remain above the convergence threshold.
+            node._on_kalman(name, LogDataGeneric(values=[0.01 * (i % 2)] * 3))
+
+    monkeypatch.setattr(node.test_clock, 'sleep', feed_sample)
+    assert node.wait_preflight() is False
+    running = [p for p in recorder.messages if p['stage'] == 3
+               and p['stages'][2]['result'] == 'running']
+    assert len(samples) == 20
+    # running entry plus one pose/supervisor Boolean result transition only.
+    assert len(running) <= 2, 'continuous gate values caused extra publications'
+    # The final fail transition includes the freshest numeric observations.
+    assert recorder.messages[-1]['drones'][node.names[0]]['pose_err'][0] > 0.0
+    for name in node.names:
+        for history in node.kal[name]:
+            history.clear()
+            history.extend([0.0001] * node.hist_len)
+    count = len(recorder.messages)
+    node.t_pre = 1.0
+    assert node.wait_preflight() is True
+    changed = recorder.messages[count:]
+    assert any(p['stages'][2]['result'] == 'running'
+               and p['drones'][node.names[0]]['kal_ok'] is True for p in changed)
+    assert changed[-1]['t'] == recorder.messages[count]['t'], 'kal_ok was delayed to a heartbeat'
+
+
+def test_battery_updates_wait_for_heartbeat_and_keep_latest_value(node):
+    recorder = record(node)
+    count = len(recorder.messages)
+    for i in range(20):
+        node.test_clock.now += 0.04
+        message = Status()
+        message.battery_voltage = 3.9 + i * 0.001
+        node._on_status(node.names[0], message)
+    assert len(recorder.messages) == count
+    node.test_clock.now += 0.21
+    node._publish_status()
+    assert len(recorder.messages) == count + 1
+    assert recorder.messages[-1]['drones'][node.names[0]]['battery_v'] == pytest.approx(3.919)
+
+
+def test_delayed_ready_heartbeat_cannot_overwrite_abort_with_stale_true(node):
+    node._set_ready(True, 'ready for concurrency regression')
+    entered_publish = threading.Event()
+    release_publish = threading.Event()
+    transition_started = threading.Event()
+    transition_finished = threading.Event()
+    values, errors = [], []
+
+    class DelayedPublisher:
+        def publish(self, message):
+            if message.data:
+                entered_publish.set()
+                assert release_publish.wait(2.0), 'test did not release heartbeat'
+            values.append(message.data)
+
+    node.pub_ready = DelayedPublisher()
+
+    def heartbeat():
+        try:
+            node._publish_ready()
+        except Exception as error:
+            errors.append(error)
+
+    def abort():
+        transition_started.set()
+        try:
+            node._set_ready(False, 'cf230: /status 끊김')
+        except Exception as error:
+            errors.append(error)
+        finally:
+            transition_finished.set()
+
+    timer = threading.Thread(target=heartbeat)
+    setter = threading.Thread(target=abort)
+    timer.start()
+    try:
+        assert entered_publish.wait(1.0)
+        setter.start()
+        assert transition_started.wait(1.0)
+        # Without the shared lock the abort finishes while True is stalled.
+        # With the lock it waits, then necessarily becomes the last publish.
+        transition_finished.wait(0.1)
+    finally:
+        release_publish.set()
+        timer.join(timeout=2.0)
+        if setter.ident is not None:
+            setter.join(timeout=2.0)
+    assert not timer.is_alive() and not setter.is_alive()
+    assert not errors
+    assert values[-1] is False, values

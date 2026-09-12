@@ -247,6 +247,7 @@ class UpdateBlackboard(ConditionWithROSTopics):
                        durability=DurabilityPolicy.TRANSIENT_LOCAL))
         self._mission_signature = None
         self._mission_last_pub = 0.0
+        self._mission_warning_logged = False
 
         # Ctrl+C 로 BT 를 끌 때 기체를 공중에 두고 나가지 않도록.
         # 트리 구성은 메인 스레드에서 일어나므로 여기서 시그널을 잡을 수 있다.
@@ -316,30 +317,40 @@ class UpdateBlackboard(ConditionWithROSTopics):
     # ---- tick (BT 스레드) ----
     def _publish_mission_state(self, bb):
         """단일 작성자인 BT tick에서만 상태 변경과 1 Hz heartbeat를 발행한다."""
-        payload = {
-            'phase': _phase(bb),
-            'mission_marker_id': bb.get('mission_marker', {}).get('id'),
-            'target_id': bb.get('target_id'),
-            'finder': bb.get('finder'),
-            'P_N': bb.get('P_N'),
-            'target_confirmed': bool(bb.get('target_confirmed', False)),
-            'target_confirm_note': bb.get('target_confirm_note'),
-            'search_progress': bb.get('search_progress', {}),
-            'missing_pose': bb['missing_pose'],
-            'preflight_required': bool(C.get('preflight', {}).get('required', False)),
-            'preflight_ready': bool(bb.get('preflight_ready', False)),
-            'cmd': bb.get('cmd', {}),
-            'led': bb.get('led', {}),
-            'rescue_done_t': bb.get('rescue_done_t', 0.0),
-        }
-        # 문자열을 보관해 cmd/led의 제자리 변경도 감지한다. cmd.*.t는 비교에 남긴다.
-        signature = json.dumps(payload, sort_keys=True, ensure_ascii=False)
-        t = bb['now']
-        if signature != self._mission_signature or t - self._mission_last_pub >= 1.0:
-            payload['t'] = t
-            self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
-            self._mission_signature = signature
-            self._mission_last_pub = t
+        try:
+            payload = {
+                'phase': _phase(bb),
+                'mission_marker_id': bb.get('mission_marker', {}).get('id'),
+                'target_id': bb.get('target_id'),
+                'finder': bb.get('finder'),
+                'P_N': bb.get('P_N'),
+                'target_confirmed': bool(bb.get('target_confirmed', False)),
+                'target_confirm_note': bb.get('target_confirm_note'),
+                'search_progress': bb.get('search_progress', {}),
+                'missing_pose': bb['missing_pose'],
+                'preflight_required': bool(C.get('preflight', {}).get('required', False)),
+                'preflight_ready': bool(bb.get('preflight_ready', False)),
+                'cmd': bb.get('cmd', {}),
+                'led': bb.get('led', {}),
+                'rescue_done_t': bb.get('rescue_done_t', 0.0),
+            }
+            # 문자열을 보관해 cmd/led의 제자리 변경도 감지한다. cmd.*.t는 비교에 남긴다.
+            signature = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+            t = bb['now']
+            if signature != self._mission_signature or t - self._mission_last_pub >= 1.0:
+                payload['t'] = t
+                self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+                self._mission_signature = signature
+                self._mission_last_pub = t
+        except Exception as error:
+            # 표시 장애가 비행 제어 tick을 끊지 않도록 로그 실패도 격리한다.
+            if not self._mission_warning_logged:
+                self._mission_warning_logged = True
+                try:
+                    self.ros.node.get_logger().warning(
+                        '[mission_state] telemetry publication failed: {}'.format(error))
+                except Exception:
+                    pass
 
     def _predicate(self, agent, bb):
         t = now()
@@ -675,7 +686,7 @@ class _DroneService(ActionWithROSService):
                 return self.status
             cli.call_async(req)
             self._last_sig = sig
-            bb['cmd'][robot] = {'kind': self.KIND, 'goal': sig[1:], 't': bb['now']}
+            bb['cmd'][robot] = {'kind': self.KIND, 'goal': sig[2:], 't': bb['now']}
         self.status = Status.RUNNING
         return self.status
 

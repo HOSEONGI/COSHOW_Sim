@@ -72,11 +72,12 @@ def test_pose_callback_only_updates_pose(channel):
     assert channel.window_created is True
 
 
-@pytest.mark.parametrize('override,expected', [(None, 'true'), ('false', 'false')])
+@pytest.mark.parametrize('override,expected', [(None, True), ('false', False)])
 def test_launch_compressed_default_overrides_yaml_and_is_configurable(monkeypatch, override, expected):
     from launch import LaunchContext
     from launch.actions import DeclareLaunchArgument
     from launch_ros.actions import Node as LaunchNode
+    from launch_ros.utilities import evaluate_parameters, normalize_parameters
 
     path = AIDECK / 'launch/aideck_aruco.launch.py'
     spec = importlib.util.spec_from_file_location('aideck_launch_m1_test', path)
@@ -98,7 +99,7 @@ def test_launch_compressed_default_overrides_yaml_and_is_configurable(monkeypatc
     for action in description.entities:
         if isinstance(action, DeclareLaunchArgument):
             action.execute(context)
-    assert context.launch_configurations.get('publish_compressed') == expected
     assert parameters[0].perform(context) == str(AIDECK / 'config/drones.yaml')
-    assert parameters[-1]['publish_compressed'].perform(context) == expected
+    evaluated = evaluate_parameters(context, normalize_parameters(parameters))
+    assert evaluated[-1]['publish_compressed'] is expected
     assert 'image_qos' not in parameters[-1]

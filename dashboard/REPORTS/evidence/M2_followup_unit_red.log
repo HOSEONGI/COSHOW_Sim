@@ -1,0 +1,642 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_drone_service_command_goal_contains_only_numbers[DroneGoTo-attrs0-goal0] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e5a92dbd0>, [100.0], [{'P_N': None, 'cmd': {'cf230': {'goa...0}}, 'finder': None, 'led': {}, ...}], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e59967df0>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e5a8c40a0>
+action_name = 'DroneGoTo', attrs = {'x': 0.0, 'y': 0.0, 'z': 1.0}
+goal = [0.0, 0.0, 1.0]
+
+    @pytest.mark.parametrize('action_name,attrs,goal', [
+        ('DroneGoTo', {'x': 0.0, 'y': 0.0, 'z': 1.0}, [0.0, 0.0, 1.0]),
+        ('DroneTakeoff', {'height': 1.0}, [1.0]),
+        ('DroneLand', {}, []),
+    ])
+    def test_drone_service_command_goal_contains_only_numbers(
+            bt_nodes, updater, monkeypatch, action_name, attrs, goal):
+        tick, clock, messages, pubs = updater
+        bb = {'cmd': {}, 'pose': {}, 'now': clock[0]}
+        calls = []
+        client = SimpleNamespace(wait_for_service=lambda **kw: True,
+                                 call_async=calls.append)
+        action = getattr(bt_nodes, action_name)(
+            'numeric_goal', SimpleNamespace(ros_bridge=tick.ros), robot='cf230', **attrs)
+        monkeypatch.setattr(action, '_client_for', lambda robot: client)
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert len(calls) == 1, 'telemetry changes must not defeat service deduplication'
+        tick._predicate(None, bb)
+        command = messages[-1]['cmd']['cf230']
+>       assert command['goal'] == goal
+E       AssertionError: assert ['go_to', 0.0, 0.0, 1.0] == [0.0, 0.0, 1.0]
+E         At index 0 diff: 'go_to' != 0.0
+E         Left contains one more item: 1.0
+E         Full diff:
+E         - [0.0, 0.0, 1.0]
+E         + ['go_to', 0.0, 0.0, 1.0]
+E         ?  +++++++++
+
+dashboard/tests/test_phase.py:207: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+pygame 2.1.2 (SDL 2.0.20, Python 3.10.12)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+_ test_drone_service_command_goal_contains_only_numbers[DroneTakeoff-attrs1-goal1] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e5a924610>, [100.0], [{'P_N': None, 'cmd': {'cf230': {'goa...0}}, 'finder': None, 'led': {}, ...}], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5998c880>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59967280>
+action_name = 'DroneTakeoff', attrs = {'height': 1.0}, goal = [1.0]
+
+    @pytest.mark.parametrize('action_name,attrs,goal', [
+        ('DroneGoTo', {'x': 0.0, 'y': 0.0, 'z': 1.0}, [0.0, 0.0, 1.0]),
+        ('DroneTakeoff', {'height': 1.0}, [1.0]),
+        ('DroneLand', {}, []),
+    ])
+    def test_drone_service_command_goal_contains_only_numbers(
+            bt_nodes, updater, monkeypatch, action_name, attrs, goal):
+        tick, clock, messages, pubs = updater
+        bb = {'cmd': {}, 'pose': {}, 'now': clock[0]}
+        calls = []
+        client = SimpleNamespace(wait_for_service=lambda **kw: True,
+                                 call_async=calls.append)
+        action = getattr(bt_nodes, action_name)(
+            'numeric_goal', SimpleNamespace(ros_bridge=tick.ros), robot='cf230', **attrs)
+        monkeypatch.setattr(action, '_client_for', lambda robot: client)
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert len(calls) == 1, 'telemetry changes must not defeat service deduplication'
+        tick._predicate(None, bb)
+        command = messages[-1]['cmd']['cf230']
+>       assert command['goal'] == goal
+E       AssertionError: assert ['takeoff', 1.0] == [1.0]
+E         At index 0 diff: 'takeoff' != 1.0
+E         Left contains one more item: 1.0
+E         Full diff:
+E         - [1.0]
+E         + ['takeoff', 1.0]
+
+dashboard/tests/test_phase.py:207: AssertionError
+_ test_drone_service_command_goal_contains_only_numbers[DroneLand-attrs2-goal2] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e599643a0>, [100.0], [{'P_N': None, 'cmd': {'cf230': {'goa...0}}, 'finder': None, 'led': {}, ...}], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5a8f3730>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59985f00>
+action_name = 'DroneLand', attrs = {}, goal = []
+
+    @pytest.mark.parametrize('action_name,attrs,goal', [
+        ('DroneGoTo', {'x': 0.0, 'y': 0.0, 'z': 1.0}, [0.0, 0.0, 1.0]),
+        ('DroneTakeoff', {'height': 1.0}, [1.0]),
+        ('DroneLand', {}, []),
+    ])
+    def test_drone_service_command_goal_contains_only_numbers(
+            bt_nodes, updater, monkeypatch, action_name, attrs, goal):
+        tick, clock, messages, pubs = updater
+        bb = {'cmd': {}, 'pose': {}, 'now': clock[0]}
+        calls = []
+        client = SimpleNamespace(wait_for_service=lambda **kw: True,
+                                 call_async=calls.append)
+        action = getattr(bt_nodes, action_name)(
+            'numeric_goal', SimpleNamespace(ros_bridge=tick.ros), robot='cf230', **attrs)
+        monkeypatch.setattr(action, '_client_for', lambda robot: client)
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert asyncio.run(action.run(None, bb)) == bt_nodes.Status.RUNNING
+        assert len(calls) == 1, 'telemetry changes must not defeat service deduplication'
+        tick._predicate(None, bb)
+        command = messages[-1]['cmd']['cf230']
+>       assert command['goal'] == goal
+E       AssertionError: assert ['land'] == []
+E         Left contains one more item: 'land'
+E         Full diff:
+E         - []
+E         + ['land']
+
+dashboard/tests/test_phase.py:207: AssertionError
+__ test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-phase] ___
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59967eb0>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5998eb00>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e5a92e110>
+failure = 'phase', poses_available = False
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:374: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:320: in _publish_mission_state
+    'phase': _phase(bb),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ({'cmd': {}, 'detections': {}, 'drone_arrived': {}, 'finder': None, ...},)
+kwargs = {}
+
+    def broken(*args, **kwargs):
+>       raise RuntimeError('injected telemetry failure')
+E       RuntimeError: injected telemetry failure
+
+dashboard/tests/test_phase.py:225: RuntimeError
+_ test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-serialize] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59a65ed0>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5a8a6980>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59a668f0>
+failure = 'serialize', poses_available = False
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:374: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:336: in _publish_mission_state
+    signature = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+/usr/lib/python3.10/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+/usr/lib/python3.10/json/encoder.py:199: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+/usr/lib/python3.10/json/encoder.py:257: in iterencode
+    return _iterencode(o, 0)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0xff1e5a8a7340>
+o = <object object at 0xff1e5996d890>
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type object is not JSON serializable
+
+/usr/lib/python3.10/json/encoder.py:179: TypeError
+_ test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-publish] __
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59a6ab30>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e59a6a2f0>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59a66710>
+failure = 'publish', poses_available = False
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:374: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:340: in _publish_mission_state
+    self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (std_msgs.msg.String(data='{"phase": "waiting_poses", "mission_marker_id": null, "target_id": null, "finder": null, "P...b"], "preflight_required": false, "preflight_ready": false, "cmd": {}, "led": {}, "rescue_done_t": 0.0, "t": 100.0}'),)
+kwargs = {}
+
+    def broken(*args, **kwargs):
+>       raise RuntimeError('injected telemetry failure')
+E       RuntimeError: injected telemetry failure
+
+dashboard/tests/test_phase.py:225: RuntimeError
+___ test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-phase] ___
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59a92500>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5994d810>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59964490>
+failure = 'phase', poses_available = True
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:410: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:320: in _publish_mission_state
+    'phase': _phase(bb),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ({'cmd': {}, 'detections': {}, 'drone_arrived': {}, 'finder': None, ...},)
+kwargs = {}
+
+    def broken(*args, **kwargs):
+>       raise RuntimeError('injected telemetry failure')
+E       RuntimeError: injected telemetry failure
+
+dashboard/tests/test_phase.py:225: RuntimeError
+_ test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-serialize] _
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59967310>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e59a26ad0>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59a91ff0>
+failure = 'serialize', poses_available = True
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:410: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:336: in _publish_mission_state
+    signature = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+/usr/lib/python3.10/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+/usr/lib/python3.10/json/encoder.py:199: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+/usr/lib/python3.10/json/encoder.py:257: in iterencode
+    return _iterencode(o, 0)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0xff1e59a245b0>
+o = <object object at 0xff1e4f41d2e0>
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type object is not JSON serializable
+
+/usr/lib/python3.10/json/encoder.py:179: TypeError
+__ test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-publish] __
+
+bt_nodes = <module 'scenarios.coshow.bt_nodes' from '/ws/bt/scenarios/coshow/bt_nodes.py'>
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e59a4c970>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e59a4e770>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e59a91c90>
+failure = 'publish', poses_available = True
+
+    @pytest.mark.parametrize('failure', ['phase', 'serialize', 'publish'])
+    @pytest.mark.parametrize('poses_available', [False, True])
+    def test_mission_telemetry_errors_do_not_interrupt_control_ticks(
+            bt_nodes, updater, monkeypatch, failure, poses_available):
+        tick, clock, messages, pubs = updater
+        bb = {}
+        warnings = []
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=warnings.append))
+        if poses_available:
+            for name, cfg in dict(bt_nodes.DRONES, **bt_nodes.LIMOS).items():
+                tick._pose[name] = {'x': cfg['base'][0], 'y': cfg['base'][1], 'z': 0.0}
+    
+        def broken(*args, **kwargs):
+            raise RuntimeError('injected telemetry failure')
+    
+        with monkeypatch.context() as failing:
+            if failure == 'phase':
+                failing.setattr(bt_nodes, '_phase', broken)
+            elif failure == 'serialize':
+                bb['led'] = {'cf230': object()}
+            else:
+                failing.setattr(pubs['/coshow/mission_state'], 'publish', broken)
+            for _ in range(3):
+>               assert tick._predicate(None, bb) is poses_available
+
+dashboard/tests/test_phase.py:235: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:410: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:340: in _publish_mission_state
+    self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (std_msgs.msg.String(data='{"phase": "observe", "mission_marker_id": null, "target_id": null, "finder": null, "P_N": n... [], "preflight_required": false, "preflight_ready": false, "cmd": {}, "led": {}, "rescue_done_t": 0.0, "t": 100.0}'),)
+kwargs = {}
+
+    def broken(*args, **kwargs):
+>       raise RuntimeError('injected telemetry failure')
+E       RuntimeError: injected telemetry failure
+
+dashboard/tests/test_phase.py:225: RuntimeError
+_________ test_mission_warning_failure_cannot_interrupt_control_ticks __________
+
+updater = (<scenarios.coshow.bt_nodes.UpdateBlackboard object at 0xff1e5999fcd0>, [100.0], [], {'/coshow/mission_state': <rclpy.publisher.Publisher object at 0xff1e5999d990>})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e5999db10>
+
+    def test_mission_warning_failure_cannot_interrupt_control_ticks(updater, monkeypatch):
+        tick, clock, messages, pubs = updater
+        warnings = []
+    
+        def broken_publish(message):
+            raise RuntimeError('publisher unavailable')
+    
+        def broken_warning(message):
+            warnings.append(message)
+            raise RuntimeError('logger unavailable')
+    
+        monkeypatch.setattr(pubs['/coshow/mission_state'], 'publish', broken_publish)
+        monkeypatch.setattr(tick.ros.node, 'get_logger',
+                            lambda: SimpleNamespace(warning=broken_warning))
+        for _ in range(2):
+>           assert tick._predicate(None, {}) is False
+
+dashboard/tests/test_phase.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bt/scenarios/coshow/bt_nodes.py:374: in _predicate
+    self._publish_mission_state(bb)
+bt/scenarios/coshow/bt_nodes.py:340: in _publish_mission_state
+    self._pub_mission.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+message = std_msgs.msg.String(data='{"phase": "waiting_poses", "mission_marker_id": null, "target_id": null, "finder": null, "P_...o_b"], "preflight_required": false, "preflight_ready": false, "cmd": {}, "led": {}, "rescue_done_t": 0.0, "t": 100.0}')
+
+    def broken_publish(message):
+>       raise RuntimeError('publisher unavailable')
+E       RuntimeError: publisher unavailable
+
+dashboard/tests/test_phase.py:248: RuntimeError
+_ test_gate_continuous_samples_are_coalesced_but_kalman_transition_is_immediate _
+
+node = <dashboard_preflight.Preflight object at 0xff1e543e0af0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff1e543e3d60>
+
+    def test_gate_continuous_samples_are_coalesced_but_kalman_transition_is_immediate(node, monkeypatch):
+        recorder = record(node)
+        seed_gate(node)
+        node.pose_stable = 0.0
+        node.t_pre = 0.99
+        # Keep stage 3 running while pose/kalman numeric values change, without
+        # making a Boolean transition until the explicitly tested kal_ok change.
+        for name in node.names:
+            for history in node.kal[name]:
+                history.clear()
+        real_sleep = node.test_clock.sleep
+        samples = []
+    
+        def feed_sample(seconds):
+            real_sleep(seconds)
+            i = len(samples)
+            samples.append(i)
+            for name in node.names:
+                pose = PoseStamped()
+                pose.pose.position.x = node.expected[name][0] + i * 0.0001
+                pose.pose.position.y = node.expected[name][1]
+                node._on_pose(name, pose)
+                status = Status()
+                status.battery_voltage = 3.9 + i * 0.0001
+                status.supervisor_info = Status.SUPERVISOR_INFO_CAN_BE_ARMED
+                node._on_status(name, status)
+                # Alternating samples remain above the convergence threshold.
+                node._on_kalman(name, LogDataGeneric(values=[0.01 * (i % 2)] * 3))
+    
+        monkeypatch.setattr(node.test_clock, 'sleep', feed_sample)
+        assert node.wait_preflight() is False
+        running = [p for p in recorder.messages if p['stage'] == 3
+                   and p['stages'][2]['result'] == 'running']
+        assert len(samples) == 20
+        # running entry plus one pose/supervisor Boolean result transition only.
+>       assert len(running) <= 2, 'continuous gate values caused extra publications'
+E       AssertionError: continuous gate values caused extra publications
+E       assert 100 <= 2
+E        +  where 100 = len([{'abort_reason': None, 'drones': {'cf230': {'armed': False, 'battery_v': 3.98, 'can_fly': False, 'kal_ok': False, ......3': {'armed': False, 'battery_v': 3.9, 'can_fly': False, 'kal_ok': False, ...}}, 'ready': False, 'stage': 3, ...}, ...])
+
+dashboard/tests/test_preflight.py:316: AssertionError
+----------------------------- Captured stderr call -----------------------------
+[INFO] [1789229688.721818275] [preflight]: [3/4] 전 기체 준비 관문 대기...
+[INFO] [1789229688.722541482] [preflight]:   cf230: kalman=False samples... | pose=True err=(0.000,0.000,0.000) | supervisor=True (manual-arm)
+  cf231: kalman=False samples... | pose=True err=(0.000,0.000,0.000) | supervisor=True (manual-arm)
+  cf232: kalman=False samples... | pose=True err=(0.000,0.000,0.000) | supervisor=True (manual-arm)
+  cf233: kalman=False samples... | pose=True err=(0.000,0.000,0.000) | supervisor=True (manual-arm)
+[ERROR] [1789229688.728956845] [preflight]: [3/4] FAIL: 1초 안에 수렴하지 못했다
+________ test_battery_updates_wait_for_heartbeat_and_keep_latest_value _________
+
+node = <dashboard_preflight.Preflight object at 0xff1e5994e9e0>
+
+    def test_battery_updates_wait_for_heartbeat_and_keep_latest_value(node):
+        recorder = record(node)
+        count = len(recorder.messages)
+        for i in range(20):
+            node.test_clock.now += 0.04
+            message = Status()
+            message.battery_voltage = 3.9 + i * 0.001
+            node._on_status(node.names[0], message)
+>       assert len(recorder.messages) == count
+E       AssertionError: assert 21 == 1
+E        +  where 21 = len([{'abort_reason': None, 'drones': {'cf230': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ......': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ...}}, 'ready': False, 'stage': 0, ...}, ...])
+E        +    where [{'abort_reason': None, 'drones': {'cf230': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ......': {'armed': False, 'battery_v': None, 'can_fly': False, 'kal_ok': False, ...}}, 'ready': False, 'stage': 0, ...}, ...] = <test_preflight.Recorder object at 0xff1e5994e2f0>.messages
+
+dashboard/tests/test_preflight.py:340: AssertionError
+_____ test_delayed_ready_heartbeat_cannot_overwrite_abort_with_stale_true ______
+
+node = <dashboard_preflight.Preflight object at 0xff1e59a1fe50>
+
+    def test_delayed_ready_heartbeat_cannot_overwrite_abort_with_stale_true(node):
+        node._set_ready(True, 'ready for concurrency regression')
+        entered_publish = threading.Event()
+        release_publish = threading.Event()
+        transition_started = threading.Event()
+        transition_finished = threading.Event()
+        values, errors = [], []
+    
+        class DelayedPublisher:
+            def publish(self, message):
+                if message.data:
+                    entered_publish.set()
+                    assert release_publish.wait(2.0), 'test did not release heartbeat'
+                values.append(message.data)
+    
+        node.pub_ready = DelayedPublisher()
+    
+        def heartbeat():
+            try:
+                node._publish_ready()
+            except Exception as error:
+                errors.append(error)
+    
+        def abort():
+            transition_started.set()
+            try:
+                node._set_ready(False, 'cf230: /status 끊김')
+            except Exception as error:
+                errors.append(error)
+            finally:
+                transition_finished.set()
+    
+        timer = threading.Thread(target=heartbeat)
+        setter = threading.Thread(target=abort)
+        timer.start()
+        try:
+            assert entered_publish.wait(1.0)
+            setter.start()
+            assert transition_started.wait(1.0)
+            # Without the shared lock the abort finishes while True is stalled.
+            # With the lock it waits, then necessarily becomes the last publish.
+            transition_finished.wait(0.1)
+        finally:
+            release_publish.set()
+            timer.join(timeout=2.0)
+            if setter.ident is not None:
+                setter.join(timeout=2.0)
+        assert not timer.is_alive() and not setter.is_alive()
+        assert not errors
+>       assert values[-1] is False, values
+E       AssertionError: [False, True]
+E       assert True is False
+
+dashboard/tests/test_preflight.py:396: AssertionError
+----------------------------- Captured stderr call -----------------------------
+[INFO] [1789229688.753134093] [preflight]: [READY] True ready for concurrency regression
+[INFO] [1789229688.754287132] [preflight]: [READY] False cf230: /status 끊김
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_phase.py::test_drone_service_command_goal_contains_only_numbers[DroneGoTo-attrs0-goal0]
+FAILED dashboard/tests/test_phase.py::test_drone_service_command_goal_contains_only_numbers[DroneTakeoff-attrs1-goal1]
+FAILED dashboard/tests/test_phase.py::test_drone_service_command_goal_contains_only_numbers[DroneLand-attrs2-goal2]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-phase]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-serialize]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[False-publish]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-phase]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-serialize]
+FAILED dashboard/tests/test_phase.py::test_mission_telemetry_errors_do_not_interrupt_control_ticks[True-publish]
+FAILED dashboard/tests/test_phase.py::test_mission_warning_failure_cannot_interrupt_control_ticks
+FAILED dashboard/tests/test_preflight.py::test_gate_continuous_samples_are_coalesced_but_kalman_transition_is_immediate
+FAILED dashboard/tests/test_preflight.py::test_battery_updates_wait_for_heartbeat_and_keep_latest_value
+FAILED dashboard/tests/test_preflight.py::test_delayed_ready_heartbeat_cannot_overwrite_abort_with_stale_true
+13 failed, 40 deselected in 0.46s
