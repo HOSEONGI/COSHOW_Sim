@@ -162,8 +162,11 @@ class Dashboard:
     def app(self):
         app = web.Application()
         app.router.add_get('/ws', self.websocket)
+        async def visitor(request):
+            return web.FileResponse(Path(__file__).resolve().parent / 'static/visitor.html')
+        app.router.add_get('/visitor.html', visitor)
         async def health(request):
-            return web.json_response(dict(milestone='M2', mock=self.mock, websocket='/ws',
+            return web.json_response(dict(milestone='M3', mock=self.mock, websocket='/ws', visitor='/visitor.html',
                                            mode='mock' if self.mock else 'observation'))
         app.router.add_get('/', health)
         app.router.add_static('/static/', Path(__file__).resolve().parent / 'static', show_index=False)

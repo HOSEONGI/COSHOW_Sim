@@ -1,0 +1,4 @@
+python3 hashlib.sha256 + PNG IHDR inspection of dashboard/REPORTS/img/M3_*.png
+ae31d26b7581a92abe4179e308f64a900273010ac17bb9cb0f0da2e71dd53abc 1920x1080 dashboard/REPORTS/img/M3_idle_fhd.png
+46824e31fcbffbde967d469020a03e5c9ab4e85da8be07c950061cc95b3bc8b5 3840x2160 dashboard/REPORTS/img/M3_search_4k.png
+9f3fdd11ccea2edc48c052ccff2435ffd384c54660b8de377a21ff6b4df913c8 1920x1080 dashboard/REPORTS/img/M3_search_fhd.png

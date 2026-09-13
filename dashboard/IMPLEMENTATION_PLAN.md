@@ -1,7 +1,7 @@
 # 운영 대시보드 구현 기록
 
-설계 기준: `astra_handoff_2026-09-13_M2.zip` v2.3과
-`reviews/M1_review_and_M2_directive.md`. [원문 SHA256](REPORTS/evidence/M2_sources.log).
+설계 기준: `astra_handoff_2026-09-13_M3.zip` v2.4와
+`reviews/M2_review_and_M3_directive.md`. [원문 SHA256](REPORTS/evidence/M3_sources.log).
 대화의 사용자 지시를 문서보다 우선한다.
 
 작업 브랜치: `HOSEONGI/COSHOW_Sim:dashboard`, 기준 `2a464d4`.
@@ -13,7 +13,8 @@
 - [x] M1: ROS 관측 발행기, AI Deck 초기화 수정, 레인 포팅 및 Docker 증거
 - [x] M2 첫 커밋: M1 후속 4건, 회귀 13개, 연속 Status 발행률, 보고서 부록 (`6c0de20`)
 - [x] M2: 설정 기반 ROS 어댑터·플릿 관측·집계·WebSocket·mock·체크리스트·ping·check-config
-- [ ] M3: 동봉 폰트·three.js, 디자인 토큰, 참관자 레이아웃 FHD·4K 검증
+- [x] M3 첫 커밋: M2 후속 8건 + 독립 리뷰 타입 누락 수정, Docker 224개 회귀 (`ba63352`)
+- [x] M3: 동봉 폰트·three.js, 디자인 토큰, 참관자 레이아웃 FHD·4K·대기 검증, 대수 변경·재접속 검증
 - [ ] M4: 트윈·카메라·내러티브와 상태별 화면 검증
 - [ ] M5: 운영 화면·프로세스 관리·비상착륙·BT/preflight 감시와 Docker 안전 순서 검증
 - [ ] M6: 플릿 표·로스터 편집/저장·생성 설정·스택 기동/재기동

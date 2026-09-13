@@ -1,0 +1,3 @@
+dashboard/run/venv/bin/python dashboard/server.py --mock --host 127.0.0.1 --port 8088
+ROS_DOMAIN_ID=(default) RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8088 mock=True
+Captured launch output from local exec session 62232. Browser evidence is M3_ui_green.log.

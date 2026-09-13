@@ -1,0 +1,26 @@
+node --test dashboard/tests/test_visitor_model.mjs
+file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_model.mjs:3
+import { present, elapsed, interests, makeNames, navigationGoal } from '../static/js/view-model.js';
+                                                 ^^^^^^^^^^^^^^
+SyntaxError: The requested module '../static/js/view-model.js' does not provide an export named 'navigationGoal'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:327:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:431:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:646:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ dashboard/tests/test_visitor_model.mjs (60.317292ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.541791
+
+✖ failing tests:
+
+test at dashboard/tests/test_visitor_model.mjs:1:1
+✖ dashboard/tests/test_visitor_model.mjs (60.317292ms)
+  'test failed'

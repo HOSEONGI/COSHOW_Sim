@@ -1,0 +1,15 @@
+node --test dashboard/tests/test_visitor_model.mjs
+✔ run overrides phase, external observation bypasses only idle guard (0.677292ms)
+✔ stale mission and disconnect clear phase signal; DONE keeps completion (0.066208ms)
+✔ labels count configured searchers and phase color comes only from led (0.114583ms)
+✔ finder uses display name and interest badges exclude unrelated detections (1.389041ms)
+✔ elapsed uses server seconds, unknown data never becomes zero (0.059125ms)
+✔ missing display name warns once per identifier (0.047542ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.472416

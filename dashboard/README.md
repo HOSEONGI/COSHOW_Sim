@@ -1,7 +1,7 @@
 # CO-SHOW 운영 대시보드
 
-현재 **M2 백엔드 코어**까지 구현했다. 화면은 M3–M4, 실제 실행 제어와
-비상착륙은 M5, 로스터 편집·스택 기동은 M6에서 추가한다.
+현재 **M3 참관자 레이아웃**까지 구현했다. 3D 장면과 카메라 디코딩은 M4,
+실제 실행 제어와 비상착륙은 M5, 로스터 편집·스택 기동은 M6에서 추가한다.
 실제 ROS 모드는 관찰 전용이며 수신한 제어 명령을 거부하고 이벤트에 남긴다.
 
 ## 실행
@@ -14,6 +14,13 @@ ROS 모드는 기존 ROS 환경을 source한 터미널에서 실행한다.
 python3 dashboard/server.py --mock
 python3 dashboard/tests/probe_m2.py --url http://127.0.0.1:8080 --start-mock
 ```
+
+서버 실행 후 브라우저에서 `http://127.0.0.1:8080/visitor.html`을 연다.
+두 번째 명령은 별도 터미널에서 mock 준비·시작을 요청한다. 약 29초에 수색
+단계가 된다. 조작 UI는 M5에서 추가한다. 화면의 빈 캔버스와 **샘플 영상**은
+M3 자리 표시자이며 실제 카메라 영상이 아니다. 글꼴과 three.js는 라이선스와
+함께 [static/VENDOR.md](static/VENDOR.md)에 버전을 고정해 동봉했다.
+`/visitor.html?fx=low`는 유리 blur를 끄고, OS의 모션 감소 설정도 따른다.
 
 `--mock-fail`을 함께 주면 stage 3 위치 오차와 ping 실패로 시작이 막힌다.
 mock은 파일을 바꾸지 않고 메모리 안에서 로스터·라디오·미설정 IP·BT 안전
@@ -28,7 +35,9 @@ python3 dashboard/server.py
 기본 바인딩은 `127.0.0.1:8080`. `/`는 현재 모드 JSON, `/ws?role=visitor`와
 `/ws?role=admin`은 프로토콜 엔드포인트다. 정적 파일은 `/static/`에서 제공한다.
 관리자 소켓은 로컬 주소만 허용한다. `--port`, `--host`, `--config`, `--field`
-옵션을 지원한다. 브라우저 화면은 다음 마일스톤에서 이 서버에 연결한다.
+옵션을 지원한다. 참관자 화면은 `hello` 역할 순서와 `state`를 사용하고
+서버의 `run.elapsed_s`를 표시한다. 연결 중단은 마지막 상태 수신 후 2초에
+표시하며 재접속한다.
 
 ## 설정 변경
 
@@ -87,3 +96,12 @@ fixture 서비스는 어떤 명령도 실행하지 않으며 제어 요청 0건�
 설치·키오스크·현장 runbook은 M7에서, Webots·실기체 리허설 지원은 M8에서
 다룬다. 각 단계의 증거와 제한은 [M1 보고서](REPORTS/M1.md),
 [M2 보고서](REPORTS/M2.md)에 기록한다.
+
+M3 화면 증거·레이아웃 해석·라벨 대비는 [M3 보고서](REPORTS/M3.md)에 있다.
+개발용 화면 검증은 `node dashboard/tests/verify_m3_ui.mjs`로 실행한다.
+별도 `--mock --port 8088` 서버와 개발 환경의 `playwright`, `sharp`가 필요하다.
+`DASHBOARD_QA_URL`로 서버 주소, `DASHBOARD_QA_NODE_MODULES`로 개발 모듈
+디렉터리, `CHROMIUM_EXECUTABLE`로 headless Chromium 경로를 지정할 수 있다.
+배포 Python 의존성이나 프론트 런타임에 Node 패키지를 추가하지 않는다.
+스크린샷은 실제 mock 타임라인에서, 대수 변경·재접속은 별도 브라우저
+프로토콜 fixture에서 확인한다.

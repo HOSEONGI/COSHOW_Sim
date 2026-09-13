@@ -1,0 +1,9 @@
+docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v '/Users/hoseon_mini/Documents/ChatGPT/'"'"'26 CO-SHOW DEMO/COSHOW_Sim:/ws' -v coshow_build:/ws_build coshow-humble-dev python3 dashboard/tests/verify_m2_constraints.py
+Python: 3.10.12
+Runtime imports: aiohttp, argparse, asyncio, collections, contextlib, copy, dashboard, ipaddress, json, math, os, pathlib, platform, rclpy, re, rosidl_runtime_py, shlex, shutil, string, sys, threading, time, uuid, yaml
+PASS: 8 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed

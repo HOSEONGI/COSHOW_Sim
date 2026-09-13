@@ -1,0 +1,9 @@
+git diff --cached --check
+dashboard/static/fonts/Pretendard-OFL-1.1.txt:22: trailing whitespace.
++fonts, including any derivative works, can be bundled, embedded, 
+dashboard/static/vendor/three.core.js:49957: space before tab in indent.
++			 	material = getMaterial( data.material );
+exit 2
+git diff --cached --check -- dashboard ':!dashboard/static/vendor' ':!dashboard/static/fonts'
+exit 0
+Two whitespace notices are unmodified upstream asset bytes; application files pass.

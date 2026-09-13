@@ -1,0 +1,99 @@
+$ node --test dashboard/tests/test_visitor_ws.mjs
+✖ initial open socket without state reconnects (hello=false) (19.855291ms)
+✖ initial open socket without state reconnects (hello=true) (0.230541ms)
+✖ newly opened reconnect gets its own state deadline despite old stale state (1.067208ms)
+✖ a state received at monotonic zero still has a watchdog deadline (0.181167ms)
+✔ hello is required again after reconnect; obsolete sockets cannot refresh it (0.198167ms)
+✔ stop closes the socket and prevents watchdog or retry work (0.152ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 2
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83.680667
+
+✖ failing tests:
+
+test at dashboard/tests/test_visitor_ws.mjs:80:3
+✖ initial open socket without state reconnects (hello=false) (19.855291ms)
+  AssertionError [ERR_ASSERTION]: a first state is also subject to the watchdog
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:88:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_visitor_ws.mjs:80:3
+✖ initial open socket without state reconnects (hello=true) (0.230541ms)
+  AssertionError [ERR_ASSERTION]: a first state is also subject to the watchdog
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:88:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_visitor_ws.mjs:95:1
+✖ newly opened reconnect gets its own state deadline despite old stale state (1.067208ms)
+  AssertionError [ERR_ASSERTION]: old lastState must not immediately close this socket
+  
+  3 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:111:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_visitor_ws.mjs:117:1
+✖ a state received at monotonic zero still has a watchdog deadline (0.181167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:124:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

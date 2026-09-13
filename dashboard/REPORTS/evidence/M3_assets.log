@@ -1,0 +1,22 @@
+COMMAND: python3 /private/tmp/coshow_vendor_assets_m3.py
+UTC: 2026-09-13T01:03:46.046058+00:00
+RELEASE: https://github.com/orioncactus/pretendard/releases/tag/v1.3.9 published_at=2023-11-05T18:21:09Z draft=false prerelease=false commit=5c41199ea0024a9e0b2cb31735265056e5472d76
+RELEASE: https://github.com/mrdoob/three.js/releases/tag/r186 published_at=2026-09-08T19:16:16Z draft=false prerelease=false commit=148ef33ecb6d2502ff796d4554abd1549c95d519
+DOWNLOAD: https://raw.githubusercontent.com/orioncactus/pretendard/5c41199ea0024a9e0b2cb31735265056e5472d76/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2
+PASS: fonts/PretendardVariable.woff2 bytes=2057688 sha256=9599f12fd42fc0bce1cd50b47a0c022e108d7aa64dd0d1bb0ed44f3282d900b4 upstream_git_blob=49c54b5152a184a243e85f7281ed338b6569987e
+DOWNLOAD: https://raw.githubusercontent.com/orioncactus/pretendard/5c41199ea0024a9e0b2cb31735265056e5472d76/LICENSE
+PASS: fonts/Pretendard-OFL-1.1.txt bytes=4418 sha256=d31ddd9f2bed32fd7e302a205cf2380ba0de6529152d239ef99cfb6f261bfc04 upstream_git_blob=c0592ca0072da4537bdc064eb935d88e9bb4361d
+DOWNLOAD: https://raw.githubusercontent.com/mrdoob/three.js/148ef33ecb6d2502ff796d4554abd1549c95d519/build/three.module.js
+PASS: vendor/three.module.js bytes=662772 sha256=9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea upstream_git_blob=c52087acfabae80efabb8cc05e3a1d96e35a1426
+DOWNLOAD: https://raw.githubusercontent.com/mrdoob/three.js/148ef33ecb6d2502ff796d4554abd1549c95d519/build/three.core.js
+PASS: vendor/three.core.js bytes=1458113 sha256=9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6 upstream_git_blob=0a1d6cb9ef3cabc97a50bd02394c85e8d1c513c2
+DOWNLOAD: https://raw.githubusercontent.com/mrdoob/three.js/148ef33ecb6d2502ff796d4554abd1549c95d519/LICENSE
+PASS: vendor/Three-MIT.txt bytes=1081 sha256=8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc upstream_git_blob=8ada2a5f982916b0ba4b7a0aa7de347587e745d7
+PASS: single unsplit WOFF2 signature; upstream OFL 1.1 and MIT license texts included
+PASS: static ESM imports three.core.js []
+PASS: static ESM imports three.module.js ["./three.core.js"]
+PASS: upstream variable CSS declares font-weight 45 920 and single full WOFF2: https://raw.githubusercontent.com/orioncactus/pretendard/5c41199ea0024a9e0b2cb31735265056e5472d76/packages/pretendard/dist/web/variable/pretendardvariable.css
+PASS: wrote static/VENDOR.md with versions, immutable source URLs, sizes, and SHA-256
+TOTAL_VENDOR_BYTES: 4184072
+PASS: upstream package.json version=0.186.0 type=module source=https://raw.githubusercontent.com/mrdoob/three.js/148ef33ecb6d2502ff796d4554abd1549c95d519/package.json
+PASS: independently re-read all 5 saved files; VENDOR.md byte counts and SHA-256 match

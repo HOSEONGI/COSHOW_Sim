@@ -1,0 +1,6 @@
+env DASHBOARD_QA_NODE_MODULES=/Users/hoseon_mini/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules CHROMIUM_EXECUTABLE=/Users/hoseon_mini/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell node dashboard/tests/measure_m3_peak_contrast.mjs
+EXPERIMENT: temporary 240x120 glass panels at background light corners; actual dashboard hidden. Sample interior >=16px from edges. This is NOT the shipped label layout.
+{"light":"cool","glassAlpha":0.1,"minimum":3.562,"x":16,"y":16,"background":[39,109,146],"meets45":false}
+{"light":"warm","glassAlpha":0.1,"minimum":4.802,"x":1901,"y":1054,"background":[92,76,77],"meets45":true}
+{"light":"cool","glassAlpha":0.16,"minimum":3.212,"x":16,"y":16,"background":[54,118,153],"meets45":false}
+{"light":"warm","glassAlpha":0.16,"minimum":4.151,"x":1901,"y":1054,"background":[102,88,89],"meets45":false}
