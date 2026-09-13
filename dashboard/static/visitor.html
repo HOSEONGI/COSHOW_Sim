@@ -24,7 +24,9 @@
         <canvas id="field-canvas" aria-label="수색 현장 디지털 트윈 영역"></canvas>
       </div>
       <div class="narrative glass" data-region="narrative">
+        <p id="narrative-previous" aria-hidden="true"></p>
         <p id="narrative">다음 데모를 준비하고 있습니다</p>
+        <span id="return-progress" hidden>복귀</span>
       </div>
       <div class="idle-intro glass" data-region="idle-intro" hidden>
         <p class="idle-lead"></p><p class="idle-detail"></p><p class="idle-detail"></p>
@@ -38,8 +40,8 @@
       <section class="mission glass glass-strong" data-region="mission" aria-labelledby="mission-heading">
         <h2 id="mission-heading">미션 정보</h2>
         <dl>
-          <div><dt class="label">발견 마커</dt><dd id="marker-value">—</dd></div>
-          <div><dt class="label">목표 좌표 <span>(m)</span></dt><dd id="target-value">—</dd></div>
+          <div><dt class="label" id="marker-label">임무</dt><dd id="marker-value">—</dd></div>
+          <div><dt class="label">발견 위치 <span>(m)</span></dt><dd id="target-value">—</dd></div>
           <div><dt class="label">구조 상태</dt><dd id="rescue-value">미션 대기</dd></div>
         </dl>
       </section>

@@ -1,0 +1,43 @@
+✔ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.438875ms)
+✔ visitor role selection comes only from hello and never observes spare telemetry (0.087292ms)
+✖ a high refresh rate display cannot request more than sixty rendered frames per second (6.62325ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.37925ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.9145ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.118416ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.122958ms)
+✔ an invalid or missing pose never erases the last received position (0.060667ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.11775ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.142042ms)
+✔ an assigned role with a missing pose remains translucent without an altitude stem (0.086125ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.141667ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.681625
+
+✖ failing tests:
+
+test at dashboard/tests/test_twin_model.mjs:21:1
+✖ a high refresh rate display cannot request more than sixty rendered frames per second (6.62325ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(now-last>=1000/60-1e-7)
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:25:52)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

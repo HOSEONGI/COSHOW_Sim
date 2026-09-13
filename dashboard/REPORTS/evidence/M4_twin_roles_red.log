@@ -1,0 +1,76 @@
+✖ field bounds follow supplied regions, including renamed and expanded deployment coordinates (2.319667ms)
+✖ visitor role selection comes only from hello and never observes spare telemetry (0.294375ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.916916ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (2.176416ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.114833ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.125458ms)
+✔ an invalid or missing pose never erases the last received position (0.063292ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.09625ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.130167ms)
+✔ an assigned role with a missing pose remains translucent without an altitude stem (0.111333ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.136584ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.319458
+
+✖ failing tests:
+
+test at dashboard/tests/test_twin_model.mjs:11:1
+✖ field bounds follow supplied regions, including renamed and expanded deployment coordinates (2.319667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      x: [
+  +     8,
+  -     10,
+        14
+      ],
+      y: [
+        20,
+        24
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:13:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { x: [ 8, 14 ], y: [ 20, 24 ] },
+    expected: { x: [ 10, 14 ], y: [ 20, 24 ] },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:15:1
+✖ visitor role selection comes only from hello and never observes spare telemetry (0.294375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'reader',
+  -   'finder',
+  -   'carrier'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:18:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'reader', 'finder', 'carrier' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,5 @@
+Recorded during 2026-09-13 role-six sustained test (native call after 03:20 UTC)
+Tool: mcp__cua_repl.js / chromeApp.getAXState()
+Result: The Mac is locked and automatic unlock could not unlock it. Ask the user to unlock the Mac manually before continuing.
+User unlock request submitted asynchronously. Current role-six 32min test keeps collecting Chromium CDP heap/DOM and renderer resource counts.
+No final Chrome Task Manager GPU-memory start/end screenshot exists. Prior prototype14 screenshot moved to ignored run/qa_archive and is not final acceptance evidence.

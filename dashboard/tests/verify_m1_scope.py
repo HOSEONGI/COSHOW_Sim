@@ -17,6 +17,7 @@ ALLOWED = {
     'tools/preflight_node.py',
     'ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py',
     'ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py',
+    'nodes/aruco_detector_node.py',
 }
 
 
@@ -66,6 +67,70 @@ def check_service_telemetry_only(before_source, after_source):
     assert ast.dump(before) == ast.dump(after), '_DroneService changed beyond cmd.goal[2:]'
 
 
+def check_sim_image_additions(before_source, after_source):
+    """Remove only §4.6 additions, then compare the entire original module AST.
+
+    The shared annotation helper must contain the exact original display drawing
+    statements. Reconstructing that block also protects resize/imshow/waitKey.
+    Decode, detection, result publication, UDP, projection and all other original
+    statements remain covered; listing the path never exempts its old methods.
+    """
+    before, after = ast.parse(before_source), ast.parse(after_source)
+    imports = [ast.dump(ast.parse(line).body[0]) for line in (
+        'from rclpy.clock import Clock, ClockType',
+        'from rclpy.qos import qos_profile_sensor_data',
+        'from sensor_msgs.msg import CompressedImage',
+        'from std_msgs.msg import Bool, Float32',
+    )]
+    for expected in imports:
+        matches = [node for node in after.body if ast.dump(node) == expected]
+        assert len(matches) == 1, 'sim images: expected exactly one added import'
+        after.body.remove(matches[0])
+
+    def detector(tree):
+        return next(node for node in tree.body
+                    if isinstance(node, ast.ClassDef) and node.name == 'ArucoDetectorNode')
+
+    old_class, new_class = detector(before), detector(after)
+    old = {node.name: node for node in old_class.body if isinstance(node, ast.FunctionDef)}
+    new = {node.name: node for node in new_class.body if isinstance(node, ast.FunctionDef)}
+    added = {'_annotate_frame', '_init_image_publishers', '_publish_image', '_publish_image_stats'}
+    assert set(new) - set(old) == added, 'sim images: unexpected new methods'
+    assert set(old) <= set(new), 'sim images: original method removed'
+    init_call = ast.dump(ast.parse('self._init_image_publishers()').body[0])
+    matches = [node for node in new['__init__'].body if ast.dump(node) == init_call]
+    assert len(matches) == 1, 'sim images: expected one publisher setup addition'
+    new['__init__'].body.remove(matches[0])
+
+    old_display = old['_process_frame'].body[-1]
+    assert isinstance(old_display, ast.If) and ast.dump(old_display.test) == ast.dump(
+        ast.parse('self.display', mode='eval').body)
+    helper = new['_annotate_frame']
+    signature = ast.parse('def _annotate_frame(self, gray, corners, ids, msg): pass').body[0]
+    assert ast.dump(helper.args) == ast.dump(signature.args)
+    assert isinstance(helper.body[0], ast.Expr) and isinstance(helper.body[0].value, ast.Constant)
+    assert ast.dump(helper.body[-1]) == ast.dump(ast.parse('return disp').body[0])
+    assert [ast.dump(n) for n in helper.body[1:-1]] == [
+        ast.dump(n) for n in old_display.body[:-3]], 'sim images: original drawing AST changed'
+
+    expected_display = ast.parse('''
+if self.display or self.publish_images:
+    disp = self._annotate_frame(gray, corners, ids, msg)
+    if self.publish_images:
+        self._publish_image(disp, msg.header)
+    if self.display:
+        pass
+''').body[0]
+    expected_display.body[-1].body = old_display.body[-3:]
+    assert ast.dump(new['_process_frame'].body[-1]) == ast.dump(expected_display), (
+        'sim images: display/publication block changed beyond authorized additions')
+    new['_process_frame'].body[-1] = old_display
+    new_class.body = [node for node in new_class.body
+                      if not isinstance(node, ast.FunctionDef) or node.name not in added]
+    assert ast.dump(before) == ast.dump(after), (
+        'sim detector original AST changed beyond §4.6 image additions')
+
+
 def main():
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASE], cwd=str(ROOT), text=True).splitlines()
     outside = [p for p in changed if not p.startswith('dashboard/')]
@@ -107,6 +172,10 @@ def main():
     # ast.walk is breadth-first: adding a lock changes traversal order, not logs.
     assert sorted(log_calls(old)) == sorted(log_calls(new))
     print('Preflight original logger calls unchanged:', len(log_calls(old)))
+    path = 'nodes/aruco_detector_node.py'
+    check_sim_image_additions(original(path), (ROOT / path).read_text())
+    print('Sim detector entire original AST unchanged after removing §4.6 additions; '
+          'shared annotation drawing and display ASTs unchanged')
     for path in sorted(ALLOWED):
         current = functions((ROOT / path).read_text())
         for revision in (BASE, M1_BASE):

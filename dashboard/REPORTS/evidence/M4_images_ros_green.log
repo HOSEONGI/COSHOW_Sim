@@ -1,0 +1,29 @@
+PASS startup with no frame: stream_ok=false, fps=0; no /clock publisher
+PASS actual compressed subscription: 20 JPEGs, 320x220 BGR, yellow annotation, marker ID 3
+{
+  "opencv": "4.10.0",
+  "python": "3.10.12",
+  "images_received": 30,
+  "active_fps_samples": [
+    9.984,
+    10.02,
+    9.985,
+    9.993
+  ],
+  "stream_false_after_last_frame_s": 3.381,
+  "stream_false_after_pause_s": 3.379,
+  "heartbeat_gaps_s": [
+    1.001,
+    1.002,
+    0.999
+  ],
+  "jpeg_shape": [
+    220,
+    320,
+    3
+  ],
+  "detector_udp_sockets_opened": 0,
+  "scope": "synthetic JPEG input through real detector -> real ROS subscribers and ROS CLI; no Webots/hardware"
+}
+PASS: real ROS JPEG/fps/stream_ok and CLI; steady 1 Hz heartbeat, 3 s stale threshold
+CHILD STOP: rc=0

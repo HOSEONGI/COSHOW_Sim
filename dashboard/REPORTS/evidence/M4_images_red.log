@@ -1,0 +1,179 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+____ test_image_topics_default_on_with_sensor_data_qos_and_steady_heartbeat ____
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d54b3ac80>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))])
+
+    def test_image_topics_default_on_with_sensor_data_qos_and_steady_heartbeat(detector):
+        node = detector.node
+        topics = {publisher.topic_name: publisher for publisher in node.publishers}
+        for suffix in ('image_annotated/compressed', 'fps', 'stream_ok'):
+            name = '/aideck/cf230/' + suffix
+>           assert name in topics, 'missing image publication topic ' + name
+E           AssertionError: missing image publication topic /aideck/cf230/image_annotated/compressed
+E           assert '/aideck/cf230/image_annotated/compressed' in {'/cf230/marker_detections': <rclpy.publisher.Publisher object at 0xe99d54cd6ec0>, '/parameter_events': <rclpy.publisher.Publisher object at 0xe99d54be0700>}
+
+dashboard/tests/test_sim_images.py:96: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.659008652] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+___ test_real_marker_detection_and_full_size_annotated_jpeg_without_display ____
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d4e5d2230>, module=<module 'sim_detector_m4_test...msg.MarkerDetection(id=3, cx=69.5, cy=69.5, size_px=79.0, world_x=0.24020665594970386, world_y=0.5367580830481038)]))])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe99d4e5d3e50>
+
+    def test_real_marker_detection_and_full_size_annotated_jpeg_without_display(detector, monkeypatch):
+        node = detector.node
+        assert node.display is False
+        quality = []
+        encode = cv2.imencode
+    
+        def record(extension, frame, parameters):
+            quality.append((extension, parameters, frame.copy()))
+            return encode(extension, frame, parameters)
+    
+        monkeypatch.setattr(cv2, 'imencode', record)
+        pose = PoseStamped()
+        pose.pose.position.z = 1.0
+        pose.pose.orientation.w = 1.0
+        node._pose_cb(pose)
+        node._process_frame(marker_frame().tobytes())
+        images = received(detector, '/compressed')
+>       assert len(images) == 1, 'headless simulated frame must publish one JPEG'
+E       AssertionError: headless simulated frame must publish one JPEG
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+dashboard/tests/test_sim_images.py:123: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.666637610] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+----------------------------- Captured stderr call -----------------------------
+[INFO] [1789266763.671678416] [aruco_detector]: [cf230] frame=0 id=3(79px)
+______ test_fps_uses_received_frames_and_stream_expires_at_three_seconds _______
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d557b11b0>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))])
+
+    def test_fps_uses_received_frames_and_stream_expires_at_three_seconds(detector):
+        node = detector.node
+>       assert hasattr(node, '_publish_image_stats'), 'missing image heartbeat'
+E       AssertionError: missing image heartbeat
+E       assert False
+E        +  where False = hasattr(<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d557b11b0>, '_publish_image_stats')
+
+dashboard/tests/test_sim_images.py:141: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.679575539] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+_________________ test_topic_prefix_is_configurable[detector0] _________________
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d54b861d0>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))])
+
+    @pytest.mark.parametrize('detector', [{'image_topic_prefix': '/preview/'}], indirect=True)
+    def test_topic_prefix_is_configurable(detector):
+        names = {publisher.topic_name for publisher in detector.node.publishers}
+>       assert '/preview/cf230/image_annotated/compressed' in names
+E       AssertionError: assert '/preview/cf230/image_annotated/compressed' in {'/cf230/marker_detections', '/parameter_events'}
+
+dashboard/tests/test_sim_images.py:164: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.688946779] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+____ test_disabling_images_keeps_original_display_and_detection[detector0] _____
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d4e5d2440>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe99d4e5d0850>
+
+    @pytest.mark.parametrize('detector', [{'publish_images': False, 'display': True}], indirect=True)
+    def test_disabling_images_keeps_original_display_and_detection(detector, monkeypatch):
+        shown = []
+        monkeypatch.setattr(cv2, 'imshow', lambda name, frame: shown.append((name, frame)))
+        monkeypatch.setattr(cv2, 'waitKey', lambda delay: None)
+        monkeypatch.setattr(cv2, 'destroyAllWindows', lambda: None)
+>       assert detector.node.get_parameter('publish_images').value is False
+
+dashboard/tests/test_sim_images.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sim_detector_m4_test.ArucoDetectorNode object at 0xe99d4e5d2440>
+name = 'publish_images'
+
+    def get_parameter(self, name: str) -> Parameter:
+        """
+        Get a parameter by name.
+    
+        :param name: Fully-qualified name of the parameter, including its namespace.
+        :return: The value for the given parameter name.
+            A default Parameter will be returned for an undeclared parameter if
+            undeclared parameters are allowed.
+        :raises: ParameterNotDeclaredException if undeclared parameters are not allowed,
+            and the parameter hadn't been declared beforehand.
+        :raises: ParameterUninitializedException if the parameter is statically typed and
+            uninitialized.
+        """
+        if self.has_parameter(name):
+            parameter = self._parameters[name]
+            if (
+                parameter.type_ != Parameter.Type.NOT_SET or
+                self._descriptors[name].dynamic_typing
+            ):
+                return self._parameters[name]
+            # Statically typed, uninitialized parameter
+            raise ParameterUninitializedException(name)
+        elif self._allow_undeclared_parameters:
+            return Parameter(name, Parameter.Type.NOT_SET, None)
+        else:
+>           raise ParameterNotDeclaredException(name)
+E           rclpy.exceptions.ParameterNotDeclaredException: ('Invalid access to undeclared parameter(s)', 'publish_images')
+
+/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py:601: ParameterNotDeclaredException
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.698854558] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=True
+___________ test_bad_frame_does_not_refresh_stream_or_publish_image ____________
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d5c0da0b0>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))])
+
+    def test_bad_frame_does_not_refresh_stream_or_publish_image(detector):
+>       assert hasattr(detector.node, '_publish_image_stats'), 'missing image heartbeat'
+E       AssertionError: missing image heartbeat
+E       assert False
+E        +  where False = hasattr(<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d5c0da0b0>, '_publish_image_stats')
+E        +    where <sim_detector_m4_test.ArucoDetectorNode object at 0xe99d5c0da0b0> = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d5c0da0b0>, module=<module 'sim_detector_m4_test...teger_array_value=[], double_array_value=[], string_array_value=[]))], changed_parameters=[], deleted_parameters=[]))]).node
+
+dashboard/tests/test_sim_images.py:186: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.713278563] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+_____________ test_jpeg_encode_failure_keeps_detection_and_display _____________
+
+detector = namespace(node=<sim_detector_m4_test.ArucoDetectorNode object at 0xe99d557d8790>, module=<module 'sim_detector_m4_test...)), markers=[coshow_interfaces.msg.MarkerDetection(id=3, cx=69.5, cy=69.5, size_px=79.0, world_x=0.0, world_y=0.0)]))])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe99d557db5b0>
+
+    def test_jpeg_encode_failure_keeps_detection_and_display(detector, monkeypatch):
+        shown = []
+        detector.node.display = True
+        monkeypatch.setattr(cv2, 'imshow', lambda name, frame: shown.append(frame))
+        monkeypatch.setattr(cv2, 'waitKey', lambda delay: None)
+        monkeypatch.setattr(cv2, 'destroyAllWindows', lambda: None)
+        attempts = []
+    
+        def fail(*args):
+            attempts.append(args)
+            raise cv2.error('intentional encoder failure')
+    
+        monkeypatch.setattr(cv2, 'imencode', fail)
+        detector.node._process_frame(marker_frame().tobytes())
+>       assert len(attempts) == 1, 'image publication must try the JPEG encoder'
+E       AssertionError: image publication must try the JPEG encoder
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+dashboard/tests/test_sim_images.py:209: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+[INFO] [1789266763.721243644] [aruco_detector]: [cf230] aruco_detector: deck=127.0.0.1:6001 listen=5001 display=False
+----------------------------- Captured stderr call -----------------------------
+[INFO] [1789266763.723851838] [aruco_detector]: [cf230] frame=0 id=3(79px)
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_sim_images.py::test_image_topics_default_on_with_sensor_data_qos_and_steady_heartbeat
+FAILED dashboard/tests/test_sim_images.py::test_real_marker_detection_and_full_size_annotated_jpeg_without_display
+FAILED dashboard/tests/test_sim_images.py::test_fps_uses_received_frames_and_stream_expires_at_three_seconds
+FAILED dashboard/tests/test_sim_images.py::test_topic_prefix_is_configurable[detector0]
+FAILED dashboard/tests/test_sim_images.py::test_disabling_images_keeps_original_display_and_detection[detector0]
+FAILED dashboard/tests/test_sim_images.py::test_bad_frame_does_not_refresh_stream_or_publish_image
+FAILED dashboard/tests/test_sim_images.py::test_jpeg_encode_failure_keeps_detection_and_display
+7 failed in 0.22s

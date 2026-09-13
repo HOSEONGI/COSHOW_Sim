@@ -1,0 +1,131 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_scope_rejects_detection_display_transport_and_projection_changes[det.id = int(marker_id)-det.id = 0] _
+
+before = 'det.id = int(marker_id)', after = 'det.id = 0'
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+_ test_scope_rejects_detection_display_transport_and_projection_changes[self.pub.publish(msg)-pass] _
+
+before = 'self.pub.publish(msg)', after = 'pass'
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+_ test_scope_rejects_detection_display_transport_and_projection_changes[cv2.imshow(f'aruco {self.drone}', disp)-pass] _
+
+before = "cv2.imshow(f'aruco {self.drone}', disp)", after = 'pass'
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+_ test_scope_rejects_detection_display_transport_and_projection_changes[self.sock.bind(('0.0.0.0', listen_port))-self.sock.bind(('127.0.0.1', listen_port))] _
+
+before = "self.sock.bind(('0.0.0.0', listen_port))"
+after = "self.sock.bind(('127.0.0.1', listen_port))"
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+_ test_scope_rejects_detection_display_transport_and_projection_changes[(0, 255, 255)-(255, 0, 255)] _
+
+before = '(0, 255, 255)', after = '(255, 0, 255)'
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+_ test_scope_rejects_detection_display_transport_and_projection_changes[k = -p.z / uE[2]-k = p.z / uE[2]] _
+
+before = 'k = -p.z / uE[2]', after = 'k = p.z / uE[2]'
+
+    @pytest.mark.parametrize('before,after', [
+        ('det.id = int(marker_id)', 'det.id = 0'),
+        ('self.pub.publish(msg)', 'pass'),
+        ("cv2.imshow(f'aruco {self.drone}', disp)", 'pass'),
+        ("self.sock.bind(('0.0.0.0', listen_port))", "self.sock.bind(('127.0.0.1', listen_port))"),
+        ('(0, 255, 255)', '(255, 0, 255)'),
+        ('k = -p.z / uE[2]', 'k = p.z / uE[2]'),
+    ])
+    def test_scope_rejects_detection_display_transport_and_projection_changes(before, after):
+        from dashboard.tests import verify_m1_scope as scope
+>       assert hasattr(scope, 'check_sim_image_additions'), 'missing simulated detector AST protection'
+E       AssertionError: missing simulated detector AST protection
+E       assert False
+E        +  where False = hasattr(<module 'dashboard.tests.verify_m1_scope' from '/ws/dashboard/tests/verify_m1_scope.py'>, 'check_sim_image_additions')
+
+dashboard/tests/test_sim_images.py:225: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[det.id = int(marker_id)-det.id = 0]
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[self.pub.publish(msg)-pass]
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[cv2.imshow(f'aruco {self.drone}', disp)-pass]
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[self.sock.bind(('0.0.0.0', listen_port))-self.sock.bind(('127.0.0.1', listen_port))]
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[(0, 255, 255)-(255, 0, 255)]
+FAILED dashboard/tests/test_sim_images.py::test_scope_rejects_detection_display_transport_and_projection_changes[k = -p.z / uE[2]-k = p.z / uE[2]]
+6 failed, 7 deselected in 0.08s

@@ -29,21 +29,24 @@ class Clock {
   }
 }
 
-function environment(t) {
+function environment(t, options={}) {
   const clock = new Clock();
   const sockets = [];
   const connections = [];
   const states = [];
   const hellos = [];
+  const frames = [];
   class Socket {
     static CONNECTING = 0;
     static OPEN = 1;
     static CLOSED = 3;
     readyState = Socket.CONNECTING;
     closes = 0;
+    sent = [];
     constructor(url) { this.url = String(url); sockets.push(this); }
     open() { this.readyState = Socket.OPEN; this.onopen?.({}); }
     message(value) { this.onmessage?.({data: JSON.stringify(value)}); }
+    send(value) {this.sent.push(JSON.parse(value));}
     close() {
       if (this.readyState === Socket.CLOSED) return;
       this.closes++;
@@ -65,7 +68,8 @@ function environment(t) {
   for (const [key, value] of Object.entries(replacements))
     Object.defineProperty(globalThis, key, {value, configurable: true, writable: true});
   const stop = connect({onHello: value => hellos.push(value),
-    onState: value => states.push(value), onConnection: value => connections.push(value)});
+    onState: value => states.push(value), onConnection: value => connections.push(value),
+    onFrame: (index, jpeg) => frames.push([index, [...jpeg]]),...options});
   t.after(() => {
     stop();
     for (const [key, descriptor] of originals) {
@@ -73,8 +77,17 @@ function environment(t) {
       else delete globalThis[key];
     }
   });
-  return {clock, sockets, Socket, connections, states, hellos, stop};
+  return {clock, sockets, Socket, connections, states, hellos, frames, stop};
 }
+
+test('binary forwarding strips index and ignores frames before hello', t => {
+  const {sockets,frames}=environment(t),socket=sockets[0];socket.open();
+  const data=new Uint8Array([2,255,216,255,217]).buffer;
+  socket.onmessage({data});assert.deepEqual(frames,[]);
+  socket.message({type:'hello'});socket.onmessage({data});
+  assert.deepEqual(frames,[[2,[255,216,255,217]]]);
+  socket.onmessage({data:new ArrayBuffer(1)});assert.equal(frames.length,1);
+});
 
 for (const hello of [false, true]) {
   test(`initial open socket without state reconnects (hello=${hello})`, t => {
@@ -153,4 +166,59 @@ test('stop closes the socket and prevents watchdog or retry work', t => {
   clock.advance(60000);
   assert.equal(sockets.length, 1);
   assert.equal(clock.pending.size, 0);
+});
+
+test('admin loses controls immediately on close and at 1.5 seconds without state',t=>{
+  const {sockets,clock,connections,stop}=environment(t,{role:'admin'}),socket=sockets[0];
+  socket.open();socket.message({type:'hello'});socket.message({type:'state'});
+  assert.equal(stop.send('estop'),true);assert.deepEqual(socket.sent,[{cmd:'estop'}]);
+  clock.advance(1500);assert.equal(connections.at(-1),false);assert.equal(stop.send('start'),false);
+  clock.advance(500);const next=sockets[1];next.open();next.message({type:'hello'});next.message({type:'state'});
+  next.close();assert.equal(connections.at(-1),false);
+});
+
+test('admin expires exactly 1.5 seconds after an off-grid state receipt',t=>{
+  const {sockets,clock,connections,Socket,stop}=environment(t,{role:'admin'}),socket=sockets[0];
+  socket.open();socket.message({type:'hello'});
+  clock.advance(100);socket.message({type:'state'});
+  clock.advance(1499);
+  assert.equal(connections.at(-1),true);assert.equal(socket.readyState,Socket.OPEN);
+  clock.advance(1);
+  assert.equal(connections.at(-1),false,'state received at 100 ms expires at 1600 ms');
+  assert.equal(socket.readyState,Socket.CLOSED);assert.equal(stop.send('start'),false);
+});
+
+test('admin state refresh replaces the expiry timer and stop cancels it',t=>{
+  const {sockets,clock,connections,Socket,stop}=environment(t,{role:'admin'}),socket=sockets[0];
+  socket.open();socket.message({type:'hello'});
+  clock.advance(100);socket.message({type:'state'});
+  clock.advance(800);socket.message({type:'state'});
+  clock.advance(1499);
+  assert.equal(connections.at(-1),true,'neither the open nor previous state deadline may expire fresh data');
+  assert.equal(socket.readyState,Socket.OPEN);
+  stop();clock.advance(60000);
+  assert.equal(clock.pending.size,0);assert.equal(sockets.length,1);
+});
+
+test('admin send rejects an expired state even when browser timers have not run',t=>{
+  const {sockets,clock,connections,Socket,stop}=environment(t,{role:'admin'}),socket=sockets[0];
+  socket.open();socket.message({type:'hello'});
+  clock.advance(100);socket.message({type:'state'});
+  // A throttled tab can resume with timer callbacks still pending.
+  clock.now+=1500;
+  assert.equal(stop.send('estop'),false,'send must check receipt age independently of timer callbacks');
+  assert.deepEqual(socket.sent,[]);assert.equal(connections.at(-1),false);
+  assert.equal(socket.readyState,Socket.CLOSED);
+});
+
+test('admin initial state deadline starts at an off-grid socket open',t=>{
+  const {sockets,clock,Socket}=environment(t,{role:'admin'}),socket=sockets[0];
+  clock.advance(100);socket.open();socket.message({type:'hello'});
+  clock.advance(1499);assert.equal(socket.readyState,Socket.OPEN);
+  clock.advance(1);assert.equal(socket.readyState,Socket.CLOSED);
+});
+
+test('visitor cannot send commands even on an active socket',t=>{
+  const {sockets,stop}=environment(t);sockets[0].open();sockets[0].message({type:'hello'});sockets[0].message({type:'state'});
+  assert.equal(stop.send('start'),false);assert.deepEqual(sockets[0].sent,[]);
 });

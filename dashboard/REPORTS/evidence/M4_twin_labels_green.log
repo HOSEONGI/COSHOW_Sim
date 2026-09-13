@@ -1,0 +1,22 @@
+✔ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.325333ms)
+✔ visitor role selection comes only from hello and never observes spare telemetry (0.0755ms)
+✔ a high refresh rate display cannot request more than sixty rendered frames per second (0.581125ms)
+✔ labels colliding at the same projected pose occupy separate stable rows without moving their anchors (0.319833ms)
+✔ labels near every frame edge remain within the scene above the reserved narrative (0.073416ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.308875ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.922625ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.11825ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.15675ms)
+✔ an invalid or missing pose never erases the last received position (0.137458ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.1585ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.096875ms)
+✔ an assigned role with a missing pose remains translucent without an altitude stem (0.054625ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.118167ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78.250084

@@ -1,0 +1,198 @@
+✖ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.843875ms)
+✖ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.093208ms)
+✖ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.358708ms)
+✖ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.117542ms)
+✖ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.069667ms)
+✖ an invalid or missing pose never erases the last received position (0.103667ms)
+✖ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.1735ms)
+✖ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.060084ms)
+✖ spare placement uses supplied pitch and bounds and never pretends a missing pose is fresh (0.078458ms)
+✖ discovery ring and return floor wash fire once and reset only for a new run (0.114291ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 0
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69.776667
+
+✖ failing tests:
+
+test at dashboard/tests/test_twin_model.mjs:11:1
+✖ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.843875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - {
+  -   x: [
+  -     -5,
+  -     2
+  -   ],
+  -   y: [
+  -     -3,
+  -     3
+  -   ]
+  - }
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:12:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { x: [ -5, 2 ], y: [ -3, 3 ] },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:15:1
+✖ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.093208ms)
+  TypeError: Cannot read properties of undefined (reading 'target')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:19:28)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at dashboard/tests/test_twin_model.mjs:26:1
+✖ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.358708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 128
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:30:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 128,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:36:1
+✖ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.117542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 6
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:40:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 6,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:44:1
+✖ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.069667ms)
+  TypeError: Cannot read properties of undefined (reading 'x')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:48:29)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at dashboard/tests/test_twin_model.mjs:52:1
+✖ an invalid or missing pose never erases the last received position (0.103667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:54:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:58:1
+✖ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.1735ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - {
+  -   fresh: true,
+  -   opacity: 1,
+  -   signal: 'red',
+  -   stem: true
+  - }
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:59:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { fresh: true, opacity: 1, stem: true, signal: 'red' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_twin_model.mjs:64:1
+✖ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.060084ms)
+  TypeError: Cannot read properties of undefined (reading 'signal')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:65:133)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at dashboard/tests/test_twin_model.mjs:69:1
+✖ spare placement uses supplied pitch and bounds and never pretends a missing pose is fresh (0.078458ms)
+  TypeError: Cannot read properties of undefined (reading 'length')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:71:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at dashboard/tests/test_twin_model.mjs:76:1
+✖ discovery ring and return floor wash fire once and reset only for a new run (0.114291ms)
+  TypeError: Cannot read properties of undefined (reading 'found')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:79:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

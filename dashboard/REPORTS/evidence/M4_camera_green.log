@@ -1,0 +1,18 @@
+✔ binary JPEG drops while busy, resizes to decoded dimensions, draws and closes (1.417584ms)
+✔ disposed decoder closes late bitmap without touching detached canvas (0.14625ms)
+✔ failed decoding frees its slot and overlay distinguishes never received from stale (0.169875ms)
+✔ binary forwarding strips index and ignores frames before hello (22.078125ms)
+✔ initial open socket without state reconnects (hello=false) (0.2545ms)
+✔ initial open socket without state reconnects (hello=true) (0.148ms)
+✔ newly opened reconnect gets its own state deadline despite old stale state (0.189875ms)
+✔ a state received at monotonic zero still has a watchdog deadline (0.171125ms)
+✔ hello is required again after reconnect; obsolete sockets cannot refresh it (0.170708ms)
+✔ stop closes the socket and prevents watchdog or retry work (0.107166ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90.06375

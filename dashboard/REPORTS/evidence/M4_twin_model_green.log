@@ -1,0 +1,18 @@
+✔ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.161084ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.679625ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (2.091292ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.111833ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.130958ms)
+✔ an invalid or missing pose never erases the last received position (0.066ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.098042ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.077584ms)
+✔ spare placement uses supplied pitch and bounds and never pretends a missing pose is fresh (0.134333ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.148875ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76.996667

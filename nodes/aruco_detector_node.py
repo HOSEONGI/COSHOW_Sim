@@ -20,9 +20,13 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from rclpy.parameter import Parameter
+from rclpy.clock import Clock, ClockType
+from rclpy.qos import qos_profile_sensor_data
 
 from geometry_msgs.msg import PoseStamped
 from coshow_interfaces.msg import MarkerDetection, MarkerDetections
+from sensor_msgs.msg import CompressedImage
+from std_msgs.msg import Bool, Float32
 
 # ── 카메라 역투영: 마커 픽셀 → 지면(z=0) 월드 좌표 (논문 Algorithm 1, 하방 카메라) ──
 _IMG_W, _IMG_H = 320.0, 220.0
@@ -121,6 +125,7 @@ class ArucoDetectorNode(Node):
         # --- 검출 결과 발행 ---
         self.pub = self.create_publisher(
             MarkerDetections, f'/{self.drone}/marker_detections', 10)
+        self._init_image_publishers()
 
         # --- 메인 루프 타이머 (10ms마다 소켓 폴링) ---
         self.create_timer(0.01, self._poll)
@@ -240,34 +245,90 @@ class ArucoDetectorNode(Node):
             self.get_logger().info(
                 f'[{self.drone}] frame={self.frame_count} {found}')
 
-        # --- 옵션: 화면 표시 ---
-        if self.display:
-            disp = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-            if ids is not None:
-                # ids 를 넘기지 않으면 외곽선만 그린다 (기본 파란 ID 글씨 억제).
-                # ID 는 아래에서 world 좌표와 묶어 한 번만 표시.
-                cv2.aruco.drawDetectedMarkers(disp, corners)
-            # 화면 중심 = 드론 바로 아래 지점 (하방 카메라)
-            hh, ww = disp.shape[:2]
-            cv2.drawMarker(disp, (ww // 2, hh // 2), (0, 255, 255),
-                           cv2.MARKER_CROSS, 18, 1)
-            if self.latest_pose is not None:
-                dx = self.latest_pose.pose.position.x
-                dy = self.latest_pose.pose.position.y
-                cv2.putText(disp, f"drone ({dx:.2f},{dy:.2f})",
-                            (ww // 2 + 10, hh // 2 - 6),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 255), 1)
-            # 각 마커: 계산된 world 좌표 표시
-            for m in msg.markers:
-                px, py = int(m.cx), int(m.cy)
-                cv2.circle(disp, (px, py), 4, (0, 0, 255), -1)
-                cv2.putText(disp, f"ID: {m.id}({m.world_x:.2f}, {m.world_y:.2f})",
-                            (px + 6, py - 6), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.45, (0, 0, 255), 1)
-            disp = cv2.resize(disp, None, fx=0.7, fy=0.7,
-                              interpolation=cv2.INTER_AREA)
-            cv2.imshow(f'aruco {self.drone}', disp)
-            cv2.waitKey(1)
+        # 원본 해상도의 주석 BGR을 공유하고, 화면만 기존처럼 축소한다.
+        if self.display or self.publish_images:
+            disp = self._annotate_frame(gray, corners, ids, msg)
+            if self.publish_images:
+                self._publish_image(disp, msg.header)
+            if self.display:
+                disp = cv2.resize(disp, None, fx=0.7, fy=0.7,
+                                  interpolation=cv2.INTER_AREA)
+                cv2.imshow(f'aruco {self.drone}', disp)
+                cv2.waitKey(1)
+
+    def _annotate_frame(self, gray, corners, ids, msg):
+        """기존 display 주석을 원본 해상도로 만든다."""
+        disp = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+        if ids is not None:
+            # ids 를 넘기지 않으면 외곽선만 그린다 (기본 파란 ID 글씨 억제).
+            # ID 는 아래에서 world 좌표와 묶어 한 번만 표시.
+            cv2.aruco.drawDetectedMarkers(disp, corners)
+        # 화면 중심 = 드론 바로 아래 지점 (하방 카메라)
+        hh, ww = disp.shape[:2]
+        cv2.drawMarker(disp, (ww // 2, hh // 2), (0, 255, 255),
+                       cv2.MARKER_CROSS, 18, 1)
+        if self.latest_pose is not None:
+            dx = self.latest_pose.pose.position.x
+            dy = self.latest_pose.pose.position.y
+            cv2.putText(disp, f"drone ({dx:.2f},{dy:.2f})",
+                        (ww // 2 + 10, hh // 2 - 6),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 255), 1)
+        # 각 마커: 계산된 world 좌표 표시
+        for m in msg.markers:
+            px, py = int(m.cx), int(m.cy)
+            cv2.circle(disp, (px, py), 4, (0, 0, 255), -1)
+            cv2.putText(disp, f"ID: {m.id}({m.world_x:.2f}, {m.world_y:.2f})",
+                        (px + 6, py - 6), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.45, (0, 0, 255), 1)
+        return disp
+
+    def _init_image_publishers(self):
+        self.declare_parameter('publish_images', True)
+        self.declare_parameter('image_topic_prefix', '/aideck')
+        self.publish_images = self.get_parameter('publish_images').value
+        if not self.publish_images:
+            return
+        prefix = self.get_parameter('image_topic_prefix').value.rstrip('/')
+        topic = f'{prefix}/{self.drone}'
+        self.image_pub = self.create_publisher(
+            CompressedImage, f'{topic}/image_annotated/compressed',
+            qos_profile_sensor_data)
+        self.image_fps_pub = self.create_publisher(Float32, f'{topic}/fps', 10)
+        self.image_ok_pub = self.create_publisher(Bool, f'{topic}/stream_ok', 10)
+        self._image_frame_count = 0
+        self._image_last_frame_at = None
+        self._image_stats_at = time.monotonic()
+        # use_sim_time는 기존 검출 시각용이다. 무프레임 판정은 /clock 정지에도 돈다.
+        self._image_stats_clock = Clock(clock_type=ClockType.STEADY_TIME)
+        self._image_stats_timer = self.create_timer(
+            1.0, self._publish_image_stats, clock=self._image_stats_clock)
+
+    def _publish_image(self, disp, header):
+        self._image_last_frame_at = time.monotonic()
+        self._image_frame_count += 1
+        try:
+            ok, encoded = cv2.imencode('.jpg', disp, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        except cv2.error as exc:
+            self.get_logger().warning(f'[{self.drone}] image JPEG encoding failed: {exc}')
+            return
+        if not ok:
+            return
+        image = CompressedImage()
+        image.header = copy.deepcopy(header)
+        image.format = 'jpeg'
+        image.data = encoded.tobytes()
+        self.image_pub.publish(image)
+
+    def _publish_image_stats(self):
+        now = time.monotonic()
+        elapsed = now - self._image_stats_at
+        fps = self._image_frame_count / elapsed if elapsed > 0.0 else 0.0
+        self.image_fps_pub.publish(Float32(data=float(fps)))
+        self.image_ok_pub.publish(Bool(data=(
+            self._image_last_frame_at is not None
+            and now - self._image_last_frame_at < 3.0)))
+        self._image_frame_count = 0
+        self._image_stats_at = now
 
     def destroy_node(self):
         try:

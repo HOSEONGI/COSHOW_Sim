@@ -1,0 +1,27 @@
+Command: M4_HEADED=1 M4_MEMORY_MINUTES=32 node dashboard/tests/verify_m4_ui.mjs (QA modules/Chrome paths supplied in execution environment).
+Chromium 149.0.7827.55 on macOS; production --mock at http://127.0.0.1:8088; final role-six graphics.
+Run log MEMORY_BEGIN 2026-09-13T03:16:07.771Z; MEMORY_END 2026-09-13T03:48:09.030Z; process exit 0.
+Samples: 638; first/last elapsed seconds: 0.002 / 1918.249.
+After5min geometries: min=72 max=72
+After5min textures: min=10 max=10
+After5min programs: min=8 max=8
+After5min robots: min=6 max=6
+After5min droneTrails: min=4 max=4
+After5min trailCapacity: min=128 max=128
+After5min maxRenderFps: min=60 max=60
+After5min DOM documents: min=1 max=1
+After5min DOM nodes: min=308 max=405
+After5min DOM jsEventListeners: min=22 max=22
+Observed render work fps after5min: 47.999 (cap60; host144Hz yields roughly48).
+JS heap windows MiB: start_minute / minimum / median / maximum
+ 0 / 5.151 / 8.499 / 18.029
+ 5 / 6.289 / 10.855 / 18.134
+10 / 5.604 / 13.649 / 31.363
+15 / 5.591 / 18.536 / 31.356
+20 / 5.592 / 18.316 / 31.038
+25 / 5.863 / 18.184 / 31.348
+30 / 6.241 / 17.658 / 30.840
+Heap GC ceiling grew during initial10min then bounded near31.4MiB; later windows return below6.3MiB. Renderer object counts and listener count remain constant after warmup.
+GPU-memory bytes: NOT MEASURED. Mac lock blocked native Chrome Task Manager; resource counts are not a replacement for GPU-byte evidence.
+Raw pretty source SHA256 (ignored run/qa_archive): 85f396d0a0a6923f3ac54f8091d910f06f322fdd848b20ef6deb08df2374bdaf
+Committed JSON reformatted one complete sample per line, values unchanged. SHA256: f42f00e6ca654eb71b9899f7609cd07c97c85b68a9ab470114feedb1e5846854

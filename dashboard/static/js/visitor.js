@@ -1,5 +1,7 @@
 import {connect} from './ws.js';
 import {present, makeNames, interests, activity, fixed, coordinate, navigationGoal} from './view-model.js';
+import {cameraDecoder,cameraMessage} from './camera.js';
+import {createTwin} from './twin.js';
 
 const find = selector => document.querySelector(selector);
 const root = find('.visitor');
@@ -11,7 +13,9 @@ let hello = null;
 let state = null;
 let connected = false;
 let name = id => id;
-let fieldRatio = 5 / 4;
+let twin=null;
+let cameraRatio=324/244;
+let narrativeTimer=null;
 let cameraNodes = new Map();
 let robotNodes = new Map();
 
@@ -33,6 +37,9 @@ function metric(label, unit = '') {
 }
 
 function configure(value) {
+  if(JSON.stringify(hello)===JSON.stringify(value))return;
+  twin?.dispose();
+  for(const refs of cameraNodes.values())refs.decoder.dispose();
   hello = value;
   // A reconnect hello must not erase the previous state during the 2s grace.
   name = makeNames(hello);
@@ -46,19 +53,20 @@ function configure(value) {
     const tile = node('article', 'camera-tile');
     tile.dataset.robot = id;
     tile.setAttribute('aria-label', `${name(id)} 카메라`);
-    const img = node('img');
-    img.src = '/static/mock/camera.jpg';
-    img.alt = '카메라 자리 표시용 정적 영상';
+    const frame = node('canvas');
+    frame.width=324;frame.height=244;
+    frame.setAttribute('aria-label',`${name(id)} 수신 영상`);
     const title = node('div', 'camera-title');
     const badge = node('span', 'interest');
     badge.hidden = true;
     title.append(node('span', 'camera-name', name(id)), badge);
-    const offline = node('span', 'camera-offline', '영상 연결 대기');
-    offline.hidden = true;
-    // M3 always uses the bundled placeholder, including a non-mock connection.
-    tile.append(img, title, node('span', 'mock-badge', '샘플 영상'), offline);
+    const offline = node('span', 'camera-offline', '카메라 대기');
+    tile.append(frame, title);
+    if(hello.mock)tile.append(node('span','mock-badge','MOCK'));
+    tile.append(offline);
+    const decoder=cameraDecoder(frame,{onSize(w,h){cameraRatio=w/h;tile.style.aspectRatio=`${w}/${h}`;layout();}});
     cameras.append(tile);
-    cameraNodes.set(id, {tile, badge, offline});
+    cameraNodes.set(id, {tile, badge, offline,decoder});
   }
   for (const id of roles) {
     const drone = hello.drones.includes(id);
@@ -80,24 +88,23 @@ function configure(value) {
     const width = Math.max(...areas.map(area => area.x[1])) - Math.min(...areas.map(area => area.x[0]));
     const height = Math.max(...areas.map(area => area.y[1])) - Math.min(...areas.map(area => area.y[0]));
     if (width > 0 && height > 0) {
-      fieldRatio = width / height;
-      text(find('#field-size'), `${fixed(width, 0)} × ${fixed(height, 0)} m`);
+      text(find('#field-size'), `필드 ${fixed(width, 0)} × ${fixed(height, 0)} m`);
     }
   }
   const idle = [...document.querySelectorAll('.idle-intro p')];
   idle.forEach((element, index) => text(element, hello.idle_lines?.[index] || ''));
+  twin=createTwin(canvas,hello,{fx:new URLSearchParams(location.search).get('fx')||'',
+    reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});
   layout();
   render();
 }
 
 function layout() {
   const stage = find('.field-stage').getBoundingClientRect();
-  const width = Math.min(stage.width, stage.height * fieldRatio);
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${width / fieldRatio}px`;
-  // No scene rendering in M3; the canvas is only a field-proportioned placeholder.
-  canvas.width = Math.round(width * devicePixelRatio);
-  canvas.height = Math.round(width / fieldRatio * devicePixelRatio);
+  canvas.style.width = `${stage.width}px`;
+  canvas.style.height = `${stage.height}px`;
+  const overlay=find(root.dataset.mode==='idle'?'.idle-intro':'.narrative').getBoundingClientRect();
+  twin?.resize(stage.width,stage.height,overlay.height);
   const count = cameraNodes.size;
   if (!count) return;
   const bounds = cameras.getBoundingClientRect();
@@ -107,11 +114,23 @@ function layout() {
   for (let columns = 1; columns <= count; columns++) {
     const rows = Math.ceil(count / columns);
     const tileWidth = Math.min((bounds.width - gap * (columns - 1)) / columns,
-      (bounds.height - gap * (rows - 1)) / rows * 324 / 244);
+      (bounds.height - gap * (rows - 1)) / rows * cameraRatio);
     if (tileWidth > best.width) best = {width: tileWidth, columns, rows};
   }
   cameras.style.gridTemplateColumns = `repeat(${best.columns}, ${best.width}px)`;
-  cameras.style.gridTemplateRows = `repeat(${best.rows}, ${best.width * 244 / 324}px)`;
+  cameras.style.gridTemplateRows = `repeat(${best.rows}, ${best.width / cameraRatio}px)`;
+}
+
+function narrative(value) {
+  const current=find('#narrative');
+  if(current.dataset.next===value)return;
+  clearTimeout(narrativeTimer);current.dataset.next=value;
+  const previous=find('#narrative-previous');
+  previous.textContent=current.textContent;previous.classList.remove('fade');
+  current.textContent=value;current.classList.remove('appear');
+  void current.offsetWidth;
+  previous.classList.add('fade');current.classList.add('appear');
+  narrativeTimer=setTimeout(()=>{previous.textContent='';},200);
 }
 
 function render() {
@@ -122,13 +141,16 @@ function render() {
   root.dataset.signal = view.signal;
   text(find('#phase-label'), view.label);
   text(find('#elapsed'), view.elapsed);
-  text(find('#narrative'), view.sentence);
+  narrative(view.sentence);
   find('.idle-intro').hidden = view.mode !== 'idle';
   find('.narrative').hidden = view.mode === 'idle';
   find('#connection-note').hidden = connected;
   const mission = state?.mission;
   const active = view.mode === 'active';
-  text(find('#marker-value'), active && mission?.mission_marker_id != null ? `미션 ${mission.mission_marker_id}번` : '—');
+  const discovered=active&&mission?.P_N;
+  text(find('#marker-label'),discovered?'발견':'임무');
+  text(find('#marker-value'),discovered ? `${mission.target_id}번 (${name(mission.finder)})` :
+    active && mission?.mission_marker_id!=null ? `${mission.mission_marker_id}번 마커 → ${mission.target_id}번 조난자` : '—');
   text(find('#target-value'), active ? coordinate(mission?.P_N) : '—');
   const rescue = {rescue_dispatch: '이동 중', rescue: '구조 중', return: '복귀 중', done: '구조 완료'};
   text(find('#rescue-value'), active ? rescue[view.phase] || (mission?.target_confirmed ? '위치 확인 완료' : '발견 대기') : '미션 대기');
@@ -137,7 +159,8 @@ function render() {
     const ids = active ? interests(hello, state, id, robot?.detections) : [];
     text(refs.badge, ids.map(id => `${id}번`).join(' · '));
     refs.badge.hidden = !ids.length;
-    refs.offline.hidden = connected;
+    const message=cameraMessage(refs.decoder.received,robot?.camera,hello.freshness_s?.camera??2,connected);
+    text(refs.offline,message);refs.offline.hidden=!message;
   }
   for (const [id, refs] of robotNodes) {
     const robot = state?.robots?.[id];
@@ -148,13 +171,20 @@ function render() {
     // The last BT navigation command is reported; active Nav2 goal status is not.
     text(refs.second, drone ? fixed(fresh ? robot?.pose?.z : null, 2) : navigationGoal(state, id));
   }
+  find('#return-progress').hidden=!(active&&['return','done'].includes(view.phase));
+  twin?.update(state,view);
+  layout();
 }
 
 if (new URLSearchParams(location.search).get('fx') === 'low') document.documentElement.dataset.fx = 'low';
-new ResizeObserver(layout).observe(root);
+const observer=new ResizeObserver(layout);observer.observe(root);
 const disconnect = connect({
   onHello: configure,
   onState(value) {state = value; render();},
   onConnection(value) {connected = value; render();},
+  onFrame(index,jpeg){const refs=cameraNodes.get(hello?.drones[index]);if(refs)refs.decoder.draw(jpeg);},
 });
-window.addEventListener('pagehide', disconnect, {once: true});
+// Read-only diagnostics used by the local memory probe; no control commands.
+window.dashboardDiagnostics=()=>({twin:twin?.stats(),cameras:[...cameraNodes.values()].map(r=>({received:r.decoder.received,dropped:r.decoder.dropped}))});
+window.addEventListener('pagehide',()=>{disconnect();observer.disconnect();twin?.dispose();clearTimeout(narrativeTimer);
+  for(const refs of cameraNodes.values())refs.decoder.dispose();}, {once: true});
