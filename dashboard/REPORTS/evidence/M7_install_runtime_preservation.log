@@ -1,0 +1,16 @@
+docker exec -u coshow coshow-m7-install-test python3 /source/dashboard/REPORTS/evidence/M7_validate_runtime_install.py
+INSTALLER_UID 1000
+python3-numpy	1:1.21.5-1ubuntu22.04.1
+python3-opencv:arm64	4.5.4+dfsg-9ubuntu4
+UNCHANGED COSHOW bt/scenarios/coshow/configs/coshow_rehearsal.yaml 00ca67408cfa502f27f5a18034e33169c3193947ba32221cba34946fca0228d0
+UNCHANGED COSHOW ros2_ws/src/crazyswarm2/crazyflie/config/crazyflies.yaml 6d5ea05b810ac57a5236aea24381b4a1a01402503d7b00c1c95b03b77a915b9b
+UNCHANGED COSHOW ros2_ws/src/aideck_aruco_ros/config/drones.yaml 17555b91e30026edc6ed92e964e7400378a363baf7611f5c826acfd386921be2
+PASS non-root build/install ownership: COSHOW
+NOT PRESENT IN ROS-ONLY MERGED FIXTURE bt/scenarios/coshow/configs/coshow_rehearsal.yaml
+UNCHANGED COSHOW-merged ros2_ws/src/crazyswarm2/crazyflie/config/crazyflies.yaml 6d5ea05b810ac57a5236aea24381b4a1a01402503d7b00c1c95b03b77a915b9b
+UNCHANGED COSHOW-merged ros2_ws/src/aideck_aruco_ros/config/drones.yaml 17555b91e30026edc6ed92e964e7400378a363baf7611f5c826acfd386921be2
+PASS non-root build/install ownership: COSHOW-merged
+PASS existing ROS execution dependencies provisioned; collaborator YAML and build ownership preserved
+
+EXIT_CODE=0
+

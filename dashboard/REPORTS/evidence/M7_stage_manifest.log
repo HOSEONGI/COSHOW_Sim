@@ -1,0 +1,9 @@
+python3 dashboard/REPORTS/evidence/M7_export_evidence.py
+JSONL messages=1060 states=1059 full_state_samples=13
+POSE CSV rows=14826 sample_rows=168
+PHASES ["observe", "handover", "search", "capture", "rescue_dispatch", "rescue", "return", "done"]
+CAMERA measured receipt fps min=9.41 max=10.2
+FULL_ARTIFACT dashboard/logs/M7_stage_full.jsonl 33260161 f35d640d0e845f9a8da2dc1523c3f7e99161293f86f50ed3fd0e2dc2218d1091
+FULL_ARTIFACT dashboard/logs/M7_poses_full.csv 1468508 5c1a6428571ebf828538e63f8518351dfa7d77ba7e9c9255e167951117c4b364
+FULL_ARTIFACT dashboard/logs/M7_probe_stdout.log 27931 e30cc0f3bc46ee28e9f8ff1b531d5b6c2a37abf4a83c82c3e69197e8c5d45539
+PASS complete eight-phase mock sequence; every recorded state contains full protocol payload

@@ -287,7 +287,7 @@ class Dashboard:
         app.router.add_put('/api/fleet/{action:roster}', self.fleet_action)
         app.router.add_post('/api/fleet/{action:start|restart}', self.fleet_action)
         async def health(request):
-            return web.json_response(dict(milestone='M5', mock=self.mock, websocket='/ws', visitor='/visitor.html',
+            return web.json_response(dict(milestone='M7', mock=self.mock, websocket='/ws', visitor='/visitor.html',
                                            admin='/admin.html', mode='mock' if self.mock else 'operations'))
         app.router.add_get('/', health)
         app.router.add_static('/static/', Path(__file__).resolve().parent / 'static', show_index=False)

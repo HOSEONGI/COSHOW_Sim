@@ -1,0 +1,375 @@
+/usr/bin/python3 /home/coshow/COSHOW/dashboard/tests/stage_probe.py --fleet --seconds 106 --record /home/coshow/COSHOW/dashboard/logs/m7_stage_final.jsonl --dump-poses /home/coshow/COSHOW/dashboard/logs/m7_poses_final.csv
+OUTPUT /home/coshow/COSHOW/dashboard/logs/m7_stage_final.jsonl
+OUTPUT /home/coshow/COSHOW/dashboard/logs/m7_poses_final.csv
+2026-09-13T03:08:16.460+00:00 CONNECTED read-only admin http://127.0.0.1:8080/ws?role=admin
+2026-09-13T03:08:16.460+00:00 HELLO roles=4+2 mock=True
+2026-09-13T03:08:16.559+00:00 RUN LANDING external_bt=False
+2026-09-13T03:08:16.559+00:00 EVENT event_t=1789268836.6021848 info cmd:preflight accepted
+2026-09-13T03:08:16.559+00:00 EVENT event_t=1789268896.4044807 info cmd:reset accepted
+TABLE 2026-09-13T03:08:21.460+00:00 window_s=5.00 run=LANDING phase=None
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.10	65	False	True	10.00	9.80	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.10	65	False	True	10.00	9.80	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.10	65	False	True	10.00	9.80	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.10	65	False	True	10.00	9.80	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:08:24.961+00:00 RUN IDLE external_bt=False
+2026-09-13T03:08:25.061+00:00 RUN CHECKING external_bt=False
+2026-09-13T03:08:25.061+00:00 EVENT event_t=1789268904.9614851 info cmd:preflight accepted
+TABLE 2026-09-13T03:08:26.462+00:00 window_s=5.00 run=CHECKING phase=None
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.10	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.10	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.10	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.10	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:08:31.061+00:00 RUN READY external_bt=False
+2026-09-13T03:08:31.161+00:00 PHASE observe
+2026-09-13T03:08:31.161+00:00 RUN RUNNING external_bt=False
+2026-09-13T03:08:31.161+00:00 EVENT event_t=1789268911.0627978 info cmd:start accepted
+TABLE 2026-09-13T03:08:31.463+00:00 window_s=5.00 run=RUNNING phase=observe
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.10	65	True	True	10.00	10.20	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.10	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.10	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.10	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:08:36.464+00:00 window_s=5.00 run=RUNNING phase=observe
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.08	65	True	True	10.00	9.80	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.08	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.08	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.08	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:08:41.465+00:00 window_s=5.00 run=RUNNING phase=observe
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.07	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.07	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.07	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.07	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:08:46.466+00:00 window_s=5.00 run=RUNNING phase=observe
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.05	65	True	True	10.00	10.20	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.05	65	True	True	10.00	10.20	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.05	65	True	True	10.00	10.20	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.05	65	True	True	10.00	10.20	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:08:53.159+00:00 PHASE handover
+TABLE 2026-09-13T03:08:53.460+00:00 window_s=5.00 run=RUNNING phase=handover
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.03	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.03	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.03	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.03	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:08:56.468+00:00 window_s=5.00 run=RUNNING phase=handover
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.02	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.02	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.02	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.02	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:09:00.160+00:00 PHASE search
+TABLE 2026-09-13T03:09:01.469+00:00 window_s=5.00 run=RUNNING phase=search
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	4.00	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	4.00	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	4.00	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	4.00	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:06.471+00:00 window_s=5.00 run=RUNNING phase=search
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.98	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.98	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.98	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.98	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:11.473+00:00 window_s=5.00 run=RUNNING phase=search
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.97	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.97	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.97	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.97	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:09:16.160+00:00 PHASE capture
+TABLE 2026-09-13T03:09:16.477+00:00 window_s=5.00 run=RUNNING phase=capture
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.95	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.95	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.95	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.95	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:09:21.164+00:00 PHASE rescue_dispatch
+TABLE 2026-09-13T03:09:21.481+00:00 window_s=5.00 run=RUNNING phase=rescue_dispatch
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.93	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.93	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.93	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.93	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:26.485+00:00 window_s=5.00 run=RUNNING phase=rescue_dispatch
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.92	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.92	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.92	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.92	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:09:29.161+00:00 PHASE rescue
+TABLE 2026-09-13T03:09:31.488+00:00 window_s=5.00 run=RUNNING phase=rescue
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.90	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.90	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.90	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.90	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:36.496+00:00 window_s=5.01 run=RUNNING phase=rescue
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.88	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.88	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.88	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.88	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:09:39.165+00:00 PHASE return
+TABLE 2026-09-13T03:09:41.501+00:00 window_s=5.01 run=RUNNING phase=return
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.87	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.87	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.87	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.87	65	True	True	10.00	9.99	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:46.503+00:00 window_s=5.00 run=RUNNING phase=return
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.85	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.85	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.85	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.85	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:51.504+00:00 window_s=5.00 run=RUNNING phase=return
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.83	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.83	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.83	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.83	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:09:56.506+00:00 window_s=5.00 run=RUNNING phase=return
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.82	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.82	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.82	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.82	65	True	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+2026-09-13T03:10:01.161+00:00 PHASE done
+2026-09-13T03:10:01.161+00:00 RUN DONE external_bt=False
+TABLE 2026-09-13T03:10:01.506+00:00 window_s=5.00 run=DONE phase=done
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.80	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.80	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.80	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.80	65	False	True	10.00	10.00	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+TABLE 2026-09-13T03:10:02.463+00:00 window_s=0.96 run=DONE phase=done
+robot	role	kind	status_age	battery_v	rssi	armed	ping	camera_fps	camera_rx_fps	stream_ok	frame_age	pose_age	pose
+cf230	cf230	drone	0.00	3.80	65	False	True	10.00	9.41	True	0.00	0.00	fresh
+cf231	cf231	drone	0.00	3.80	65	False	True	10.00	9.41	True	0.00	0.00	fresh
+cf232	cf232	drone	0.00	3.80	65	False	True	10.00	9.41	True	0.00	0.00	fresh
+cf233	cf233	drone	0.00	3.80	65	False	True	10.00	9.41	True	0.00	0.00	fresh
+spare_CF05	spare	drone	0.00	3.60	65	False	True	—	0.00	None	—	—	STALE
+spare_CF06	spare	drone	0.00	3.70	65	False	True	—	0.00	None	—	—	STALE
+spare_CF07	spare	drone	0.00	3.80	65	False	True	—	0.00	None	—	—	STALE
+spare_CF08	spare	drone	0.00	3.90	65	False	True	—	0.00	None	—	—	STALE
+spare_CF09	spare	drone	0.00	4.00	65	False	True	—	0.00	None	—	—	STALE
+spare_CF10	spare	drone	—	—	—	None	True	—	0.00	None	—	—	STALE
+limo_a	limo_a	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_b	limo_b	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_c	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh
+limo_d	spare	limo	—	—	—	None	True	—	0.00	None	—	0.00	fresh

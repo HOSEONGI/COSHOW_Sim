@@ -1,0 +1,3 @@
+docker exec -u coshow -e HOME=/home/coshow coshow-m7-install-test python3 /source/dashboard/REPORTS/evidence/M7_probe_mock.py
+TEST HARNESS: verified mock server; preflight/start sent by harness only.
+PASS genuine --mock timeline recorded through read-only stage_probe CLI

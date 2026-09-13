@@ -1,0 +1,6 @@
+docker exec -u coshow -e HOME=/home/coshow -e DISPLAY=:99 -e XDG_SESSION_TYPE=x11 -e VISITOR_SCALE=1.3 -e FX=low coshow-m7-install-test bash /home/coshow/COSHOW/dashboard/kiosk.sh --dry-run
+WAIT up to 30s for http://127.0.0.1:8080/visitor.html (HTTP success required)
+xset s off -dpms 
+xset s noblank 
+/usr/local/bin/chromium --no-first-run --no-default-browser-check --disable-session-crashed-bubble --user-data-dir=/home/coshow/.cache/coshow-kiosk/admin --new-window --window-position=0\,0 --window-size=1280\,900 http://127.0.0.1:8080/admin.html 
+/usr/local/bin/chromium --no-first-run --no-default-browser-check --disable-session-crashed-bubble --user-data-dir=/home/coshow/.cache/coshow-kiosk/visitor --kiosk --window-position=1920\,0 --force-device-scale-factor=1.3 http://127.0.0.1:8080/visitor.html\?fx=low 

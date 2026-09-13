@@ -1,0 +1,89 @@
+docker exec -u coshow -e HOME=/home/coshow -e DISPLAY=:99 -e XDG_SESSION_TYPE=x11 coshow-m7-install-test bash -lc 'cd /home/coshow/COSHOW && bash dashboard/install.sh'
+PASS interfaces already importable; interface build skipped.
+Starting >>> aideck_aruco_ros
+running egg_info
+writing ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/PKG-INFO
+writing dependency_links to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/dependency_links.txt
+writing entry points to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/entry_points.txt
+writing requirements to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/requires.txt
+writing top-level names to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/top_level.txt
+reading manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+writing manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+running install_egg_info
+removing '/home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros-0.1.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info to /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros-0.1.0-py3.10.egg-info
+running install_scripts
+Installing aideck_aruco_node script to /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/aideck_aruco_ros
+writing list of installed files to '/home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/install.log'
+Finished <<< aideck_aruco_ros [0.28s]
+
+Summary: 1 package finished [0.34s]
+PASS Python aiohttp/PyYAML/rclpy imports
+uint8 group_mask
+float32 height
+builtin_interfaces/Duration duration
+	int32 sec
+	uint32 nanosec
+---
+PASS crazyflie Land interface
+# 드론 1대의 한 프레임 검출 결과
+std_msgs/Header header                # stamp = 검출 완료 시각
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+string drone                          # "cf_a" 등
+geometry_msgs/PoseStamped drone_pose  # 검출 시점의 최신 pose
+	std_msgs/Header header
+		builtin_interfaces/Time stamp
+			int32 sec
+			uint32 nanosec
+		string frame_id
+	Pose pose
+		Point position
+			float64 x
+			float64 y
+			float64 z
+		Quaternion orientation
+			float64 x 0
+			float64 y 0
+			float64 z 0
+			float64 w 1
+MarkerDetection[] markers             # 검출된 마커 목록 (0개 이상)
+	int32 id          #
+	float32 cx        #
+	float32 cy        #
+	float32 size_px   #
+	float32 world_x   #
+	float32 world_y   #
+PASS coshow MarkerDetections interface
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros/aideck_aruco_node.py", line 49, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'
+FAIL workspace package prefix, node import and OpenCV runtime
+/usr/bin/ping
+PASS ping executable
+Chromium 140.0.7339.16 
+PASS browser binary
+Monitors: 1
+ 0: +screen 3840/1016x2160/571+0+0  screen
+PASS X11 monitors
+FAIL installation self-check: 1 failed item(s); resolve them before starting.
+
+EXIT_CODE=1
+

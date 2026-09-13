@@ -1,0 +1,74 @@
+docker exec -u coshow -e HOME=/home/coshow -e DISPLAY=:99 -e XDG_SESSION_TYPE=x11 coshow-m7-install-test bash /home/coshow/COSHOW-merged/dashboard/install.sh
+PASS interfaces already importable; interface build skipped.
+Starting >>> aideck_aruco_ros
+running egg_info
+writing ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/PKG-INFO
+writing dependency_links to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/dependency_links.txt
+writing entry points to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/entry_points.txt
+writing requirements to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/requires.txt
+writing top-level names to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/top_level.txt
+reading manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+writing manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+running install_egg_info
+removing '/home/coshow/COSHOW-merged/ros2_ws/install/lib/python3.10/site-packages/aideck_aruco_ros-0.1.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info to /home/coshow/COSHOW-merged/ros2_ws/install/lib/python3.10/site-packages/aideck_aruco_ros-0.1.0-py3.10.egg-info
+running install_scripts
+Installing aideck_aruco_node script to /home/coshow/COSHOW-merged/ros2_ws/install/lib/aideck_aruco_ros
+writing list of installed files to '/home/coshow/COSHOW-merged/ros2_ws/build/aideck_aruco_ros/install.log'
+Finished <<< aideck_aruco_ros [0.32s]
+
+Summary: 1 package finished [0.39s]
+PASS Python aiohttp/PyYAML/rclpy imports
+uint8 group_mask
+float32 height
+builtin_interfaces/Duration duration
+	int32 sec
+	uint32 nanosec
+---
+PASS crazyflie Land interface
+# 드론 1대의 한 프레임 검출 결과
+std_msgs/Header header                # stamp = 검출 완료 시각
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+string drone                          # "cf_a" 등
+geometry_msgs/PoseStamped drone_pose  # 검출 시점의 최신 pose
+	std_msgs/Header header
+		builtin_interfaces/Time stamp
+			int32 sec
+			uint32 nanosec
+		string frame_id
+	Pose pose
+		Point position
+			float64 x
+			float64 y
+			float64 z
+		Quaternion orientation
+			float64 x 0
+			float64 y 0
+			float64 z 0
+			float64 w 1
+MarkerDetection[] markers             # 검출된 마커 목록 (0개 이상)
+	int32 id          #
+	float32 cx        #
+	float32 cy        #
+	float32 size_px   #
+	float32 world_x   #
+	float32 world_y   #
+PASS coshow MarkerDetections interface
+/home/coshow/COSHOW-merged/ros2_ws/install
+PASS workspace package prefix and copied source
+/usr/bin/ping
+PASS ping executable
+Chromium 140.0.7339.16 
+PASS browser binary
+Monitors: 1
+ 0: +screen 3840/1016x2160/571+0+0  screen
+PASS X11 monitors
+PASS installation self-check; collaborator YAML files were not modified.

@@ -1,0 +1,1347 @@
+docker exec -u coshow -e HOME=/home/coshow -e DISPLAY=:99 -e XDG_SESSION_TYPE=x11 -e ROS_DOMAIN_ID=89 -e ROS_LOCALHOST_ONLY=1 coshow-m7-install-test bash /home/coshow/COSHOW/dashboard/install.sh
+Hit:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease
+Hit:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease
+Hit:3 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease
+Hit:4 http://packages.ros.org/ros2/ubuntu jammy InRelease
+Hit:5 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libcap2-bin libpam-cap python3-aiosignal python3-async-timeout
+  python3-charset-normalizer python3-frozenlist python3-idna python3-multidict
+  python3-typing-extensions python3-yarl
+The following NEW packages will be installed:
+  iputils-ping libcap2-bin libpam-cap python3-aiohttp python3-aiosignal
+  python3-async-timeout python3-charset-normalizer python3-frozenlist
+  python3-idna python3-multidict python3-typing-extensions python3-yarl
+0 upgraded, 12 newly installed, 0 to remove and 10 not upgraded.
+Need to get 611 kB of archives.
+After this operation, 2969 kB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libcap2-bin arm64 1:2.44-1ubuntu0.22.04.3 [25.5 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 iputils-ping arm64 3:20211215-1ubuntu0.1 [43.6 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpam-cap arm64 1:2.44-1ubuntu0.22.04.3 [7952 B]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 python3-idna all 3.3-1ubuntu0.2 [52.7 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-multidict arm64 5.1.0-1build2 [39.3 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-yarl arm64 1.7.2-1build1 [46.1 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-typing-extensions all 3.10.0.2-1 [35.7 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-async-timeout all 4.0.1-1 [6546 B]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-frozenlist arm64 1.2.0-1build1 [65.3 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-aiosignal all 1.2.0-2 [5646 B]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-charset-normalizer all 2.0.6-2 [32.2 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 python3-aiohttp arm64 3.8.1-4ubuntu0.2 [250 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 611 kB in 2s (259 kB/s)
+Selecting previously unselected package libcap2-bin.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 40524 files and directories currently installed.)
+Preparing to unpack .../00-libcap2-bin_1%3a2.44-1ubuntu0.22.04.3_arm64.deb ...
+Unpacking libcap2-bin (1:2.44-1ubuntu0.22.04.3) ...
+Selecting previously unselected package iputils-ping.
+Preparing to unpack .../01-iputils-ping_3%3a20211215-1ubuntu0.1_arm64.deb ...
+Unpacking iputils-ping (3:20211215-1ubuntu0.1) ...
+Selecting previously unselected package libpam-cap:arm64.
+Preparing to unpack .../02-libpam-cap_1%3a2.44-1ubuntu0.22.04.3_arm64.deb ...
+Unpacking libpam-cap:arm64 (1:2.44-1ubuntu0.22.04.3) ...
+Selecting previously unselected package python3-idna.
+Preparing to unpack .../03-python3-idna_3.3-1ubuntu0.2_all.deb ...
+Unpacking python3-idna (3.3-1ubuntu0.2) ...
+Selecting previously unselected package python3-multidict.
+Preparing to unpack .../04-python3-multidict_5.1.0-1build2_arm64.deb ...
+Unpacking python3-multidict (5.1.0-1build2) ...
+Selecting previously unselected package python3-yarl.
+Preparing to unpack .../05-python3-yarl_1.7.2-1build1_arm64.deb ...
+Unpacking python3-yarl (1.7.2-1build1) ...
+Selecting previously unselected package python3-typing-extensions.
+Preparing to unpack .../06-python3-typing-extensions_3.10.0.2-1_all.deb ...
+Unpacking python3-typing-extensions (3.10.0.2-1) ...
+Selecting previously unselected package python3-async-timeout.
+Preparing to unpack .../07-python3-async-timeout_4.0.1-1_all.deb ...
+Unpacking python3-async-timeout (4.0.1-1) ...
+Selecting previously unselected package python3-frozenlist.
+Preparing to unpack .../08-python3-frozenlist_1.2.0-1build1_arm64.deb ...
+Unpacking python3-frozenlist (1.2.0-1build1) ...
+Selecting previously unselected package python3-aiosignal.
+Preparing to unpack .../09-python3-aiosignal_1.2.0-2_all.deb ...
+Unpacking python3-aiosignal (1.2.0-2) ...
+Selecting previously unselected package python3-charset-normalizer.
+Preparing to unpack .../10-python3-charset-normalizer_2.0.6-2_all.deb ...
+Unpacking python3-charset-normalizer (2.0.6-2) ...
+Selecting previously unselected package python3-aiohttp.
+Preparing to unpack .../11-python3-aiohttp_3.8.1-4ubuntu0.2_arm64.deb ...
+Unpacking python3-aiohttp (3.8.1-4ubuntu0.2) ...
+Setting up python3-charset-normalizer (2.0.6-2) ...
+Setting up python3-multidict (5.1.0-1build2) ...
+Setting up python3-frozenlist (1.2.0-1build1) ...
+Setting up python3-aiosignal (1.2.0-2) ...
+Setting up libcap2-bin (1:2.44-1ubuntu0.22.04.3) ...
+Setting up python3-idna (3.3-1ubuntu0.2) ...
+Setting up python3-typing-extensions (3.10.0.2-1) ...
+Setting up python3-yarl (1.7.2-1build1) ...
+Setting up libpam-cap:arm64 (1:2.44-1ubuntu0.22.04.3) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+Setting up iputils-ping (3:20211215-1ubuntu0.1) ...
+Setting up python3-async-timeout (4.0.1-1) ...
+Setting up python3-aiohttp (3.8.1-4ubuntu0.2) ...
+Building missing interfaces: crazyflie_interfaces coshow_interfaces
+Starting >>> coshow_interfaces
+Starting >>> crazyflie_interfaces
+-- The C compiler identification is GNU 11.4.0
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found builtin_interfaces: 1.2.3 (/opt/ros/humble/share/builtin_interfaces/cmake)
+-- Found std_msgs: 4.9.2 (/opt/ros/humble/share/std_msgs/cmake)
+-- Found rosidl_generator_c: 3.1.9 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_c: 3.1.9 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.9 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_adapter: 3.1.9 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.9 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Found rosidl_generator_cpp: 3.1.9 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found geometry_msgs: 4.9.2 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found geometry_msgs: 4.9.2 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found rosidl_default_generators: 1.2.1 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Found rosidl_default_generators: 1.2.1 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Found ament_cmake_cppcheck: 0.12.15 (/opt/ros/humble/share/ament_cmake_cppcheck/cmake)
+-- Found ament_cmake_cpplint: 0.12.15 (/opt/ros/humble/share/ament_cmake_cpplint/cmake)
+-- Found ament_cmake_uncrustify: 0.12.15 (/opt/ros/humble/share/ament_cmake_uncrustify/cmake)
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Found PythonLibs: /usr/lib/aarch64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.10.so
+-- Found PythonExtra: .so  
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Found PythonLibs: /usr/lib/aarch64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.10.so
+-- Configuring done
+-- Found PythonExtra: .so  
+-- Generating done
+-- Build files have been written to: /home/coshow/COSHOW/ros2_ws/build/coshow_interfaces
+-- Found ament_cmake_flake8: 0.12.15 (/opt/ros/humble/share/ament_cmake_flake8/cmake)
+-- Found ament_cmake_pep257: 0.12.15 (/opt/ros/humble/share/ament_cmake_pep257/cmake)
+[  2%] Generating C code for ROS interfaces
+[  5%] Generating C++ code for ROS interfaces
+[  7%] Generating Rust code for ROS interfaces
+[  7%] Built target ament_cmake_python_copy_coshow_interfaces
+-- Configuring done
+running egg_info
+creating coshow_interfaces.egg-info
+writing coshow_interfaces.egg-info/PKG-INFO
+writing dependency_links to coshow_interfaces.egg-info/dependency_links.txt
+writing top-level names to coshow_interfaces.egg-info/top_level.txt
+writing manifest file 'coshow_interfaces.egg-info/SOURCES.txt'
+reading manifest file 'coshow_interfaces.egg-info/SOURCES.txt'
+writing manifest file 'coshow_interfaces.egg-info/SOURCES.txt'
+[  7%] Built target ament_cmake_python_build_coshow_interfaces_egg
+-- Generating done
+-- Build files have been written to: /home/coshow/COSHOW/ros2_ws/build/crazyflie_interfaces
+[  0%] Generating C code for ROS interfaces
+[  0%] Built target ament_cmake_python_copy_crazyflie_interfaces
+[  1%] Generating Rust code for ROS interfaces
+[  1%] Generating C++ code for ROS interfaces
+[  7%] Built target coshow_interfaces__rs
+[ 10%] Building C object CMakeFiles/coshow_interfaces__rosidl_generator_c.dir/rosidl_generator_c/coshow_interfaces/msg/detail/marker_detection__functions.c.o
+[ 12%] Building C object CMakeFiles/coshow_interfaces__rosidl_generator_c.dir/rosidl_generator_c/coshow_interfaces/msg/detail/marker_detections__functions.c.o
+running egg_info
+creating crazyflie_interfaces.egg-info
+writing crazyflie_interfaces.egg-info/PKG-INFO
+writing dependency_links to crazyflie_interfaces.egg-info/dependency_links.txt
+writing top-level names to crazyflie_interfaces.egg-info/top_level.txt
+writing manifest file 'crazyflie_interfaces.egg-info/SOURCES.txt'
+reading manifest file 'crazyflie_interfaces.egg-info/SOURCES.txt'
+writing manifest file 'crazyflie_interfaces.egg-info/SOURCES.txt'
+[ 12%] Built target coshow_interfaces__cpp
+[ 15%] Linking C shared library libcoshow_interfaces__rosidl_generator_c.so
+[  1%] Built target ament_cmake_python_build_crazyflie_interfaces_egg
+[ 17%] Generating C++ type support for eProsima Fast-RTPS
+[ 20%] Generating C++ introspection for ROS interfaces
+[ 22%] Generating C++ type support dispatch for ROS interfaces
+[ 22%] Built target coshow_interfaces__rosidl_generator_c
+[ 25%] Generating C type support for eProsima Fast-RTPS
+[  1%] Built target crazyflie_interfaces__rs
+[ 27%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/coshow_interfaces/msg/detail/marker_detection__type_support_c.cpp.o
+[ 30%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/coshow_interfaces/msg/marker_detection__type_support.cpp.o
+[ 32%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/coshow_interfaces/msg/detail/dds_fastrtps/marker_detection__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/coshow_interfaces/msg/detail/marker_detection__type_support.cpp.o
+[ 37%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/coshow_interfaces/msg/marker_detections__type_support.cpp.o
+[ 40%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/coshow_interfaces/msg/detail/marker_detections__type_support_c.cpp.o
+[ 42%] Linking CXX shared library libcoshow_interfaces__rosidl_typesupport_cpp.so
+[ 45%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/coshow_interfaces/msg/detail/marker_detections__type_support.cpp.o
+[ 45%] Built target coshow_interfaces__rosidl_typesupport_cpp
+[ 47%] Generating C introspection for ROS interfaces
+[ 50%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/coshow_interfaces/msg/detail/dds_fastrtps/marker_detections__type_support.cpp.o
+[ 52%] Linking CXX shared library libcoshow_interfaces__rosidl_typesupport_fastrtps_c.so
+[ 55%] Linking CXX shared library libcoshow_interfaces__rosidl_typesupport_introspection_cpp.so
+[ 55%] Built target coshow_interfaces__rosidl_typesupport_fastrtps_c
+[ 57%] Generating C type support dispatch for ROS interfaces
+[ 57%] Built target coshow_interfaces__rosidl_typesupport_introspection_cpp
+[ 60%] Building C object CMakeFiles/coshow_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/coshow_interfaces/msg/detail/marker_detection__type_support.c.o
+[ 62%] Building C object CMakeFiles/coshow_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/coshow_interfaces/msg/detail/marker_detections__type_support.c.o
+[ 65%] Linking CXX shared library libcoshow_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[ 67%] Linking C shared library libcoshow_interfaces__rosidl_typesupport_introspection_c.so
+[ 67%] Built target coshow_interfaces__rosidl_typesupport_fastrtps_cpp
+[ 67%] Built target coshow_interfaces__rosidl_typesupport_introspection_c
+[ 70%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/coshow_interfaces/msg/marker_detections__type_support.cpp.o
+[ 72%] Building CXX object CMakeFiles/coshow_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/coshow_interfaces/msg/marker_detection__type_support.cpp.o
+[ 75%] Linking CXX shared library libcoshow_interfaces__rosidl_typesupport_c.so
+[ 75%] Built target coshow_interfaces__rosidl_typesupport_c
+[ 75%] Built target coshow_interfaces
+[ 77%] Generating Python code for ROS interfaces
+[ 77%] Built target coshow_interfaces__py
+[ 80%] Building C object CMakeFiles/coshow_interfaces__rosidl_generator_py.dir/rosidl_generator_py/coshow_interfaces/msg/_marker_detection_s.c.o
+[ 82%] Building C object CMakeFiles/coshow_interfaces__rosidl_generator_py.dir/rosidl_generator_py/coshow_interfaces/msg/_marker_detections_s.c.o
+[ 85%] Linking C shared library rosidl_generator_py/coshow_interfaces/libcoshow_interfaces__rosidl_generator_py.so
+[ 85%] Built target coshow_interfaces__rosidl_generator_py
+[ 87%] Building C object CMakeFiles/coshow_interfaces__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c.o
+[ 90%] Building C object CMakeFiles/coshow_interfaces__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_introspection_c.c.o
+[ 92%] Building C object CMakeFiles/coshow_interfaces__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_c.c.o
+[  2%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/connection_statistics__functions.c.o
+[  2%] Built target crazyflie_interfaces__cpp
+[  3%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/full_state__functions.c.o
+[  3%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/connection_statistics_array__functions.c.o
+[  4%] Generating C++ type support for eProsima Fast-RTPS
+[ 95%] Linking C shared library rosidl_generator_py/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+[ 97%] Linking C shared library rosidl_generator_py/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+[100%] Linking C shared library rosidl_generator_py/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+[  4%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/log_data_generic__functions.c.o
+[100%] Built target coshow_interfaces__rosidl_typesupport_fastrtps_c__pyext
+[100%] Built target coshow_interfaces__rosidl_typesupport_c__pyext
+[  5%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/hover__functions.c.o
+[  5%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/log_block__functions.c.o
+[100%] Built target coshow_interfaces__rosidl_typesupport_introspection_c__pyext
+[  6%] Generating C++ introspection for ROS interfaces
+[  7%] Generating C++ type support dispatch for ROS interfaces
+[  8%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/position__functions.c.o
+-- Install configuration: ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/ament_index/resource_index/rosidl_interfaces/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/marker_detection.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/rosidl_generator_c__visibility_control.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/marker_detections.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/library_path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/library_path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_generator_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_generator_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_fastrtps_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_fastrtps_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/marker_detections.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/marker_detection.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/dds_fastrtps
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_fastrtps_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_fastrtps_cpp.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_introspection_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detection__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/include/coshow_interfaces/coshow_interfaces/msg/detail/marker_detections__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_introspection_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_typesupport_cpp.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/pythonpath.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/pythonpath.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces-0.0.0-py3.10.egg-info
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces-0.0.0-py3.10.egg-info/SOURCES.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces-0.0.0-py3.10.egg-info/dependency_links.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces-0.0.0-py3.10.egg-info/top_level.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces-0.0.0-py3.10.egg-info/PKG-INFO
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detection_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detections_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detections.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/__init__.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detection.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/libcoshow_interfaces__rosidl_generator_py.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/_coshow_interfaces_s.ep.rosidl_typesupport_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/__init__.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+[  8%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/status__functions.c.o
+Listing '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/__init__.py'...
+Listing '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/__init__.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detection.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/msg/_marker_detections.py'...
+[  9%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__functions.c.o
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/local/lib/python3.10/dist-packages/coshow_interfaces/coshow_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_generator_py.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/lib/libcoshow_interfaces__rosidl_generator_py.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/ament_index/resource_index/rust_packages/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/build.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/Cargo.toml
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/src
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/src/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/src/msg/rmw.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/src/lib.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/rust/src/msg.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/msg/MarkerDetection.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/msg/MarkerDetections.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/msg/MarkerDetection.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/msg/MarkerDetections.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/ament_index/resource_index/package_run_dependencies/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/ament_index/resource_index/parent_prefix_path/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/ament_prefix_path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/ament_prefix_path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/environment/path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/local_setup.bash
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/local_setup.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/local_setup.zsh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/local_setup.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/package.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/ament_index/resource_index/packages/coshow_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_generator_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_generator_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_generator_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_generator_pyExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/export_coshow_interfaces__rosidl_generator_pyExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/rosidl_cmake-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/rosidl_cmake_aggregate_target-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfacesConfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/cmake/coshow_interfacesConfig-version.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/coshow_interfaces/share/coshow_interfaces/package.xml
+Finished <<< coshow_interfaces [2.84s]
+[  9%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/msg/detail/velocity_world__functions.c.o
+[ 10%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/go_to__functions.c.o
+[ 10%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/land__functions.c.o
+[ 11%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/notify_setpoints_stop__functions.c.o
+[ 11%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/set_group_mask__functions.c.o
+[ 12%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/start_trajectory__functions.c.o
+[ 12%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/stop__functions.c.o
+[ 13%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/takeoff__functions.c.o
+[ 13%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/update_params__functions.c.o
+[ 14%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/upload_trajectory__functions.c.o
+[ 14%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/remove_logging__functions.c.o
+[ 15%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/add_logging__functions.c.o
+[ 15%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_c.dir/rosidl_generator_c/crazyflie_interfaces/srv/detail/arm__functions.c.o
+[ 16%] Linking C shared library libcrazyflie_interfaces__rosidl_generator_c.so
+[ 16%] Built target crazyflie_interfaces__rosidl_generator_c
+[ 17%] Generating C type support for eProsima Fast-RTPS
+[ 17%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/connection_statistics__type_support.cpp.o
+[ 18%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/connection_statistics_array__type_support.cpp.o
+[ 18%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/connection_statistics__type_support.cpp.o
+[ 18%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/full_state__type_support.cpp.o
+[ 18%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/connection_statistics__type_support.cpp.o
+[ 19%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/log_data_generic__type_support.cpp.o
+[ 20%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.cpp.o
+[ 21%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/connection_statistics_array__type_support.cpp.o
+[ 21%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/hover__type_support.cpp.o
+[ 21%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/full_state__type_support.cpp.o
+[ 22%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/log_block__type_support.cpp.o
+[ 22%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/full_state__type_support.cpp.o
+[ 22%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/position__type_support.cpp.o
+[ 23%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/log_data_generic__type_support.cpp.o
+[ 23%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/connection_statistics__type_support_c.cpp.o
+[ 24%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/log_data_generic__type_support.cpp.o
+[ 25%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/status__type_support.cpp.o
+[ 26%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support_c.cpp.o
+[ 26%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/hover__type_support.cpp.o
+[ 26%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/trajectory_polynomial_piece__type_support.cpp.o
+[ 26%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/hover__type_support.cpp.o
+[ 26%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/full_state__type_support_c.cpp.o
+[ 27%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/msg/velocity_world__type_support.cpp.o
+[ 28%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/log_block__type_support.cpp.o
+[ 28%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/go_to__type_support.cpp.o
+[ 29%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/log_block__type_support.cpp.o
+[ 30%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/log_data_generic__type_support_c.cpp.o
+[ 30%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/position__type_support.cpp.o
+[ 31%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/land__type_support.cpp.o
+[ 31%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/hover__type_support_c.cpp.o
+[ 31%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/position__type_support.cpp.o
+[ 31%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/notify_setpoints_stop__type_support.cpp.o
+[ 32%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/status__type_support.cpp.o
+[ 33%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/log_block__type_support_c.cpp.o
+[ 34%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/set_group_mask__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/status__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/position__type_support_c.cpp.o
+[ 35%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/start_trajectory__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/trajectory_polynomial_piece__type_support.cpp.o
+[ 36%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/msg/detail/velocity_world__type_support.cpp.o
+[ 37%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/stop__type_support.cpp.o
+[ 38%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/status__type_support_c.cpp.o
+[ 38%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/takeoff__type_support.cpp.o
+[ 39%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/msg/detail/dds_fastrtps/velocity_world__type_support.cpp.o
+[ 39%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/go_to__type_support.cpp.o
+[ 39%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support_c.cpp.o
+[ 40%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/update_params__type_support.cpp.o
+[ 41%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/msg/detail/velocity_world__type_support_c.cpp.o
+[ 42%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/land__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/go_to__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/upload_trajectory__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/go_to__type_support_c.cpp.o
+[ 43%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/remove_logging__type_support.cpp.o
+[ 43%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.cpp.o
+[ 44%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/land__type_support.cpp.o
+[ 44%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/add_logging__type_support.cpp.o
+[ 45%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/land__type_support_c.cpp.o
+[ 46%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/set_group_mask__type_support.cpp.o
+[ 46%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/notify_setpoints_stop__type_support.cpp.o
+[ 47%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/crazyflie_interfaces/srv/arm__type_support.cpp.o
+[ 47%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support_c.cpp.o
+[ 47%] Linking CXX shared library libcrazyflie_interfaces__rosidl_typesupport_cpp.so
+[ 47%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/start_trajectory__type_support.cpp.o
+[ 47%] Built target crazyflie_interfaces__rosidl_typesupport_cpp
+[ 48%] Generating C introspection for ROS interfaces
+[ 49%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/set_group_mask__type_support.cpp.o
+[ 50%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/set_group_mask__type_support_c.cpp.o
+[ 51%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/stop__type_support.cpp.o
+[ 51%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/start_trajectory__type_support.cpp.o
+[ 51%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/start_trajectory__type_support_c.cpp.o
+[ 51%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/takeoff__type_support.cpp.o
+[ 52%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/stop__type_support.cpp.o
+[ 53%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/stop__type_support_c.cpp.o
+[ 54%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/update_params__type_support.cpp.o
+[ 54%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/takeoff__type_support_c.cpp.o
+[ 54%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/takeoff__type_support.cpp.o
+[ 54%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.cpp.o
+[ 55%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/update_params__type_support_c.cpp.o
+[ 56%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/update_params__type_support.cpp.o
+[ 56%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/connection_statistics__type_support.c.o
+[ 57%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.c.o
+[ 57%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/full_state__type_support.c.o
+[ 57%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/upload_trajectory__type_support_c.cpp.o
+[ 58%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/log_data_generic__type_support.c.o
+[ 58%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/hover__type_support.c.o
+[ 59%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/remove_logging__type_support.cpp.o
+[ 60%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/log_block__type_support.c.o
+[ 60%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/position__type_support.c.o
+[ 61%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/status__type_support.c.o
+[ 61%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/upload_trajectory__type_support.cpp.o
+[ 61%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.c.o
+[ 62%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/msg/detail/velocity_world__type_support.c.o
+[ 62%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/go_to__type_support.c.o
+[ 63%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/remove_logging__type_support_c.cpp.o
+[ 64%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/land__type_support.c.o
+[ 64%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.c.o
+[ 65%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/set_group_mask__type_support.c.o
+[ 65%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/add_logging__type_support.cpp.o
+[ 65%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/start_trajectory__type_support.c.o
+[ 66%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/stop__type_support.c.o
+[ 66%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/takeoff__type_support.c.o
+[ 67%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/update_params__type_support.c.o
+[ 67%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.c.o
+[ 68%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/remove_logging__type_support.c.o
+[ 69%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/remove_logging__type_support.cpp.o
+[ 69%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/add_logging__type_support_c.cpp.o
+[ 69%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/add_logging__type_support.c.o
+[ 70%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/crazyflie_interfaces/srv/detail/arm__type_support.c.o
+[ 70%] Linking C shared library libcrazyflie_interfaces__rosidl_typesupport_introspection_c.so
+[ 70%] Built target crazyflie_interfaces__rosidl_typesupport_introspection_c
+[ 71%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/crazyflie_interfaces/srv/detail/arm__type_support.cpp.o
+[ 71%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/add_logging__type_support.cpp.o
+[ 72%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/crazyflie_interfaces/srv/detail/arm__type_support_c.cpp.o
+[ 73%] Generating C type support dispatch for ROS interfaces
+[ 73%] Linking CXX shared library libcrazyflie_interfaces__rosidl_typesupport_introspection_cpp.so
+[ 73%] Built target crazyflie_interfaces__rosidl_typesupport_introspection_cpp
+[ 74%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/crazyflie_interfaces/srv/detail/dds_fastrtps/arm__type_support.cpp.o
+[ 74%] Linking CXX shared library libcrazyflie_interfaces__rosidl_typesupport_fastrtps_c.so
+[ 74%] Built target crazyflie_interfaces__rosidl_typesupport_fastrtps_c
+[ 74%] Linking CXX shared library libcrazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[ 74%] Built target crazyflie_interfaces__rosidl_typesupport_fastrtps_cpp
+[ 75%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/log_data_generic__type_support.cpp.o
+[ 75%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/connection_statistics__type_support.cpp.o
+[ 76%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/full_state__type_support.cpp.o
+[ 76%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/connection_statistics_array__type_support.cpp.o
+[ 76%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/position__type_support.cpp.o
+[ 76%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/hover__type_support.cpp.o
+[ 78%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/status__type_support.cpp.o
+[ 78%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/log_block__type_support.cpp.o
+[ 80%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/velocity_world__type_support.cpp.o
+[ 80%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/land__type_support.cpp.o
+[ 80%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/go_to__type_support.cpp.o
+[ 80%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/msg/trajectory_polynomial_piece__type_support.cpp.o
+[ 81%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/start_trajectory__type_support.cpp.o
+[ 81%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/set_group_mask__type_support.cpp.o
+[ 81%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/notify_setpoints_stop__type_support.cpp.o
+[ 82%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/stop__type_support.cpp.o
+[ 83%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/update_params__type_support.cpp.o
+[ 83%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/upload_trajectory__type_support.cpp.o
+[ 83%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/takeoff__type_support.cpp.o
+[ 84%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/remove_logging__type_support.cpp.o
+[ 85%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/add_logging__type_support.cpp.o
+[ 85%] Building CXX object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/crazyflie_interfaces/srv/arm__type_support.cpp.o
+[ 85%] Linking CXX shared library libcrazyflie_interfaces__rosidl_typesupport_c.so
+[ 85%] Built target crazyflie_interfaces__rosidl_typesupport_c
+[ 85%] Built target crazyflie_interfaces
+[ 86%] Generating Python code for ROS interfaces
+[ 86%] Built target crazyflie_interfaces__py
+[ 86%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_connection_statistics_s.c.o
+[ 86%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_full_state_s.c.o
+[ 87%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_log_data_generic_s.c.o
+[ 88%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_connection_statistics_array_s.c.o
+[ 88%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_hover_s.c.o
+[ 89%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_log_block_s.c.o
+[ 90%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_status_s.c.o
+[ 90%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_position_s.c.o
+[ 90%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_trajectory_polynomial_piece_s.c.o
+[ 90%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_go_to_s.c.o
+[ 91%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/msg/_velocity_world_s.c.o
+[ 92%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_land_s.c.o
+[ 92%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_notify_setpoints_stop_s.c.o
+[ 93%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_set_group_mask_s.c.o
+[ 93%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_start_trajectory_s.c.o
+[ 94%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_stop_s.c.o
+[ 94%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_takeoff_s.c.o
+[ 95%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_update_params_s.c.o
+[ 95%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_upload_trajectory_s.c.o
+[ 96%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_remove_logging_s.c.o
+[ 96%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_add_logging_s.c.o
+[ 97%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_generator_py.dir/rosidl_generator_py/crazyflie_interfaces/srv/_arm_s.c.o
+[ 97%] Linking C shared library rosidl_generator_py/crazyflie_interfaces/libcrazyflie_interfaces__rosidl_generator_py.so
+[ 97%] Built target crazyflie_interfaces__rosidl_generator_py
+[ 98%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c.o
+[100%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_c.c.o
+[100%] Building C object CMakeFiles/crazyflie_interfaces__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_introspection_c.c.o
+[100%] Linking C shared library rosidl_generator_py/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+[100%] Linking C shared library rosidl_generator_py/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+[100%] Linking C shared library rosidl_generator_py/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+[100%] Built target crazyflie_interfaces__rosidl_typesupport_fastrtps_c__pyext
+[100%] Built target crazyflie_interfaces__rosidl_typesupport_c__pyext
+[100%] Built target crazyflie_interfaces__rosidl_typesupport_introspection_c__pyext
+-- Install configuration: ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/ament_index/resource_index/rosidl_interfaces/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/trajectory_polynomial_piece.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/log_data_generic.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/status.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/velocity_world.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/rosidl_generator_c__visibility_control.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/position.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/log_block.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/hover.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/full_state.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/connection_statistics.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/connection_statistics_array.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__functions.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__functions.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__struct.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/arm.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/stop.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/set_group_mask.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/upload_trajectory.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/land.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/go_to.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/remove_logging.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/start_trajectory.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/add_logging.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/notify_setpoints_stop.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/update_params.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/takeoff.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/library_path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/library_path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_generator_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_generator_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_fastrtps_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_fastrtps_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/log_data_generic.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/position.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/trajectory_polynomial_piece.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/hover.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/full_state.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/velocity_world.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/log_block.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/connection_statistics.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/status.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/connection_statistics_array.hpp
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__struct.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__type_support.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__traits.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__builder.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/go_to.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/arm.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/update_params.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/land.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/takeoff.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/remove_logging.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/stop.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/add_logging.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/start_trajectory.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/upload_trajectory.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/set_group_mask.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/notify_setpoints_stop.hpp
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/dds_fastrtps
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/dds_fastrtps
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_fastrtps_cpp.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__type_support.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__rosidl_typesupport_introspection_c.h
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_introspection_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_c.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_c.so" to ""
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/trajectory_polynomial_piece__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/status__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_data_generic__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/position__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/velocity_world__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/full_state__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/hover__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/log_block__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/msg/detail/connection_statistics_array__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv
+-- Up-to-date: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/takeoff__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/go_to__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/add_logging__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/upload_trajectory__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/set_group_mask__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/start_trajectory__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/update_params__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/land__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/notify_setpoints_stop__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/stop__type_support.cpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/arm__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/include/crazyflie_interfaces/crazyflie_interfaces/srv/detail/remove_logging__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_introspection_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_cpp.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_typesupport_cpp.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/pythonpath.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/pythonpath.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces-1.0.5-py3.10.egg-info
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces-1.0.5-py3.10.egg-info/SOURCES.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces-1.0.5-py3.10.egg-info/dependency_links.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces-1.0.5-py3.10.egg-info/top_level.txt
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces-1.0.5-py3.10.egg-info/PKG-INFO
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_status_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_hover_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_hover.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_full_state_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_data_generic_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_velocity_world.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_trajectory_polynomial_piece.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics_array.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_velocity_world_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_status.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_block_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_block.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_data_generic.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_position.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/__init__.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_position_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics_array_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_trajectory_polynomial_piece_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_full_state.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/libcrazyflie_interfaces__rosidl_generator_py.so
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_land_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_land.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_takeoff.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_upload_trajectory_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_remove_logging.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_arm_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_stop.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_stop_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_add_logging_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_upload_trajectory.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_start_trajectory.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_update_params.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_start_trajectory_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_set_group_mask.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_arm.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_go_to.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_update_params_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/__init__.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_add_logging.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_set_group_mask_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_notify_setpoints_stop_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_notify_setpoints_stop.py
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_go_to_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_remove_logging_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_takeoff_s.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/_crazyflie_interfaces_s.ep.rosidl_typesupport_c.c
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/__init__.py
+Listing '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/__init__.py'...
+Listing '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/__init__.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_connection_statistics_array.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_full_state.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_hover.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_block.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_log_data_generic.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_position.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_status.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_trajectory_polynomial_piece.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/msg/_velocity_world.py'...
+Listing '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/__init__.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_add_logging.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_arm.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_go_to.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_land.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_notify_setpoints_stop.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_remove_logging.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_set_group_mask.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_start_trajectory.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_stop.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_takeoff.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_update_params.py'...
+Compiling '/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/srv/_upload_trajectory.py'...
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/local/lib/python3.10/dist-packages/crazyflie_interfaces/crazyflie_interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_generator_py.so
+-- Set runtime path of "/home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/lib/libcrazyflie_interfaces__rosidl_generator_py.so" to ""
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/ament_index/resource_index/rust_packages/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/build.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/Cargo.toml
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/msg/rmw.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/srv/rmw.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/lib.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/srv.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/rust/src/msg.rs
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/ConnectionStatistics.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/ConnectionStatisticsArray.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/FullState.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/LogDataGeneric.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Hover.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/LogBlock.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Position.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Status.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/TrajectoryPolynomialPiece.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/VelocityWorld.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/GoTo.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Land.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/NotifySetpointsStop.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/SetGroupMask.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/StartTrajectory.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Stop.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Takeoff.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UpdateParams.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UploadTrajectory.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/RemoveLogging.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/AddLogging.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Arm.idl
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/ConnectionStatistics.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/ConnectionStatisticsArray.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/FullState.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/LogDataGeneric.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Hover.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/LogBlock.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Position.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/Status.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/TrajectoryPolynomialPiece.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/msg/VelocityWorld.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/GoTo.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/GoTo_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/GoTo_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Land.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Land_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Land_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/NotifySetpointsStop.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/NotifySetpointsStop_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/NotifySetpointsStop_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/SetGroupMask.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/SetGroupMask_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/SetGroupMask_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/StartTrajectory.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/StartTrajectory_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/StartTrajectory_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Stop.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Stop_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Stop_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Takeoff.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Takeoff_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Takeoff_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UpdateParams.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UpdateParams_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UpdateParams_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UploadTrajectory.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UploadTrajectory_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/UploadTrajectory_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/RemoveLogging.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/RemoveLogging_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/RemoveLogging_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/AddLogging.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/AddLogging_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/AddLogging_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Arm.srv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Arm_Request.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/srv/Arm_Response.msg
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/ament_index/resource_index/package_run_dependencies/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/ament_index/resource_index/parent_prefix_path/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/ament_prefix_path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/ament_prefix_path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/path.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/environment/path.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/local_setup.bash
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/local_setup.sh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/local_setup.zsh
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/local_setup.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/package.dsv
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/ament_index/resource_index/packages/crazyflie_interfaces
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_generator_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_generator_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_generator_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_cExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_cppExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_generator_pyExport.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/export_crazyflie_interfaces__rosidl_generator_pyExport-noconfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/rosidl_cmake-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/rosidl_cmake_aggregate_target-extras.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfacesConfig.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/cmake/crazyflie_interfacesConfig-version.cmake
+-- Installing: /home/coshow/COSHOW/ros2_ws/install/crazyflie_interfaces/share/crazyflie_interfaces/package.xml
+Finished <<< crazyflie_interfaces [9.67s]
+
+Summary: 2 packages finished [9.75s]
+Starting >>> aideck_aruco_ros
+running egg_info
+creating ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info
+writing ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/PKG-INFO
+writing dependency_links to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/dependency_links.txt
+writing entry points to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/entry_points.txt
+writing requirements to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/requires.txt
+writing top-level names to ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/top_level.txt
+writing manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+reading manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+writing manifest file '../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build
+creating /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib
+creating /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros
+copying aideck_aruco_ros/__init__.py -> /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros
+copying aideck_aruco_ros/udp_stream.py -> /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros
+copying aideck_aruco_ros/aideck_aruco_node.py -> /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros
+running install
+running install_lib
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros
+copying /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros/__init__.py -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros
+copying /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros/udp_stream.py -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros
+copying /home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/build/lib/aideck_aruco_ros/aideck_aruco_node.py -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros
+byte-compiling /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros/udp_stream.py to udp_stream.cpython-310.pyc
+byte-compiling /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros/aideck_aruco_node.py to aideck_aruco_node.cpython-310.pyc
+running install_data
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/ament_index
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/ament_index/resource_index
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/ament_index/resource_index/packages
+copying resource/aideck_aruco_ros -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/ament_index/resource_index/packages
+copying package.xml -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/aideck_aruco_ros
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/aideck_aruco_ros/launch
+copying launch/aideck_aruco.launch.py -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/aideck_aruco_ros/launch
+creating /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/aideck_aruco_ros/config
+copying config/drones.yaml -> /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/share/aideck_aruco_ros/config
+running install_egg_info
+Copying ../../build/aideck_aruco_ros/aideck_aruco_ros.egg-info to /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/python3.10/site-packages/aideck_aruco_ros-0.1.0-py3.10.egg-info
+running install_scripts
+Installing aideck_aruco_node script to /home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros/lib/aideck_aruco_ros
+writing list of installed files to '/home/coshow/COSHOW/ros2_ws/build/aideck_aruco_ros/install.log'
+Finished <<< aideck_aruco_ros [0.34s]
+
+Summary: 1 package finished [0.42s]
+PASS Python aiohttp/PyYAML/rclpy imports
+uint8 group_mask
+float32 height
+builtin_interfaces/Duration duration
+	int32 sec
+	uint32 nanosec
+---
+PASS crazyflie Land interface
+# 드론 1대의 한 프레임 검출 결과
+std_msgs/Header header                # stamp = 검출 완료 시각
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+string drone                          # "cf_a" 등
+geometry_msgs/PoseStamped drone_pose  # 검출 시점의 최신 pose
+	std_msgs/Header header
+		builtin_interfaces/Time stamp
+			int32 sec
+			uint32 nanosec
+		string frame_id
+	Pose pose
+		Point position
+			float64 x
+			float64 y
+			float64 z
+		Quaternion orientation
+			float64 x 0
+			float64 y 0
+			float64 z 0
+			float64 w 1
+MarkerDetection[] markers             # 검출된 마커 목록 (0개 이상)
+	int32 id          #
+	float32 cx        #
+	float32 cy        #
+	float32 size_px   #
+	float32 world_x   #
+	float32 world_y   #
+PASS coshow MarkerDetections interface
+/home/coshow/COSHOW/ros2_ws/install/aideck_aruco_ros
+PASS workspace package prefix and copied source
+/usr/bin/ping
+PASS ping executable
+Chromium 140.0.7339.16 
+PASS browser binary
+Monitors: 1
+ 0: +screen 3840/1016x2160/571+0+0  screen
+PASS X11 monitors
+PASS installation self-check; collaborator YAML files were not modified.

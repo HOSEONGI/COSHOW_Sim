@@ -1,0 +1,19 @@
+BT top-level function/class ASTs unchanged (37): now, _dist2, _yaw_to_quat, _dur, _install_emergency_land, _param, _alt, _dur_of, _robots_from_attrs, _resolve_goal, BBCondition, IsReady, IsMMFound, IsTMFound, IsTargetConfirmed, IsRescue, _drone_home, _limo_home, IsMissionComplete, IsDroneAt, IsDroneAirborne, IsDroneLanded, AreDronesReturn, IsLimoAt, _goto_duration, _goto_request, DroneTakeoff, DroneGoTo, DroneLand, LimoNavigateTo, _MultiDroneAction, _lawnmower, Search, ReturnDrones, CatchTarget, SetLed, Idle
+BT callback ASTs unchanged: UpdateBlackboard._on_drone_pose, UpdateBlackboard._on_preflight, UpdateBlackboard._on_limo_pose, UpdateBlackboard._on_det
+BT _DroneService AST: only authorized cmd.goal slice[1:] -> slice[2:] differs
+Preflight ASTs unchanged: _pose_ok, _supervisor_ok, _postarm_ok, check_inflight, land_all, run, main
+Preflight original logger calls unchanged: 22
+Sim detector entire original AST unchanged after removing §4.6 additions; shared annotation drawing and display ASTs unchanged
+bt/scenarios/coshow/bt_nodes.py vs 2a464d4: modified=['UpdateBlackboard.__init__', 'UpdateBlackboard._predicate', '_DroneService.run'], added=['UpdateBlackboard._publish_mission_state', '_phase']
+bt/scenarios/coshow/bt_nodes.py vs 73c14ea: modified=['UpdateBlackboard.__init__', 'UpdateBlackboard._publish_mission_state', '_DroneService.run'], added=[]
+nodes/aruco_detector_node.py vs 2a464d4: modified=['ArucoDetectorNode.__init__', 'ArucoDetectorNode._process_frame'], added=['ArucoDetectorNode._annotate_frame', 'ArucoDetectorNode._init_image_publishers', 'ArucoDetectorNode._publish_image', 'ArucoDetectorNode._publish_image_stats']
+nodes/aruco_detector_node.py vs 73c14ea: modified=['ArucoDetectorNode.__init__', 'ArucoDetectorNode._process_frame'], added=['ArucoDetectorNode._annotate_frame', 'ArucoDetectorNode._init_image_publishers', 'ArucoDetectorNode._publish_image', 'ArucoDetectorNode._publish_image_stats']
+ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py vs 2a464d4: modified=['DroneChannel.__init__', 'DroneChannel._on_pose'], added=[]
+ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py vs 73c14ea: modified=[], added=[]
+ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py vs 2a464d4: modified=['generate_launch_description'], added=[]
+ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py vs 73c14ea: modified=[], added=[]
+tools/preflight_node.py vs 2a464d4: modified=['Preflight.__init__', 'Preflight._kal_ranges', 'Preflight._on_kalman', 'Preflight._on_pose', 'Preflight._on_status', 'Preflight._publish_ready', 'Preflight._set_ready', 'Preflight.arm_all', 'Preflight.reset_estimators', 'Preflight.wait_preflight', 'Preflight.wait_server_ready'], added=['Preflight._publish_status', 'Preflight._set_stage']
+tools/preflight_node.py vs 73c14ea: modified=['Preflight._publish_ready', 'Preflight._publish_status'], added=[]
+Python 3.10 grammar: 50 files PASS
+Upstream changed paths: ['bt/scenarios/coshow/bt_nodes.py', 'nodes/aruco_detector_node.py', 'ros2_ws/src/aideck_aruco_ros/aideck_aruco_ros/aideck_aruco_node.py', 'ros2_ws/src/aideck_aruco_ros/launch/aideck_aruco.launch.py', 'tools/preflight_node.py']
+PASS: tracked upstream paths limited to allowlist; listed AST and Python grammar checks passed

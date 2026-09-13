@@ -1,0 +1,3 @@
+Command: Python pathlib+Markdown-link scan of README, M4, M5, M6, M7, FINAL.
+Targets checked: 127
+PASS: every relative target exists

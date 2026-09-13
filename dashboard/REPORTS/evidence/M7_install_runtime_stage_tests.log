@@ -1,0 +1,6 @@
+docker exec -e ROS_DOMAIN_ID=89 -e ROS_LOCALHOST_ONLY=1 coshow-m4-images-test bash -lc 'source /opt/ros/humble/setup.bash && source /ws_build/install/setup.bash && cd /ws && python3 -m pytest dashboard/tests/test_stage_tools.py -q'
+...............                                                          [100%]
+15 passed in 0.23s
+
+EXIT_CODE=0
+

@@ -1,0 +1,287 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=89' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' '-m' 'pytest' 'dashboard/tests/test_stage_tools.py' '-q'
+FFFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+__ test_recorder_deduplicates_transitions_and_events_but_records_every_state ___
+
+    def test_recorder_deduplicates_transitions_and_events_but_records_every_state():
+        record, poses = io.StringIO(), io.StringIO()
+>       recorder = module('stage_probe').ProbeRecorder(record=record, poses=poses, fleet=True)
+
+dashboard/tests/test_stage_tools.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'stage_probe'
+
+    def module(name):
+        path = ROOT / 'dashboard/tests' / (name + '.py')
+>       assert path.exists(), 'Missing stage tool: ' + str(path)
+E       AssertionError: Missing stage tool: /ws/dashboard/tests/stage_probe.py
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')> = PosixPath('/ws/dashboard/tests/stage_probe.py').exists
+
+dashboard/tests/test_stage_tools.py:19: AssertionError
+_ test_fleet_table_uses_hello_roles_and_reports_camera_receipts_and_stale_poses _
+
+    def test_fleet_table_uses_hello_roles_and_reports_camera_receipts_and_stale_poses():
+>       recorder = module('stage_probe').ProbeRecorder(fleet=True)
+
+dashboard/tests/test_stage_tools.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'stage_probe'
+
+    def module(name):
+        path = ROOT / 'dashboard/tests' / (name + '.py')
+>       assert path.exists(), 'Missing stage tool: ' + str(path)
+E       AssertionError: Missing stage tool: /ws/dashboard/tests/stage_probe.py
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')> = PosixPath('/ws/dashboard/tests/stage_probe.py').exists
+
+dashboard/tests/test_stage_tools.py:19: AssertionError
+___ test_analyzer_reports_phase_and_estop_timeline_without_duplicate_events ____
+
+    def test_analyzer_reports_phase_and_estop_timeline_without_duplicate_events():
+        packets = []
+        hello, state = messages()
+        for tick, phase, run, event in [
+            (0, 'observe', 'RUNNING', 'BT started'),
+            (10, 'capture', 'RUNNING', 'BT started'),
+            (11, 'capture', 'LANDING', 'BT SIGINT sent once'),
+            (12, 'capture', 'LANDING', 'land sent 1/1'),
+            (13, 'capture', 'ABORTED', 'vehicle 취소 미확인'),
+            (20, None, 'IDLE', 'reset'),
+            (100, None, 'READY', 'preflight ready'),
+        ]:
+            value = dict(state, mission={'phase': phase}, run={'state': run},
+                         events=[{'t': 100. + tick, 'level': 'info', 'text': event}])
+            packets.append(json.dumps({'received_at': '2026-09-13T00:00:00+00:00',
+                                       'monotonic_s': float(tick), 'message': value}))
+        packets.append(packets[-1])
+>       result = module('analyze_stage').analyze_lines(packets)
+
+dashboard/tests/test_stage_tools.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'analyze_stage'
+
+    def module(name):
+        path = ROOT / 'dashboard/tests' / (name + '.py')
+>       assert path.exists(), 'Missing stage tool: ' + str(path)
+E       AssertionError: Missing stage tool: /ws/dashboard/tests/analyze_stage.py
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/tests/analyze_stage.py')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/tests/analyze_stage.py')> = PosixPath('/ws/dashboard/tests/analyze_stage.py').exists
+
+dashboard/tests/test_stage_tools.py:19: AssertionError
+_____________ test_analyzer_rejects_corrupt_json_with_line_number ______________
+
+    def test_analyzer_rejects_corrupt_json_with_line_number():
+        with pytest.raises(ValueError, match='line 2'):
+>           module('analyze_stage').analyze_lines(['{}', 'broken'])
+
+dashboard/tests/test_stage_tools.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'analyze_stage'
+
+    def module(name):
+        path = ROOT / 'dashboard/tests' / (name + '.py')
+>       assert path.exists(), 'Missing stage tool: ' + str(path)
+E       AssertionError: Missing stage tool: /ws/dashboard/tests/analyze_stage.py
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/tests/analyze_stage.py')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/tests/analyze_stage.py')> = PosixPath('/ws/dashboard/tests/analyze_stage.py').exists
+
+dashboard/tests/test_stage_tools.py:19: AssertionError
+____________ test_stage_websocket_probe_never_sends_admin_commands _____________
+
+    def test_stage_websocket_probe_never_sends_admin_commands():
+        from aiohttp import web
+        from aiohttp.test_utils import TestServer
+        async def exercise():
+            incoming, roles = [], []
+            hello, state = messages()
+            async def websocket(request):
+                roles.append(request.query.get('role'))
+                socket = web.WebSocketResponse()
+                await socket.prepare(request)
+                await socket.send_json(hello)
+                await socket.send_json(state)
+                await socket.send_bytes(b'\x00jpeg')
+                async for item in socket:
+                    incoming.append(item)
+                return socket
+            app = web.Application()
+            app.router.add_get('/ws', websocket)
+            async with TestServer(app) as server:
+                tool = module('stage_probe')
+                output = []
+                recorder = tool.ProbeRecorder(fleet=True)
+                await tool.collect(str(server.make_url('/')), recorder, seconds=.12, interval=.05, emit=output.append)
+            assert roles == ['admin'] and not incoming
+            assert any('PHASE' in line for line in output)
+            assert any('camera_rx_fps' in line for line in output)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_stage_tools.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_stage_tools.py:122: in exercise
+    tool = module('stage_probe')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'stage_probe'
+
+    def module(name):
+        path = ROOT / 'dashboard/tests' / (name + '.py')
+>       assert path.exists(), 'Missing stage tool: ' + str(path)
+E       AssertionError: Missing stage tool: /ws/dashboard/tests/stage_probe.py
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/tests/stage_probe.py')> = PosixPath('/ws/dashboard/tests/stage_probe.py').exists
+
+dashboard/tests/test_stage_tools.py:19: AssertionError
+________________ test_launch_scripts_parse_as_bash[install.sh] _________________
+
+script = 'install.sh'
+
+    @pytest.mark.parametrize('script', ['install.sh', 'run.sh', 'kiosk.sh'])
+    def test_launch_scripts_parse_as_bash(script):
+        path = ROOT / 'dashboard' / script
+>       assert path.exists(), 'Missing launch script: ' + script
+E       AssertionError: Missing launch script: install.sh
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/install.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/install.sh')> = PosixPath('/ws/dashboard/install.sh').exists
+
+dashboard/tests/test_stage_tools.py:135: AssertionError
+__________________ test_launch_scripts_parse_as_bash[run.sh] ___________________
+
+script = 'run.sh'
+
+    @pytest.mark.parametrize('script', ['install.sh', 'run.sh', 'kiosk.sh'])
+    def test_launch_scripts_parse_as_bash(script):
+        path = ROOT / 'dashboard' / script
+>       assert path.exists(), 'Missing launch script: ' + script
+E       AssertionError: Missing launch script: run.sh
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/run.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/run.sh')> = PosixPath('/ws/dashboard/run.sh').exists
+
+dashboard/tests/test_stage_tools.py:135: AssertionError
+_________________ test_launch_scripts_parse_as_bash[kiosk.sh] __________________
+
+script = 'kiosk.sh'
+
+    @pytest.mark.parametrize('script', ['install.sh', 'run.sh', 'kiosk.sh'])
+    def test_launch_scripts_parse_as_bash(script):
+        path = ROOT / 'dashboard' / script
+>       assert path.exists(), 'Missing launch script: ' + script
+E       AssertionError: Missing launch script: kiosk.sh
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:135: AssertionError
+____________ test_kiosk_rejects_invalid_scale_before_launching[nan] ____________
+
+scale = 'nan'
+
+    @pytest.mark.parametrize('scale', ['nan', 'inf', '.69', '1.61', 'invalid'])
+    def test_kiosk_rejects_invalid_scale_before_launching(scale):
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:142: AssertionError
+____________ test_kiosk_rejects_invalid_scale_before_launching[inf] ____________
+
+scale = 'inf'
+
+    @pytest.mark.parametrize('scale', ['nan', 'inf', '.69', '1.61', 'invalid'])
+    def test_kiosk_rejects_invalid_scale_before_launching(scale):
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:142: AssertionError
+____________ test_kiosk_rejects_invalid_scale_before_launching[.69] ____________
+
+scale = '.69'
+
+    @pytest.mark.parametrize('scale', ['nan', 'inf', '.69', '1.61', 'invalid'])
+    def test_kiosk_rejects_invalid_scale_before_launching(scale):
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:142: AssertionError
+___________ test_kiosk_rejects_invalid_scale_before_launching[1.61] ____________
+
+scale = '1.61'
+
+    @pytest.mark.parametrize('scale', ['nan', 'inf', '.69', '1.61', 'invalid'])
+    def test_kiosk_rejects_invalid_scale_before_launching(scale):
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:142: AssertionError
+__________ test_kiosk_rejects_invalid_scale_before_launching[invalid] __________
+
+scale = 'invalid'
+
+    @pytest.mark.parametrize('scale', ['nan', 'inf', '.69', '1.61', 'invalid'])
+    def test_kiosk_rejects_invalid_scale_before_launching(scale):
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:142: AssertionError
+_______________ test_kiosk_rejects_wayland_with_operator_action ________________
+
+    def test_kiosk_rejects_wayland_with_operator_action():
+        path = ROOT / 'dashboard/kiosk.sh'
+>       assert path.exists(), 'Missing kiosk script'
+E       AssertionError: Missing kiosk script
+E       assert False
+E        +  where False = <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')>()
+E        +    where <bound method Path.exists of PosixPath('/ws/dashboard/kiosk.sh')> = PosixPath('/ws/dashboard/kiosk.sh').exists
+
+dashboard/tests/test_stage_tools.py:150: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_stage_tools.py::test_recorder_deduplicates_transitions_and_events_but_records_every_state
+FAILED dashboard/tests/test_stage_tools.py::test_fleet_table_uses_hello_roles_and_reports_camera_receipts_and_stale_poses
+FAILED dashboard/tests/test_stage_tools.py::test_analyzer_reports_phase_and_estop_timeline_without_duplicate_events
+FAILED dashboard/tests/test_stage_tools.py::test_analyzer_rejects_corrupt_json_with_line_number
+FAILED dashboard/tests/test_stage_tools.py::test_stage_websocket_probe_never_sends_admin_commands
+FAILED dashboard/tests/test_stage_tools.py::test_launch_scripts_parse_as_bash[install.sh]
+FAILED dashboard/tests/test_stage_tools.py::test_launch_scripts_parse_as_bash[run.sh]
+FAILED dashboard/tests/test_stage_tools.py::test_launch_scripts_parse_as_bash[kiosk.sh]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_invalid_scale_before_launching[nan]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_invalid_scale_before_launching[inf]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_invalid_scale_before_launching[.69]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_invalid_scale_before_launching[1.61]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_invalid_scale_before_launching[invalid]
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_rejects_wayland_with_operator_action
+14 failed in 0.10s
