@@ -1,0 +1,848 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=84' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' '-m' 'pytest' 'dashboard/tests/test_m4_followup.py' '-q'
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                           [100%]
+=================================== FAILURES ===================================
+_____ test_hello_marker_contract_comes_from_bt_not_field_or_lane_inference _____
+
+    def test_hello_marker_contract_comes_from_bt_not_field_or_lane_inference():
+        cfg = load_config(mock=True)
+        cfg.bt['coshow'].update(observe_drone='renamed_reader',
+                                mission_marker_ids=[31, 38], marker_id_offset=30)
+        cfg.field['markers']['mission'] = [{'id': 99, 'position': [0, 0]}]
+        hello = cfg.hello(True)
+>       assert hello.get('observe_drone') == 'renamed_reader'
+E       AssertionError: assert None == 'renamed_reader'
+E        +  where None = <built-in method get of dict object at 0xed207eb75280>('observe_drone')
+E        +    where <built-in method get of dict object at 0xed207eb75280> = {'bases': {'cf230': [-1.0, 0.0], 'cf231': [-1.5, 1.5], 'cf232': [-1.5, 0.0], 'cf233': [-1.5, -1.5], ...}, 'camera_min_... 'cf231': '탐색 드론 B', 'cf232': '탐색 드론 C', 'cf233': '탐색 드론 D', ...}, 'drones': ['cf230', 'cf231', 'cf232', 'cf233'], ...}.get
+
+dashboard/tests/test_m4_followup.py:16: AssertionError
+______ test_missing_bt_marker_contract_is_explicit_null_without_defaults _______
+
+    def test_missing_bt_marker_contract_is_explicit_null_without_defaults():
+        cfg = load_config(mock=True)
+        for key in ('observe_drone', 'mission_marker_ids', 'marker_id_offset'):
+            cfg.bt['coshow'].pop(key)
+        hello = cfg.hello()
+>       assert all(key in hello and hello[key] is None
+                   for key in ('observe_drone', 'mission_marker_ids', 'marker_id_offset'))
+E       assert False
+E        +  where False = all(<generator object test_missing_bt_marker_contract_is_explicit_null_without_defaults.<locals>.<genexpr> at 0xed207e9f0ba0>)
+
+dashboard/tests/test_m4_followup.py:27: AssertionError
+_______ test_recursive_javascript_audit_catches_external_strings[cf230] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabb640>
+literal = 'cf230'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+__ test_recursive_javascript_audit_catches_external_strings[/preflight/ready] __
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207f6270d0>
+literal = '/preflight/ready'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_recursive_javascript_audit_catches_external_strings[/coshow/mission_state] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabdd20>
+literal = '/coshow/mission_state'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+____ test_recursive_javascript_audit_catches_external_strings[/aideck/data] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed20801fc0a0>
+literal = '/aideck/data'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+___ test_recursive_javascript_audit_catches_external_strings[/renamed/land] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabf910>
+literal = '/renamed/land'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+____ test_recursive_javascript_audit_catches_external_strings[/renamed/arm] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207f624610>
+literal = '/renamed/arm'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_recursive_javascript_audit_catches_external_strings[/renamed/navigate_to_pose] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabc070>
+literal = '/renamed/navigate_to_pose'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_recursive_javascript_audit_catches_external_strings[marker_detections] __
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eb46d10>
+literal = 'marker_detections'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+______ test_recursive_javascript_audit_catches_external_strings[limo_new] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi8')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabe740>
+literal = 'limo_new'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_______ test_recursive_javascript_audit_catches_external_strings[spare_] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e996da0>
+literal = 'spare_'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_____ test_recursive_javascript_audit_catches_external_strings[spare_CF07] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recursive_javascript_audi10')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabc880>
+literal = 'spare_CF07'
+
+    @pytest.mark.parametrize('literal', [
+        'cf230', '/preflight/ready', '/coshow/mission_state', '/aideck/data',
+        '/renamed/land', '/renamed/arm', '/renamed/navigate_to_pose',
+        'marker_detections', 'limo_new', 'spare_', 'spare_CF07',
+    ])
+    def test_recursive_javascript_audit_catches_external_strings(tmp_path, monkeypatch, literal):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:46: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\x63f230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e9950c0>
+source = 'const value = "\\x63f230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\u0063f230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabecb0>
+source = 'const value = "\\u0063f230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\u{63}f230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e9961a0>
+source = 'const value = "\\u{63}f230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot cf230 ${id}`;] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eab8e80>
+source = 'const value = `robot cf230 ${id}`;'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot ${lookup("cf230")}`;] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e997eb0>
+source = 'const value = `robot ${lookup("cf230")}`;'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot ${`nested ${lookup("cf230")}`}`;] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eab91b0>
+source = 'const value = `robot ${`nested ${lookup("cf230")}`}`;'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "https://local.example"; const role = "cf230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e996a70>
+source = 'const value = "https://local.example"; const role = "cf230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[const ratio = width / height; const role = "cf230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eab8d00>
+source = 'const ratio = width / height; const role = "cf230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_lexing_catches_escaped_and_template_expression_strings[if (ready) /["/]/.test(value); const role = "cf230";] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_lexing_catches8')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e9959f0>
+source = 'if (ready) /["/]/.test(value); const role = "cf230";'
+
+    @pytest.mark.parametrize('source', [
+        r'const value = "\x63f230";',
+        r'const value = "\u0063f230";',
+        r'const value = "\u{63}f230";',
+        'const value = `robot cf230 ${id}`;',
+        'const value = `robot ${lookup("cf230")}`;',
+        'const value = `robot ${`nested ${lookup("cf230")}`}`;',
+        'const value = "https://local.example"; const role = "cf230";',
+        'const ratio = width / height; const role = "cf230";',
+        'if (ready) /["/]/.test(value); const role = "cf230";',
+    ])
+    def test_javascript_lexing_catches_escaped_and_template_expression_strings(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:63: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => id >= 11 && id <= 14);] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabaf20>
+source = 'return ids.filter(id => id >= 11 && id <= 14);'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => 14 >= id && 11 <= id);] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e996770>
+source = 'return ids.filter(id => 14 >= id && 11 <= id);'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[const mission_marker_ids = [11, 14];] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eaba590>
+source = 'const mission_marker_ids = [11, 14];'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[const missionMarkerIds = [11, 12, 13, 14];] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207e994370>
+source = 'const missionMarkerIds = [11, 12, 13, 14];'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[const missionMarkerIds = [0xb, 0xe];] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabbe80>
+source = 'const missionMarkerIds = [0xb, 0xe];'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+_ test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => id >= 1.1e1 && id <= 1_4);] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_rejects_5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207f624ee0>
+source = 'return ids.filter(id => id >= 1.1e1 && id <= 1_4);'
+
+    @pytest.mark.parametrize('source', [
+        'return ids.filter(id => id >= 11 && id <= 14);',
+        'return ids.filter(id => 14 >= id && 11 <= id);',
+        'const mission_marker_ids = [11, 14];',
+        'const missionMarkerIds = [11, 12, 13, 14];',
+        'const missionMarkerIds = [0xb, 0xe];',
+        'return ids.filter(id => id >= 1.1e1 && id <= 1_4);',
+    ])
+    def test_javascript_audit_rejects_hardcoded_mission_marker_range(
+            tmp_path, monkeypatch, source):
+>       with pytest.raises(AssertionError, match='mission marker'):
+E       Failed: DID NOT RAISE <class 'AssertionError'>
+
+dashboard/tests/test_m4_followup.py:77: Failed
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+Runtime imports: asyncio
+PASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every runtime string literal tested; no external-name literal matched outside schema keys
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed
+___ test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eabc0a0>
+capsys = <_pytest.capture.CaptureFixture object at 0xed207eabc940>
+
+    def test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers(
+            tmp_path, monkeypatch, capsys):
+        source = r'''// const bad = 'cf230'; id >= 11 && id <= 14;
+        /* const bad = "/preflight/ready"; */
+        const url = "https://local.example";
+        const pattern = /["/]*cf230/;
+        if (ready) /cf230/.test(value);
+        const padding = [11, 14]; const size = {width: 11, height: 14};
+        const color = '#111414'; const ratio = width / 14;
+        const text = `style ${11}px ${14}px`;
+        const allowed = ['spare_prefix', 'limo_status_template'];
+        '''
+        run_audit(tmp_path, monkeypatch, source)
+        output = capsys.readouterr().out
+>       assert '1 authored JavaScript files' in output
+E       AssertionError: assert '1 authored JavaScript files' in 'Python: 3.10.12\nRuntime imports: asyncio\nPASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib\nE...ocket/UDP module\nPASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed\n'
+
+dashboard/tests/test_m4_followup.py:95: AssertionError
+________ test_vendor_is_counted_but_never_read_for_external_name_audit _________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_vendor_is_counted_but_nev0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xed207eaba5f0>
+capsys = <_pytest.capture.CaptureFixture object at 0xed207eabb1f0>
+
+    def test_vendor_is_counted_but_never_read_for_external_name_audit(
+            tmp_path, monkeypatch, capsys):
+        vendor = tmp_path / 'static/vendor/original.js'
+        vendor.parent.mkdir(parents=True)
+        vendor.write_text("const external = 'cf230'; const missionMarkerIds = [11,14];")
+        original_read = Path.read_text
+        def tracked_read(path, *args, **kwargs):
+            # Existing offline request syntax audit may still inspect vendor assets;
+            # the authored literal audit must never tokenize or interpret this file.
+            return original_read(path, *args, **kwargs)
+        monkeypatch.setattr(Path, 'read_text', tracked_read)
+        run_audit(tmp_path, monkeypatch, "const data = 'spare_prefix';")
+>       assert '1 vendor JavaScript files excluded from external-name/literal audit' in capsys.readouterr().out
+E       assert '1 vendor JavaScript files excluded from external-name/literal audit' in 'Python: 3.10.12\nRuntime imports: asyncio\nPASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib\nE...ocket/UDP module\nPASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed\n'
+E        +  where 'Python: 3.10.12\nRuntime imports: asyncio\nPASS: 1 runtime files, Python 3.10 grammar, no match/union/newer stdlib\nE...ocket/UDP module\nPASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed\n' = CaptureResult(out="Python: 3.10.12\nRuntime imports: asyncio\nPASS: 1 runtime files, Python 3.10 grammar, no match/uni... module\nPASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed\n", err='').out
+E        +    where CaptureResult(out="Python: 3.10.12\nRuntime imports: asyncio\nPASS: 1 runtime files, Python 3.10 grammar, no match/uni... module\nPASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed\n", err='') = <bound method CaptureFixture.readouterr of <_pytest.capture.CaptureFixture object at 0xed207eabb1f0>>()
+E        +      where <bound method CaptureFixture.readouterr of <_pytest.capture.CaptureFixture object at 0xed207eabb1f0>> = <_pytest.capture.CaptureFixture object at 0xed207eabb1f0>.readouterr
+
+dashboard/tests/test_m4_followup.py:111: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m4_followup.py::test_hello_marker_contract_comes_from_bt_not_field_or_lane_inference
+FAILED dashboard/tests/test_m4_followup.py::test_missing_bt_marker_contract_is_explicit_null_without_defaults
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[cf230]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/preflight/ready]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/coshow/mission_state]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/aideck/data]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/renamed/land]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/renamed/arm]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[/renamed/navigate_to_pose]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[marker_detections]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[limo_new]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[spare_]
+FAILED dashboard/tests/test_m4_followup.py::test_recursive_javascript_audit_catches_external_strings[spare_CF07]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\x63f230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\u0063f230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "\\u{63}f230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot cf230 ${id}`;]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot ${lookup("cf230")}`;]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = `robot ${`nested ${lookup("cf230")}`}`;]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const value = "https://local.example"; const role = "cf230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[const ratio = width / height; const role = "cf230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_lexing_catches_escaped_and_template_expression_strings[if (ready) /["/]/.test(value); const role = "cf230";]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => id >= 11 && id <= 14);]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => 14 >= id && 11 <= id);]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[const mission_marker_ids = [11, 14];]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[const missionMarkerIds = [11, 12, 13, 14];]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[const missionMarkerIds = [0xb, 0xe];]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_rejects_hardcoded_mission_marker_range[return ids.filter(id => id >= 1.1e1 && id <= 1_4);]
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers
+FAILED dashboard/tests/test_m4_followup.py::test_vendor_is_counted_but_never_read_for_external_name_audit
+30 failed in 0.09s

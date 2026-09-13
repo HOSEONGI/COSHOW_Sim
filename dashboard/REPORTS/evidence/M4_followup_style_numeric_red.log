@@ -1,0 +1,64 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=84' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' '-m' 'pytest' 'dashboard/tests/test_m4_followup.py' '-q' '-k' 'ignores_comments'
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe2b49d15ce50>
+capsys = <_pytest.capture.CaptureFixture object at 0xe2b49d15d660>
+
+    def test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers(
+            tmp_path, monkeypatch, capsys):
+        source = r'''// const bad = 'cf230'; id >= 11 && id <= 14;
+        /* const bad = "/preflight/ready"; */
+        const url = "https://local.example";
+        const pattern = /["/]*cf230/;
+        if (ready) /cf230/.test(value);
+        const padding = [11, 14]; const size = {width: 11, height: 14};
+        const markerDimensions = [11, 14];
+        const color = '#111414'; const ratio = width / 14;
+        const text = `style ${11}px ${14}px`;
+        const allowed = ['spare_prefix', 'limo_status_template', 'limo_area'];
+        '''
+>       run_audit(tmp_path, monkeypatch, source)
+
+dashboard/tests/test_m4_followup.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/tests/test_m4_followup.py:35: in run_audit
+    audit.main()
+dashboard/tests/verify_m2_constraints.py:260: in main
+    strings, numbers = assert_javascript_literals_allowed(path.read_text(), path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = '// const bad = \'cf230\'; id >= 11 && id <= 14;\n    /* const bad = "/preflight/ready"; */\n    const url = "https://...ext = `style ${11}px ${14}px`;\n    const allowed = [\'spare_prefix\', \'limo_status_template\', \'limo_area\'];\n    '
+path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0/static/js/nested/fixture.js')
+
+    def assert_javascript_literals_allowed(source, path):
+        tokens = list(javascript_tokens(source, path))
+        strings = [token for token in tokens if token[0] == 'string']
+        numbers = [token for token in tokens if token[0] == 'number']
+        for _, value, line in strings:
+            assert_string_external_names_absent(value, path, line)
+    
+        # Detect the reviewed marker-range hole without banning typography/geometry
+        # values 11 and 14. Only marker-named arrays or comparisons of id/marker
+        # operands are schema constants. Numeric spelling (hex/exponent/etc.) cannot
+        # bypass the rule. Semicolons keep unrelated statements from being combined.
+        statement, bounds = [], {}
+        for token in tokens + [('punct', ';', 0)]:
+            if token[1] != ';':
+                statement.append(token)
+                continue
+            marker_context = any(kind in ('word', 'string') and 'marker' in str(value).lower()
+                                 for kind, value, _ in statement)
+            values = {value for kind, value, _ in statement if kind == 'number'}
+            if marker_context and any(value == '[' for _, value, _ in statement):
+>               assert not {11, 14} <= values, (path, token[2], 'hardcoded mission marker range 11..14')
+E               AssertionError: (PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0/static/js/nested/fixture.js'), 7, 'hardcoded mission marker range 11..14')
+
+dashboard/tests/verify_m2_constraints.py:211: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers
+1 failed, 29 deselected in 0.02s

@@ -1,0 +1,18 @@
+{"parent":{"x":32,"y":32,"width":3775.984375,"height":64,"top":32,"right":3807.984375,"bottom":96,"left":32},"children":[{"name":"H1","rect":{"x":32,"y":37.59375,"width":867.375,"height":52.796875,"top":37.59375,"right":899.375,"bottom":90.390625,"left":32}},{"name":"title-separator","rect":{"x":374.734375,"y":36.59375,"width":43.59375,"height":53,"top":36.59375,"right":418.328125,"bottom":89.59375,"left":374.734375}},{"name":"run-summary","rect":{"x":3326.1875,"y":27.046875,"width":481.796875,"height":73.921875,"top":27.046875,"right":3807.984375,"bottom":100.96875,"left":3326.1875}},{"name":"phase-label","rect":{"x":3326.1875,"y":27.046875,"width":149.171875,"height":73.921875,"top":27.046875,"right":3475.359375,"bottom":100.96875,"left":3326.1875}},{"name":"elapsed","rect":{"x":3539.359375,"y":28.5,"width":268.625,"height":71,"top":28.5,"right":3807.984375,"bottom":99.5,"left":3539.359375}},{"name":"label","rect":{"x":3539.359375,"y":43.03125,"width":51.78125,"height":41.921875,"top":43.03125,"right":3591.140625,"bottom":84.953125,"left":3539.359375}},{"name":"elapsed","rect":{"x":3623.140625,"y":28.5,"width":184.84375,"height":71,"top":28.5,"right":3807.984375,"bottom":99.5,"left":3623.140625}}]}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: header descendant escapes parent: run-summary
+    at file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/verify_m4_header.mjs:18:54
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:472:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v26.3.0

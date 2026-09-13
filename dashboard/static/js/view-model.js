@@ -58,9 +58,12 @@ export function present(hello, state, {connected = true, name = makeNames(hello)
 export function interests(hello, state, robot, ids) {
   const mission = state?.mission;
   if (!mission || !Array.isArray(ids)) return [];
-  const reader = (hello.drones || []).find(id => !(id in (hello.lanes || {})));
-  // Mission marker range is the fixed narrative contract; target comes from telemetry.
-  return ids.filter(id => robot === reader ? id >= 11 && id <= 14 : id === mission.target_id);
+  if (robot === hello.observe_drone) {
+    const range = hello.mission_marker_ids;
+    if (!Array.isArray(range) || range.length !== 2 || !range.every(Number.isFinite)) return [];
+    return ids.filter(id => id >= range[0] && id <= range[1]);
+  }
+  return ids.filter(id => id === mission.target_id);
 }
 
 export function activity(hello, state, robot, view) {

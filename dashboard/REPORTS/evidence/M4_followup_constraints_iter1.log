@@ -1,0 +1,12 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=84' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' 'dashboard/tests/verify_m2_constraints.py'
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 284, in <module>
+Python: 3.10.12
+    main()
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 260, in main
+    strings, numbers = assert_javascript_literals_allowed(path.read_text(), path)
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 196, in assert_javascript_literals_allowed
+    assert_string_external_names_absent(value, path, line)
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 25, in assert_string_external_names_absent
+    assert match.group() in INTERNAL_KEYS, (path, line, pattern, match.group())
+AssertionError: (PosixPath('/ws/dashboard/static/js/twin-model.js'), 5, '\\blimo_[A-Za-z0-9_]*', 'limo_area')

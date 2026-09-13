@@ -1,7 +1,8 @@
 # 운영 대시보드 구현 기록
 
-설계 기준: `astra_handoff_2026-09-13_M3.zip` v2.4와
-`reviews/M2_review_and_M3_directive.md`. [원문 SHA256](REPORTS/evidence/M3_sources.log).
+설계 기준: `astra_handoff_2026-09-13_final.zip` v2.5와
+`reviews/M3_review_and_final_directive.md`, `06_staged_test_plan.md`.
+[원문 SHA256](REPORTS/evidence/M4_sources.log).
 대화의 사용자 지시를 문서보다 우선한다.
 
 작업 브랜치: `HOSEONGI/COSHOW_Sim:dashboard`, 기준 `2a464d4`.
@@ -16,11 +17,13 @@
 - [x] M3 첫 커밋: M2 후속 8건 + 독립 리뷰 타입 누락 수정, Docker 224개 회귀 (`ba63352`)
 - [x] M3: 동봉 폰트·three.js, 디자인 토큰, 참관자 레이아웃 FHD·4K·대기 검증, 대수 변경·재접속 검증
 - [ ] M4: 트윈·카메라·내러티브와 상태별 화면 검증
+- [x] M4 첫 커밋: M3 후속 4건, 명시적 hello 계약·JS 리터럴 검사·우하 연결 표시·4K 헤더 내부 넘침
 - [ ] M5: 운영 화면·프로세스 관리·비상착륙·BT/preflight 감시와 Docker 안전 순서 검증
 - [ ] M6: 플릿 표·로스터 편집/저장·생성 설정·스택 기동/재기동
 - [ ] M7: 설치·실행·키오스크 스크립트, runbook, Docker 통합 검증
 - [ ] M8: 사용자가 제공하는 Webots·실기체 리허설 피드백 수정/재검증
 
+M4→M7은 승인 대기 없이 연속 진행한다. M7 뒤 `REPORTS/FINAL.md`와 단계별 테스트 킷을 제공한다.
 각 마일스톤은 직접 실행한 증거, `REPORTS/M<n>.md`,
 `dashboard: M<n> ...` 커밋 및 해당 브랜치 푸시로 남긴다.
 
@@ -50,4 +53,5 @@
 
 로컬 mock과 ROS Humble Docker 하네스만 직접 실행한다.
 Webots·실기체·AI Deck UDP 검증은 하지 않는다. 기존 시나리오
-설정·XML·서버·fake_limo·월드를 수정하지 않는다.
+설정·XML·서버·fake_limo·월드를 수정하지 않는다. v2.5 §4.6은 기존
+시뮬 검출 노드에 이미지/fps/stream_ok 발행을 추가하도록 명시적으로 허용한다.

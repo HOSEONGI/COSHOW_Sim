@@ -1,0 +1,49 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=84' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' '-m' 'pytest' 'dashboard/tests/test_m4_followup.py' '-q' '-k' 'ignores_comments'
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe836611cc730>
+capsys = <_pytest.capture.CaptureFixture object at 0xe836611ce860>
+
+    def test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers(
+            tmp_path, monkeypatch, capsys):
+        source = r'''// const bad = 'cf230'; id >= 11 && id <= 14;
+        /* const bad = "/preflight/ready"; */
+        const url = "https://local.example";
+        const pattern = /["/]*cf230/;
+        if (ready) /cf230/.test(value);
+        const padding = [11, 14]; const size = {width: 11, height: 14};
+        const color = '#111414'; const ratio = width / 14;
+        const text = `style ${11}px ${14}px`;
+        const allowed = ['spare_prefix', 'limo_status_template', 'limo_area'];
+        '''
+>       run_audit(tmp_path, monkeypatch, source)
+
+dashboard/tests/test_m4_followup.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/tests/test_m4_followup.py:35: in run_audit
+    audit.main()
+dashboard/tests/verify_m2_constraints.py:260: in main
+    strings, numbers = assert_javascript_literals_allowed(path.read_text(), path)
+dashboard/tests/verify_m2_constraints.py:196: in assert_javascript_literals_allowed
+    assert_string_external_names_absent(value, path, line)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 'limo_area'
+path = PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0/static/js/nested/fixture.js')
+line = 9
+
+    def assert_string_external_names_absent(value, path, line):
+        for pattern in LITERAL_PATTERNS:
+            for match in re.finditer(pattern, value):
+>               assert match.group() in INTERNAL_KEYS, (path, line, pattern, match.group())
+E               AssertionError: (PosixPath('/tmp/pytest-of-root/pytest-0/test_javascript_audit_ignores_0/static/js/nested/fixture.js'), 9, '\\blimo_[A-Za-z0-9_]*', 'limo_area')
+
+dashboard/tests/verify_m2_constraints.py:25: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Python: 3.10.12
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m4_followup.py::test_javascript_audit_ignores_comments_regex_and_unrelated_style_numbers
+1 failed, 29 deselected in 0.02s

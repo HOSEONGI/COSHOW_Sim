@@ -48,7 +48,11 @@ async function geometry(label, expectedRoles = 6, expectedCameras = 4) {
     const outside = [...document.querySelectorAll('[data-region],.robot-panel,.camera-tile')].filter(visible).map(rect)
       .filter(r => r.left < -1 || r.top < -1 || r.right > innerWidth + 1 || r.bottom > innerHeight + 1);
     const canvas = document.querySelector('canvas').getBoundingClientRect();
-    return {regions, clipped, outside, viewport: [innerWidth, innerHeight],
+    const head = document.querySelector('.head');
+    const bounds = head.getBoundingClientRect();
+    const headerOverflow = [...head.querySelectorAll('*')].map(rect).filter(r =>
+      r.left < bounds.left - 1 || r.right > bounds.right + 1 || r.top < bounds.top - 1 || r.bottom > bounds.bottom + 1);
+    return {regions, clipped, outside, headerOverflow, viewport: [innerWidth, innerHeight],
       document: [document.documentElement.scrollWidth, document.documentElement.scrollHeight],
       roles: document.querySelectorAll('.robot-panel').length,
       cameras: [...document.querySelectorAll('.camera-tile')].map(rect),
@@ -62,7 +66,7 @@ async function geometry(label, expectedRoles = 6, expectedCameras = 4) {
   assert.equal(result.cameras.length, expectedCameras);
   for (const r of result.cameras) assert.ok(Math.abs(r.width / r.height - 324 / 244) < .002);
   assert.ok(Math.abs(result.canvasRatio - 7 / 6) < .002);
-  assert.ok(result.regions.find(r => r.name === 'head').height <= 64.01);
+  assert.deepEqual(result.headerOverflow, [], label + ' header child outside parent');
   assert.ok(result.regions.find(r => r.name === 'fleet').height <= result.viewport[1] * .22 + 1);
   console.log('LAYOUT', label, JSON.stringify(result));
 }

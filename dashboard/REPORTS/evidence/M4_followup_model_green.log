@@ -1,0 +1,22 @@
+✔ run overrides phase, external observation bypasses only idle guard (0.681125ms)
+✔ stale mission and disconnect clear phase signal; DONE keeps completion (0.063833ms)
+✔ labels count configured searchers and phase color comes only from led (0.112291ms)
+✔ finder uses display name and interest badges exclude unrelated detections (0.598ms)
+✔ observer and marker range follow hello even when lanes and IDs change (0.055ms)
+✔ elapsed uses server seconds, unknown data never becomes zero (0.052375ms)
+✔ missing display name warns once per identifier (0.046417ms)
+✔ LIMO goal uses the last reported nav command, never an inferred position (0.358833ms)
+✔ initial open socket without state reconnects (hello=false) (22.437291ms)
+✔ initial open socket without state reconnects (hello=true) (0.240833ms)
+✔ newly opened reconnect gets its own state deadline despite old stale state (0.216167ms)
+✔ a state received at monotonic zero still has a watchdog deadline (0.134625ms)
+✔ hello is required again after reconnect; obsolete sockets cannot refresh it (0.200292ms)
+✔ stop closes the socket and prevents watchdog or retry work (0.137708ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.944417

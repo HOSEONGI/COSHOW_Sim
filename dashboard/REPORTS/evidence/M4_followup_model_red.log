@@ -1,0 +1,45 @@
+env node --test dashboard/tests/test_visitor_model.mjs
+✔ run overrides phase, external observation bypasses only idle guard (0.673916ms)
+✔ stale mission and disconnect clear phase signal; DONE keeps completion (0.062ms)
+✔ labels count configured searchers and phase color comes only from led (0.101833ms)
+✔ finder uses display name and interest badges exclude unrelated detections (0.562416ms)
+✖ observer and marker range follow hello even when lanes and IDs change (0.897583ms)
+✔ elapsed uses server seconds, unknown data never becomes zero (0.05375ms)
+✔ missing display name warns once per identifier (0.061166ms)
+✔ LIMO goal uses the last reported nav command, never an inferred position (0.08175ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.350209
+
+✖ failing tests:
+
+test at dashboard/tests/test_visitor_model.mjs:45:1
+✖ observer and marker range follow hello even when lanes and IDs change (0.897583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   41,
+  -   43
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_model.mjs:48:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 41, 43 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
