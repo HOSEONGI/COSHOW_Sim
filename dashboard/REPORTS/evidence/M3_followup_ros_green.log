@@ -1,0 +1,22 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 dashboard/tests/verify_m3_followup.py
+FIXTURE CONFIG: /ws/dashboard/run/m3_followup/dashboard.yaml (14 robots, 3 radios, role roster, loopback IPs)
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/skip_warn.yaml
+M3_followup_skip_warn_green.log: rc=0, PASS rows=51, FAIL rows=0
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/known_missing.yaml
+M3_followup_known_missing_green.log: rc=1, PASS rows=50, FAIL rows=1
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/missing_type.yaml
+M3_followup_missing_type_green.log: rc=1, PASS rows=47, FAIL rows=1
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/role_required.yaml
+M3_followup_role_required_green.log: rc=1, PASS rows=51, FAIL rows=2
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/partial_interface.yaml
+M3_followup_partial_interface_green.log: rc=1, PASS rows=51, FAIL rows=2
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3
+M3_followup_actual_config_green.log: rc=1, PASS rows=51, FAIL rows=8
+{"role": "visitor", "hello": 1, "seconds": 3, "states": 30, "state_hz": 10.0, "maximum_state_gap_s": 0.113, "binary_frames": 120, "per_camera": {"0": 30, "1": 30, "2": 30, "3": 30}, "robot_count": 14, "role_drones": ["cf230", "cf231", "cf232", "cf233"], "spare_drones": ["spare_CF05", "spare_CF06", "spare_CF07", "spare_CF08", "spare_CF09", "spare_CF10"], "limos": ["limo_a", "limo_b", "limo_c", "limo_d"], "disconnected_spare": "spare_CF10", "spare_link_blocking": false, "mission_phases": ["capture"], "mission_age": 1.078, "external_bt": true, "run_state": "IDLE"}
+{"role": "admin", "hello": 1, "seconds": 3, "states": 30, "state_hz": 10.0, "maximum_state_gap_s": 0.113, "binary_frames": 120, "per_camera": {"0": 30, "1": 30, "2": 30, "3": 30}, "robot_count": 14, "role_drones": ["cf230", "cf231", "cf232", "cf233"], "spare_drones": ["spare_CF05", "spare_CF06", "spare_CF07", "spare_CF08", "spare_CF09", "spare_CF10"], "limos": ["limo_a", "limo_b", "limo_c", "limo_d"], "disconnected_spare": "spare_CF10", "spare_link_blocking": false, "mission_phases": ["capture"], "mission_age": 1.078, "external_bt": true, "run_state": "IDLE"}
+PASS: hello once, state 10 Hz, indexed JPEG, 14-robot fleet, advisory spare link
+CHILD STOP: pid=106 rc=0
+CHILD STOP: pid=22 rc=0
+PASS: null SKIP4 + spare WARN14 rc0; typed missing rc1; role URI/IP rc1;
+PASS: actual config retains SKIP4 while fatal role/graph errors rc1;
+PASS: partial template/type-key errors leave HTTP and two live ROS WebSockets available; commands=0

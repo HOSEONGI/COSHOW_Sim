@@ -1,0 +1,88 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 -m pytest dashboard/tests -q
+........................................................................ [ 32%]
+.....................................F.................................. [ 65%]
+........................................................................ [ 98%]
+....                                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_sender_failure_is_removed_from_dashboard_socket_set ___________
+
+    async def exercise():
+        app = Dashboard(load_config(mock=True), mock=True)
+        async with TestClient(TestServer(app.app())) as client:
+            async with client.ws_connect('/ws') as socket:
+                assert (await socket.receive_json())['type'] == 'hello'
+>               slots = next(iter(app.sockets))
+E               StopIteration
+
+dashboard/tests/test_m3_followup.py:233: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+    def test_sender_failure_is_removed_from_dashboard_socket_set():
+        from aiohttp.test_utils import TestClient, TestServer
+        async def exercise():
+            app = Dashboard(load_config(mock=True), mock=True)
+            async with TestClient(TestServer(app.app())) as client:
+                async with client.ws_connect('/ws') as socket:
+                    assert (await socket.receive_json())['type'] == 'hello'
+                    slots = next(iter(app.sockets))
+                    async def fail(value):
+                        raise ValueError('live socket writer failure')
+                    slots.ws.send_str = fail
+                    await asyncio.sleep(.25)
+                    assert slots not in app.sockets
+                    assert any('live socket writer failure' in event['text'] for event in app.store.events)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_m3_followup.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=True debug=False>
+future = <Task finished name='Task-216' coro=<test_sender_failure_is_removed_from_dashboard_socket_set.<locals>.exercise() done, defined at /ws/dashboard/tests/test_m3_followup.py:228> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+E       RuntimeError: coroutine raised StopIteration
+
+/usr/lib/python3.10/asyncio/base_events.py:649: RuntimeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m3_followup.py::test_sender_failure_is_removed_from_dashboard_socket_set
+1 failed, 219 passed in 7.20s

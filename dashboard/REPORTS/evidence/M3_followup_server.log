@@ -1,0 +1,4 @@
+$ /usr/bin/python3 dashboard/server.py --config /ws/dashboard/run/m3_followup/partial_interface.yaml
+ROS_DOMAIN_ID=83 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8093 mock=False
+======== Running on http://127.0.0.1:8093 ========
+(Press CTRL+C to quit)

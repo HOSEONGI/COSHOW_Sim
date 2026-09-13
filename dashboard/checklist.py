@@ -54,7 +54,7 @@ def external_observation(kind, cfg, context, now):
     if kind == 'bt':
         received = recent('mission')
     else:
-        received = recent('preflight_status') or recent('preflight_ready')
+        received = max(recent('preflight_status'), recent('preflight_ready'), key=len)
     active = not alive and len(received) >= 2
     external = count > expected or active
     if external:
@@ -234,7 +234,8 @@ def evaluate(state, cfg, context, now):
         global_row(key, label, value is True, '{}: {}={}'.format(bt_path, key, value))
     visualiser = ((bt.get('bt_runner') or {}).get('bt_visualiser') or {}).get('enabled')
     global_row('bt_visualiser', 'BT 시각화 창 끄기', visualiser is False,
-               '{}: bt_visualiser.enabled={}'.format(bt_path, visualiser))
+               '{}: bt_visualiser.enabled={}'.format(bt_path, visualiser), blocking=False,
+               status='pass' if visualiser is False else 'warning')
     env = context.get('env', raw.get('commands', {}).get('env', {})) or {}
     global_row('bt_environment', 'BT 실행 환경', bool(env.get('DISPLAY')) or env.get('SDL_VIDEODRIVER') == 'dummy',
                'DISPLAY 또는 SDL_VIDEODRIVER=dummy 필요')
@@ -246,7 +247,14 @@ def evaluate(state, cfg, context, now):
     global_row('field_config', '필드 설정 로드', cfg.field_ok, '필드 설정 정상' if cfg.field_ok else '설정 없음')
     global_row('dashboard_config', '대시보드 설정 로드', cfg.dashboard_ok,
                '대시보드 설정 정상' if cfg.dashboard_ok else '설정 없음')
-    global_row('bt_config', '필수 설정 항목', not cfg.errors, '; '.join(cfg.errors) or '설정 정상')
+    for index, error in enumerate(cfg.errors):
+        global_row('config_error_' + str(index), '필수 설정 오류', False, error)
+    for index, warning in enumerate(getattr(cfg, 'warnings', [])):
+        global_row('config_warning_' + str(index), '인벤토리 설정 미확인', False, warning,
+                   blocking=False, status='warning')
+    for index, error in enumerate(context.get('interface_errors', [])):
+        global_row('interface_error_' + str(index), '인터페이스 설정 오류', False,
+                   '{}.{}: {}'.format(error['kind'], error['key'], error['reason']))
     global_row('ping_tool', 'ping 실행 파일', context.get('ping_available') is True,
                '사용 가능' if context.get('ping_available') is True else 'ping 실행 파일 없음 또는 미확인')
     return result

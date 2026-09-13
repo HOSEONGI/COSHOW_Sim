@@ -136,10 +136,19 @@ class MockWorld:
         self.started = self.checking = None
         self.landing_until, self.after_landing = None, None
         self.last_json, self.signature = -math.inf, None
+        from dashboard.ros_io import interface_specs
+        specs, errors = interface_specs(cfg)
+        self.channels = {(s['robot'], s['channel']) for s in specs if s['type'] is not None}
+        for error in errors:
+            store.unavailable(None, 'interface', error)
         root = Path(__file__).resolve().parent / 'static/mock'
         self.jpeg = {n: (root / 'camera.jpg').read_bytes() for n in cfg.drones}
 
     def command(self, cmd):
+        with self.store.lock:
+            return self._command(cmd)
+
+    def _command(self, cmd):
         state = self.store.run['state']
         allowed = dict(IDLE=('preflight', 'reset'), CHECKING=('estop', 'reset'),
                        READY=('start', 'estop', 'reset'), RUNNING=('estop', 'reset'),
@@ -149,14 +158,14 @@ class MockWorld:
         now = self.store.clock()
         if cmd == 'preflight':
             self.checking = now
-            self.store.run.update(state='CHECKING', preflight_pid=-1)
+            self.store.set_run(state='CHECKING', preflight_pid=-1)
             self.store.context['processes']['preflight']['alive'] = True
         elif cmd == 'start':
             self.started = now
-            self.store.run.update(state='RUNNING', bt_pid=-1)
+            self.store.set_run(state='RUNNING', bt_pid=-1)
             self.store.context['processes']['bt']['alive'] = True
         elif cmd in ('estop', 'reset') and state != 'IDLE':
-            self.store.run.update(state='LANDING')
+            self.store.set_run(state='LANDING')
             self.after_landing = 'ABORTED' if cmd == 'estop' else 'IDLE'
             self.landing_until = now + .5 + self.cfg.bt.get('coshow', {}).get('durations', {}).get('land', 8)
         if cmd == 'reset' and state == 'IDLE':
@@ -166,51 +175,65 @@ class MockWorld:
         if cmd in ('estop', 'reset') and state != 'IDLE':
             for proc in self.store.context['processes'].values():
                 proc.update(alive=False, exited_at=now)
-        self.store.run['since'] = now
+        self.store.set_run(since=now)
         return True, 'mock'
 
     def tick(self):
+        with self.store.lock:
+            self._tick()
+
+    def _tick(self):
         now = self.store.clock()
         run = self.store.run['state']
         if run == 'LANDING' and now >= self.landing_until:
-            self.store.run.update(state=self.after_landing, preflight_pid=None, bt_pid=None, since=now)
+            self.store.set_run(state=self.after_landing, preflight_pid=None, bt_pid=None, since=now)
             run = self.after_landing
             self.store.reset_cached()
         check_s = now - self.checking if self.checking is not None else 0
         elapsed = now - self.started if self.started is not None else 0
         if run == 'CHECKING' and check_s >= 6 and not self.fail:
-            self.store.run.update(state='READY', since=now)
+            self.store.set_run(state='READY', since=now)
             run = 'READY'
         if run == 'RUNNING' and elapsed >= 90:
-            self.store.run.update(state='DONE', since=now)
+            self.store.set_run(state='DONE', since=now)
             run = 'DONE'
         self.apply(scenario(elapsed, self.cfg, run, check_s, self.fail), now)
 
     def apply(self, fragment, now):
+        with self.store.lock:
+            self._apply(fragment, now)
+
+    def _apply(self, fragment, now):
+        def receive(name, channel, value):
+            if (name, channel) in self.channels:
+                self.store.receive(name, channel, value)
+
         for name, row in fragment['robots'].items():
             meta = self.cfg.robots[name]
-            self.store.receive(name, 'pose', row['pose'])
+            receive(name, 'pose', row['pose'])
             self.store.ping(name, row['ping'])
             if meta['kind'] == 'drone':
                 if row.get('link_ok', True):
-                    self.store.receive(name, 'status', {k: row[k] for k in ('battery_v', 'rssi', 'armed', 'can_fly', 'tumbled', 'low_power')})
+                    receive(name, 'status', {k: row[k] for k in ('battery_v', 'rssi', 'armed', 'can_fly', 'tumbled', 'low_power')})
                 if meta['role']:
-                    self.store.receive(name, 'camera_fps', row['camera']['fps'])
-                    self.store.receive(name, 'camera_ok', row['camera']['stream_ok'])
-                    self.store.receive(name, 'frame', self.jpeg[name])
-                    self.store.receive(name, 'detections', row['detections'])
+                    receive(name, 'camera_fps', row['camera']['fps'])
+                    receive(name, 'camera_ok', row['camera']['stream_ok'])
+                    receive(name, 'frame', self.jpeg[name])
+                    receive(name, 'detections', row['detections'])
             else:
-                self.store.receive(name, 'nav_ready', row['nav_ready'])
+                receive(name, 'nav_ready', row['nav_ready'])
         mission, preflight = fragment['mission'], fragment['preflight']
         signature = ((mission or {}).get('phase'), (preflight or {}).get('stage'), (preflight or {}).get('ready'))
         if signature != self.signature or now - self.last_json >= 1:
-            if mission:
+            if mission and (None, 'mission') in self.channels:
                 self.store.mission(mission)
             if preflight:
-                self.store.preflight(preflight)
-                self.store.ready(preflight['ready'])
+                if (None, 'preflight') in self.channels:
+                    self.store.preflight(preflight)
+                if (None, 'ready') in self.channels:
+                    self.store.ready(preflight['ready'])
             self.signature, self.last_json = signature, now
-        self.store.stack.update(crazyflie_server='up', aideck='up', roster_hash='mock', applied_hash='mock')
+        self.store.set_stack(crazyflie_server='up', aideck='up', roster_hash='mock', applied_hash='mock')
         nodes = []
         for key, name in self.cfg.raw.get('nodes', {}).items():
             if key in ('server', 'aideck') or self.store.context['processes'].get(key, {}).get('alive'):

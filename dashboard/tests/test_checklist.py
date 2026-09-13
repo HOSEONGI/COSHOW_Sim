@@ -139,8 +139,8 @@ def test_config_and_static_flags_block_with_absolute_path(setup):
     context['ping_available'] = False
     context['orphans'] = [{'pid': 123}]
     items = rows(setup)
-    for key in ('dashboard_config', 'field_config', 'bt_config', 'preflight_required',
-                'emergency_land', 'bt_visualiser', 'bt_environment', 'ping_tool', 'orphans'):
+    for key in ('dashboard_config', 'field_config', 'config_error_0', 'preflight_required',
+                'emergency_land', 'bt_environment', 'ping_tool', 'orphans'):
         assert items['global.' + key]['blocking'] and not items['global.' + key]['ok']
     assert str(cfg.bt_path) in items['global.preflight_required']['detail']
 

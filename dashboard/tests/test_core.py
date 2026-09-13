@@ -216,7 +216,7 @@ def test_unknown_fleet_radio_cannot_silently_pass_static_config(tmp_path):
     path = tmp_path / 'dashboard.yaml'
     path.write_text(yaml.safe_dump(raw))
     cfg = load_config(path)
-    assert any(unconfigured['id'] in error and 'URI' in error for error in cfg.errors)
+    assert any(unconfigured['id'] in error and 'URI' in error for error in cfg.warnings)
 
 
 def test_mock_failure_keeps_start_blocked():

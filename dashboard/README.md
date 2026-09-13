@@ -40,8 +40,8 @@ python3 dashboard/server.py
 
 이름·타입 변경 뒤 `--check-config`를 실행한다. 진단은 자기 구독이나
 클라이언트를 정상 서버로 세지 않고 실제 publisher/service/action server를
-검사한다. 누락·타입 오류는 표와 종료 코드 1로 알린다. 이 진단은 모든 인터페이스를
-대조하므로 optional LIMO 타입이 미정이어도 FAIL을 출력한다.
+검사한다. 종료 코드는 치명 설정 오류나 확인 가능한 인터페이스/노드의 FAIL이 있으면 1, 그 외에는 0이다.
+명시적 null 타입은 SKIP, 스페어 URI/IP 미기입은 WARN이며 종료 코드에서 제외한다.
 
 파일 경로는 `dashboard/` 기준으로 해석하고 `~`를 확장한다. BT `--config`
 경로만 `commands.bt_cwd` 기준이다. 관측점·베이스·탐색 레인·구조 대기 시간은
@@ -55,7 +55,7 @@ python3 dashboard/server.py
 | `coshow.observe_drone/observe_point/rescue_sec` | 관측점·공유 mock·구조 대기 |
 | `coshow.tolerances`, `coshow.durations` | 허용오차·착륙 시간 검사, M5 실행 제어 |
 | `coshow.preflight.required`, `coshow.emergency_land_on_exit` | 안전 플래그 검사 |
-| `bt_runner.bt_visualiser.enabled` | 운영 창 설정 검사 |
+| `bt_runner.bt_visualiser.enabled` | 운영 창 설정 경고(비차단) |
 
 키가 없으면 해당 항목만 설정 없음으로 표시한다.
 

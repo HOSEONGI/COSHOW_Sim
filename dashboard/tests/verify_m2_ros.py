@@ -91,7 +91,7 @@ def inspect_ros(cfg):
     executor = SingleThreadedExecutor(context=context)
     executor.add_node(node)
     try:
-        specs = interface_specs(cfg)
+        specs, errors = interface_specs(cfg)
         checked = []
         for spec in specs:
             if spec['kind'] != 'topics' or spec['channel'] not in ('frame', 'detections', 'mission', 'preflight', 'ready'):

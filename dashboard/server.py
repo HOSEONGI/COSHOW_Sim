@@ -20,9 +20,10 @@ from dashboard.checklist import evaluate, external_observation
 
 class SocketSlots:
     """A single independent sender consumes replaceable, bounded latest slots."""
-    def __init__(self, ws, drones, timeout=5.0):
+    def __init__(self, ws, drones, timeout=5.0, on_error=None):
         self.ws, self.count, self.timeout = ws, drones, timeout
         self.state, self.frames = None, {}
+        self.on_error = on_error
         self.wake = asyncio.Event()
 
     def offer(self, state, frames):
@@ -41,9 +42,13 @@ class SocketSlots:
                     await asyncio.wait_for(self.ws.send_str(state), self.timeout)
                 for payload in frames.values():
                     await asyncio.wait_for(self.ws.send_bytes(payload), self.timeout)
-        except (asyncio.TimeoutError, ConnectionError, RuntimeError):
-            with contextlib.suppress(asyncio.TimeoutError, ConnectionError):
-                await asyncio.wait_for(self.ws.close(), self.timeout)
+        except Exception as exc:
+            try:
+                if self.on_error:
+                    self.on_error('WebSocket 송신 종료: {}: {}'.format(type(exc).__name__, exc))
+            finally:
+                with contextlib.suppress(Exception):
+                    await asyncio.wait_for(self.ws.close(), self.timeout)
 
 
 class Dashboard:
@@ -67,20 +72,26 @@ class Dashboard:
 
     async def aggregate(self):
         next_tick, last_frames, frame_at = time.monotonic(), {}, {}
+        warned = False
         while True:
-            if self.world:
-                self.world.tick()
-            state = json.dumps(self.state(), ensure_ascii=False, allow_nan=False)
-            frames, now = {}, time.monotonic()
-            period = 1 / max(.1, float(self.cfg.raw.get('frame_forward_max_fps', 15)))
-            for name, (serial, jpeg) in self.store.latest_frames().items():
-                if name not in self.cfg.drones:
-                    continue
-                if serial != last_frames.get(name) and now - frame_at.get(name, -float('inf')) >= period:
-                    frames[self.cfg.drones.index(name)] = bytes([self.cfg.drones.index(name)]) + jpeg
-                    last_frames[name], frame_at[name] = serial, now
-            for slots in tuple(self.sockets):
-                slots.offer(state, frames)
+            try:
+                if self.world:
+                    self.world.tick()
+                state = json.dumps(self.state(), ensure_ascii=False, allow_nan=False)
+                frames, now = {}, time.monotonic()
+                period = 1 / max(.1, float(self.cfg.raw.get('frame_forward_max_fps', 15)))
+                for name, (serial, jpeg) in self.store.latest_frames().items():
+                    if name not in self.cfg.drones:
+                        continue
+                    if serial != last_frames.get(name) and now - frame_at.get(name, -float('inf')) >= period:
+                        frames[self.cfg.drones.index(name)] = bytes([self.cfg.drones.index(name)]) + jpeg
+                        last_frames[name], frame_at[name] = serial, now
+                for slots in tuple(self.sockets):
+                    slots.offer(state, frames)
+            except Exception as exc:
+                if not warned:
+                    self.store.event('warning', '상태 집계 오류 (다음 tick 재시도): {}'.format(exc))
+                    warned = True
             next_tick = max(next_tick + .1, time.monotonic())
             await asyncio.sleep(max(0, next_tick - time.monotonic()))
 
@@ -107,11 +118,13 @@ class Dashboard:
             raise web.HTTPForbidden(text='관리자 소켓은 로컬 연결만 허용합니다')
         ws = web.WebSocketResponse(max_msg_size=4096, heartbeat=20)
         await ws.prepare(request)
-        slots, sender = SocketSlots(ws, len(self.cfg.drones)), None
+        slots, sender = SocketSlots(ws, len(self.cfg.drones),
+                                     on_error=lambda text: self.store.event('warning', text)), None
         try:
             await asyncio.wait_for(ws.send_json(self.cfg.hello(self.mock)), 5)
             self.sockets.add(slots)
             sender = asyncio.create_task(slots.run())
+            sender.add_done_callback(lambda task: self.sockets.discard(slots))
             async for message in ws:
                 if message.type == WSMsgType.TEXT:
                     try:
@@ -130,8 +143,11 @@ class Dashboard:
         if not self.mock:
             from dashboard.ros_io import ROSIO
             from dashboard.pinger import Pinger
-            self.io = ROSIO(self.cfg, self.store)
-            await self.io.start()
+            try:
+                self.io = ROSIO(self.cfg, self.store)
+                await self.io.start()
+            except Exception as exc:
+                self.store.unavailable(None, 'ros', 'ROS 시작 실패: {}'.format(exc))
             self.tasks.append(asyncio.create_task(Pinger(self.cfg, self.store).run()))
         self.tasks.append(asyncio.create_task(self.aggregate()))
 
@@ -177,11 +193,13 @@ def main():
         from dashboard.ros_io import check_config
         rows = check_config(cfg, args.check_timeout)
         for row in rows:
-            print('{}\t{}\t{}\t{}\t{}'.format('PASS' if row['ok'] else 'FAIL', row['kind'],
+            print('{}\t{}\t{}\t{}\t{}'.format(row.get('status', 'pass' if row['ok'] else 'fail').upper(), row['kind'],
                 row['name'], row['expected_type'], row['detail']))
         for error in cfg.errors:
             print('FAIL\tconfiguration\t' + error)
-        return 1 if cfg.errors or any(not r['ok'] for r in rows) else 0
+        for warning in cfg.warnings:
+            print('WARN\tconfiguration\t' + warning)
+        return 1 if cfg.errors or any(not r['ok'] and r.get('status') != 'skip' for r in rows) else 0
     web.run_app(Dashboard(cfg, args.mock, args.mock_fail).app(), host=host, port=port)
     return 0
 

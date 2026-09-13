@@ -1,0 +1,8 @@
+python3 hashlib.sha256: supplied M3 ZIP and extracted contracts
+dd799ce9bfa6a73e7faadb2eddeff54f582ed127407b70f968ac37a788ea0465  /Users/hoseon_mini/Desktop/InMOLab/_project/04.Crazyflie-Demo_COSS/08_outputs/astra_handoff_2026-09-13_M3.zip
+13d1f5061638edcf448df7bd3ec2be98a2038cdc2309a1486953b7a990548187  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/reviews/M2_review_and_M3_directive.md
+42a91b118df4fede7bc90e7c93e71808b9c19e021b340b0633b288ceb3fed216  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/README.md
+730d4ead2fb4816f80168cb30b09cce8a106868540252f3320f75659c73ca252  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/01_context.md
+5aa8bcc599f396f8c539f0ae5f38d17a09e3b3cc39ec4ce96c469797711ed51d  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/02_spec.md
+c9741124fe0c6aaf0769a5fe73fbc624359534ab12348f3fc447ea344af11435  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/03_implementation_guide.md
+c7ce56952b51833bb93942e7170c03227482d613a8d472c1272a64f7f4898f14  /private/tmp/coshow-handoff-20260913-m3/astra_handoff/05_verification_and_reporting.md

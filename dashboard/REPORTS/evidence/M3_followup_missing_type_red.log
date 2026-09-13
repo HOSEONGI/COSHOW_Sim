@@ -1,0 +1,56 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 -m pytest dashboard/tests/test_m3_followup.py -k missing_type_entry -q
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[topics-pose_template] _
+
+kind = 'topics', key = 'pose_template'
+
+    @pytest.mark.parametrize('kind,key', [('topics', 'pose_template'),
+                                         ('services', 'land_template'),
+                                         ('actions', 'nav_template')])
+    def test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip(kind, key):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind].pop(key)
+        specs, errors = interface_specs(cfg)
+>       assert any(e['kind'] == 'types.' + kind and e['key'] == key for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip.<locals>.<genexpr> at 0xf070f1e71a10>)
+
+dashboard/tests/test_m3_followup.py:264: AssertionError
+_ test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[services-land_template] _
+
+kind = 'services', key = 'land_template'
+
+    @pytest.mark.parametrize('kind,key', [('topics', 'pose_template'),
+                                         ('services', 'land_template'),
+                                         ('actions', 'nav_template')])
+    def test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip(kind, key):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind].pop(key)
+        specs, errors = interface_specs(cfg)
+>       assert any(e['kind'] == 'types.' + kind and e['key'] == key for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip.<locals>.<genexpr> at 0xf070f1d0bd10>)
+
+dashboard/tests/test_m3_followup.py:264: AssertionError
+_ test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[actions-nav_template] _
+
+kind = 'actions', key = 'nav_template'
+
+    @pytest.mark.parametrize('kind,key', [('topics', 'pose_template'),
+                                         ('services', 'land_template'),
+                                         ('actions', 'nav_template')])
+    def test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip(kind, key):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind].pop(key)
+        specs, errors = interface_specs(cfg)
+>       assert any(e['kind'] == 'types.' + kind and e['key'] == key for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip.<locals>.<genexpr> at 0xf070f1d0bc30>)
+
+dashboard/tests/test_m3_followup.py:264: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m3_followup.py::test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[topics-pose_template]
+FAILED dashboard/tests/test_m3_followup.py::test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[services-land_template]
+FAILED dashboard/tests/test_m3_followup.py::test_missing_type_entry_is_blocking_configuration_not_explicit_null_skip[actions-nav_template]
+3 failed, 21 deselected in 0.09s

@@ -1,0 +1,75 @@
+$ /usr/bin/python3 dashboard/server.py --check-config --check-timeout 3 --config /ws/dashboard/run/m3_followup/role_required.yaml
+ROS_DOMAIN_ID=83 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8093 mock=False
+PASS	topics	/aideck/cf230/fps	std_msgs/msg/Float32	PASS
+PASS	topics	/aideck/cf231/fps	std_msgs/msg/Float32	PASS
+PASS	topics	/aideck/cf232/fps	std_msgs/msg/Float32	PASS
+PASS	topics	/aideck/cf233/fps	std_msgs/msg/Float32	PASS
+PASS	topics	/aideck/cf230/stream_ok	std_msgs/msg/Bool	PASS
+PASS	topics	/aideck/cf231/stream_ok	std_msgs/msg/Bool	PASS
+PASS	topics	/aideck/cf232/stream_ok	std_msgs/msg/Bool	PASS
+PASS	topics	/aideck/cf233/stream_ok	std_msgs/msg/Bool	PASS
+PASS	topics	/aideck/cf230/image_annotated/compressed	sensor_msgs/msg/CompressedImage	PASS
+PASS	topics	/aideck/cf231/image_annotated/compressed	sensor_msgs/msg/CompressedImage	PASS
+PASS	topics	/aideck/cf232/image_annotated/compressed	sensor_msgs/msg/CompressedImage	PASS
+PASS	topics	/aideck/cf233/image_annotated/compressed	sensor_msgs/msg/CompressedImage	PASS
+PASS	topics	/cf230/marker_detections	coshow_interfaces/msg/MarkerDetections	PASS
+PASS	topics	/cf231/marker_detections	coshow_interfaces/msg/MarkerDetections	PASS
+PASS	topics	/cf232/marker_detections	coshow_interfaces/msg/MarkerDetections	PASS
+PASS	topics	/cf233/marker_detections	coshow_interfaces/msg/MarkerDetections	PASS
+SKIP	topics	/limo_a/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_b/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_c/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_d/limo_status	None	타입 미확인 (null)
+PASS	topics	/coshow/mission_state	std_msgs/msg/String	PASS
+PASS	topics	/limo_a/odom	nav_msgs/msg/Odometry	PASS
+PASS	topics	/limo_b/odom	nav_msgs/msg/Odometry	PASS
+PASS	topics	/limo_c/odom	nav_msgs/msg/Odometry	PASS
+PASS	topics	/limo_d/odom	nav_msgs/msg/Odometry	PASS
+PASS	topics	/cf230/pose	geometry_msgs/msg/PoseStamped	PASS
+PASS	topics	/cf231/pose	geometry_msgs/msg/PoseStamped	PASS
+PASS	topics	/cf232/pose	geometry_msgs/msg/PoseStamped	PASS
+PASS	topics	/cf233/pose	geometry_msgs/msg/PoseStamped	PASS
+PASS	topics	/preflight/ready	std_msgs/msg/Bool	PASS
+PASS	topics	/preflight/status	std_msgs/msg/String	PASS
+PASS	topics	/cf230/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/cf231/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/cf232/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/cf233/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF05/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF06/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF07/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF08/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF09/status	crazyflie_interfaces/msg/Status	PASS
+PASS	topics	/spare_CF10/status	crazyflie_interfaces/msg/Status	PASS
+PASS	services	/cf230/arm	crazyflie_interfaces/srv/Arm	PASS
+PASS	services	/cf231/arm	crazyflie_interfaces/srv/Arm	PASS
+PASS	services	/cf232/arm	crazyflie_interfaces/srv/Arm	PASS
+PASS	services	/cf233/arm	crazyflie_interfaces/srv/Arm	PASS
+PASS	services	/cf230/land	crazyflie_interfaces/srv/Land	PASS
+PASS	services	/cf231/land	crazyflie_interfaces/srv/Land	PASS
+PASS	services	/cf232/land	crazyflie_interfaces/srv/Land	PASS
+PASS	services	/cf233/land	crazyflie_interfaces/srv/Land	PASS
+PASS	actions	/limo_a/navigate_to_pose	nav2_msgs/action/NavigateToPose	PASS
+PASS	actions	/limo_b/navigate_to_pose	nav2_msgs/action/NavigateToPose	PASS
+PASS	nodes	aideck_aruco_node	None	PASS
+PASS	nodes	space_bt_bridge	None	PASS
+PASS	nodes	preflight	None	PASS
+PASS	nodes	crazyflie_server	None	PASS
+FAIL	configuration	fleet CF01: radio URI 미설정 또는 형식 오류
+FAIL	configuration	fleet CF01: AI Deck IP 미설정
+WARN	configuration	fleet CF05: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF05: AI Deck IP 미설정
+WARN	configuration	fleet CF06: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF06: AI Deck IP 미설정
+WARN	configuration	fleet CF07: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF07: AI Deck IP 미설정
+WARN	configuration	fleet CF08: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF08: AI Deck IP 미설정
+WARN	configuration	fleet CF09: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF09: AI Deck IP 미설정
+WARN	configuration	fleet CF10: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF10: AI Deck IP 미설정
+WARN	configuration	fleet LIMO3 (limo_c): LIMO IP 미설정
+WARN	configuration	fleet LIMO4 (limo_d): LIMO IP 미설정
+
+EXIT CODE: 1

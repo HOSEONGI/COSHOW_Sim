@@ -114,7 +114,11 @@ class FakeROSWorld:
             node = rclpy.create_node(parts[-1], namespace=namespace)
             self.nodes[key] = node
             self.executor.add_node(node)
-        for spec in interface_specs(cfg):
+        specs, errors = interface_specs(cfg)
+        assert not errors, errors
+        for spec in specs:
+            if spec['type'] is None:
+                continue
             if spec['kind'] == 'topics':
                 owner = ('bt' if spec['channel'] == 'mission' else 'preflight'
                          if spec['channel'] in ('preflight', 'ready') else 'aideck'

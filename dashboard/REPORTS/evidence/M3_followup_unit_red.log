@@ -1,0 +1,603 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 -m pytest dashboard/tests/test_m3_followup.py -q
+FFFFFFFFFFFFFFFFFUnclosed client session
+client_session: <aiohttp.client.ClientSession object at 0xf6c93b72fa30>
+F                                                       [100%]
+=================================== FAILURES ===================================
+_ test_bad_interface_is_reported_without_losing_valid_specs[topics-limo_status_template-None] _
+
+kind = 'topics', key = 'limo_status_template', value = None
+
+    @pytest.mark.parametrize('kind,key,value', [
+        ('topics', 'limo_status_template', None),
+        ('topics', 'new_unsupported_topic', '/test'),
+        ('topics', 'pose_template', '/{drone}/pose'),
+        ('topics', 'pose_template', '/{cf.x}/pose'),
+    ])
+    def test_bad_interface_is_reported_without_losing_valid_specs(kind, key, value):
+        cfg = load_config(mock=True)
+        cfg.raw[kind][key] = value
+>       specs, errors = interface_specs(cfg)
+
+dashboard/tests/test_m3_followup.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c93cdffa60>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+>                   raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+E                   ValueError: Missing interface name: topics.limo_status_template
+
+dashboard/ros_io.py:52: ValueError
+_ test_bad_interface_is_reported_without_losing_valid_specs[topics-new_unsupported_topic-/test] _
+
+kind = 'topics', key = 'new_unsupported_topic', value = '/test'
+
+    @pytest.mark.parametrize('kind,key,value', [
+        ('topics', 'limo_status_template', None),
+        ('topics', 'new_unsupported_topic', '/test'),
+        ('topics', 'pose_template', '/{drone}/pose'),
+        ('topics', 'pose_template', '/{cf.x}/pose'),
+    ])
+    def test_bad_interface_is_reported_without_losing_valid_specs(kind, key, value):
+        cfg = load_config(mock=True)
+        cfg.raw[kind][key] = value
+>       specs, errors = interface_specs(cfg)
+
+dashboard/tests/test_m3_followup.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c93ce70be0>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+>                   raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+E                   ValueError: Unsupported configured interface: topics.new_unsupported_topic
+
+dashboard/ros_io.py:49: ValueError
+_ test_bad_interface_is_reported_without_losing_valid_specs[topics-pose_template-/{drone}/pose] _
+
+cfg = <dashboard.config.Config object at 0xf6c93cd2ae90>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+                    raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+                for robot in groups[group]:
+                    try:
+>                       name = template.format(cf=robot, limo=robot, name=robot)
+E                       KeyError: 'drone'
+
+dashboard/ros_io.py:55: KeyError
+
+The above exception was the direct cause of the following exception:
+
+kind = 'topics', key = 'pose_template', value = '/{drone}/pose'
+
+    @pytest.mark.parametrize('kind,key,value', [
+        ('topics', 'limo_status_template', None),
+        ('topics', 'new_unsupported_topic', '/test'),
+        ('topics', 'pose_template', '/{drone}/pose'),
+        ('topics', 'pose_template', '/{cf.x}/pose'),
+    ])
+    def test_bad_interface_is_reported_without_losing_valid_specs(kind, key, value):
+        cfg = load_config(mock=True)
+        cfg.raw[kind][key] = value
+>       specs, errors = interface_specs(cfg)
+
+dashboard/tests/test_m3_followup.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c93cd2ae90>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+                    raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+                for robot in groups[group]:
+                    try:
+                        name = template.format(cf=robot, limo=robot, name=robot)
+                    except (KeyError, ValueError) as exc:
+>                       raise ValueError('Invalid {}.{}: {}'.format(kind, key, exc)) from exc
+E                       ValueError: Invalid topics.pose_template: 'drone'
+
+dashboard/ros_io.py:57: ValueError
+_ test_bad_interface_is_reported_without_losing_valid_specs[topics-pose_template-/{cf.x}/pose] _
+
+kind = 'topics', key = 'pose_template', value = '/{cf.x}/pose'
+
+    @pytest.mark.parametrize('kind,key,value', [
+        ('topics', 'limo_status_template', None),
+        ('topics', 'new_unsupported_topic', '/test'),
+        ('topics', 'pose_template', '/{drone}/pose'),
+        ('topics', 'pose_template', '/{cf.x}/pose'),
+    ])
+    def test_bad_interface_is_reported_without_losing_valid_specs(kind, key, value):
+        cfg = load_config(mock=True)
+        cfg.raw[kind][key] = value
+>       specs, errors = interface_specs(cfg)
+
+dashboard/tests/test_m3_followup.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c93ce3eaa0>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+                    raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+                for robot in groups[group]:
+                    try:
+>                       name = template.format(cf=robot, limo=robot, name=robot)
+E                       AttributeError: 'str' object has no attribute 'x'
+
+dashboard/ros_io.py:55: AttributeError
+________ test_type_key_typo_is_an_interface_configuration_error[topics] ________
+
+kind = 'topics'
+
+    @pytest.mark.parametrize('kind', ['topics', 'services', 'actions'])
+    def test_type_key_typo_is_an_interface_configuration_error(kind):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind]['misspelled_key'] = 'std_msgs/msg/String'
+>       specs, errors = interface_specs(cfg)
+E       ValueError: too many values to unpack (expected 2)
+
+dashboard/tests/test_m3_followup.py:53: ValueError
+_______ test_type_key_typo_is_an_interface_configuration_error[services] _______
+
+kind = 'services'
+
+    @pytest.mark.parametrize('kind', ['topics', 'services', 'actions'])
+    def test_type_key_typo_is_an_interface_configuration_error(kind):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind]['misspelled_key'] = 'std_msgs/msg/String'
+>       specs, errors = interface_specs(cfg)
+E       ValueError: too many values to unpack (expected 2)
+
+dashboard/tests/test_m3_followup.py:53: ValueError
+_______ test_type_key_typo_is_an_interface_configuration_error[actions] ________
+
+kind = 'actions'
+
+    @pytest.mark.parametrize('kind', ['topics', 'services', 'actions'])
+    def test_type_key_typo_is_an_interface_configuration_error(kind):
+        cfg = load_config(mock=True)
+        cfg.raw['types'][kind]['misspelled_key'] = 'std_msgs/msg/String'
+>       specs, errors = interface_specs(cfg)
+E       ValueError: too many values to unpack (expected 2)
+
+dashboard/tests/test_m3_followup.py:53: ValueError
+______________ test_null_types_are_skipped_even_without_ros_graph ______________
+
+    def test_null_types_are_skipped_even_without_ros_graph():
+        cfg = load_config(mock=True)
+        rows = check_config(cfg, timeout=0)
+        skipped = [r for r in rows if r.get('status') == 'skip']
+>       assert len(skipped) == 4
+E       assert 0 == 4
+E        +  where 0 = len([])
+
+dashboard/tests/test_m3_followup.py:62: AssertionError
+_________ test_inventory_warnings_are_separate_from_fatal_role_errors __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_inventory_warnings_are_se0')
+
+    def test_inventory_warnings_are_separate_from_fatal_role_errors(tmp_path):
+        def edit(raw):
+            raw['fleet']['drones'][-1].update(uri=None, aideck_ip=None)
+            raw['fleet']['limos'][-1]['ip'] = None
+            raw['fleet']['drones'][0].update(uri=None, aideck_ip=None)
+            raw['network']['aideck_ips'] = {}
+            raw['network']['limo_ips'] = {}
+        cfg = write_config(tmp_path, edit)
+        role_id = cfg.raw['fleet']['drones'][0]['id']
+        spare_id = cfg.raw['fleet']['drones'][-1]['id']
+        assert any(role_id in e and 'URI' in e for e in cfg.errors)
+>       assert any(role_id in e and 'IP' in e for e in cfg.errors)
+E       assert False
+E        +  where False = any(<generator object test_inventory_warnings_are_separate_from_fatal_role_errors.<locals>.<genexpr> at 0xf6c93cd02d50>)
+
+dashboard/tests/test_m3_followup.py:78: AssertionError
+_______________ test_missing_spare_prefix_is_fatal_configuration _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_missing_spare_prefix_is_f0')
+
+    def test_missing_spare_prefix_is_fatal_configuration(tmp_path):
+        cfg = write_config(tmp_path, lambda raw: raw.pop('spare_prefix'))
+>       assert any('spare_prefix' in e for e in cfg.errors)
+E       assert False
+E        +  where False = any(<generator object test_missing_spare_prefix_is_fatal_configuration.<locals>.<genexpr> at 0xf6c93cd02880>)
+
+dashboard/tests/test_m3_followup.py:90: AssertionError
+_________ test_visualiser_is_advisory_but_display_gate_stays_blocking __________
+
+    def test_visualiser_is_advisory_but_display_gate_stays_blocking():
+        cfg = load_config(mock=True)
+        cfg.bt['bt_runner']['bt_visualiser']['enabled'] = True
+        store = TelemetryStore(cfg)
+        context = store.checklist_context()
+        context['env'] = {}
+        rows = {r['id']: r for r in evaluate(store.snapshot(), cfg, context, store.clock())}
+        visual = rows['global.bt_visualiser']
+>       assert not visual['ok'] and not visual['blocking'] and visual['status'] == 'warning'
+E       assert (not False and not True)
+
+dashboard/tests/test_m3_followup.py:101: AssertionError
+_______________ test_mock_receives_only_configured_ros_channels ________________
+
+    def test_mock_receives_only_configured_ros_channels():
+        cfg = load_config(mock=True)
+        cfg.raw['topics'].pop('camera_fps_template')
+        store = TelemetryStore(cfg)
+        world = MockWorld(cfg, store)
+        world.apply(scenario(32, cfg), store.clock())
+        for name, meta in cfg.robots.items():
+            if meta['kind'] == 'drone' and not meta['role']:
+                assert 'pose' not in store.data[name]
+            if meta['kind'] == 'limo' and not meta['role']:
+                assert 'nav_ready' not in store.data[name]
+>           assert 'camera_fps' not in store.data[name]
+E           AssertionError: assert 'camera_fps' not in {'camera_fps': (10.0, 59804.618808221), 'camera_ok': (True, 59804.618809054), 'frame': (True, 59804.618809721), 'ping': ({'ip': '192.168.1.211', 'ok': True, 'rtt_ms': 2.4}, 59804.618800054), ...}
+
+dashboard/tests/test_m3_followup.py:116: AssertionError
+___________ test_elapsed_and_ready_only_use_monotonic_receipt_clock ____________
+
+    def test_elapsed_and_ready_only_use_monotonic_receipt_clock():
+        clock = [100.0]
+        store = TelemetryStore(load_config(mock=True), clock=lambda: clock[0])
+        store.ready(True)
+        clock[0] = 104.5
+        snap = store.snapshot()
+>       assert snap['run']['elapsed_s'] == 4.5
+E       KeyError: 'elapsed_s'
+
+dashboard/tests/test_m3_followup.py:127: KeyError
+____________ test_ready_stream_is_not_masked_by_one_retained_status ____________
+
+    def test_ready_stream_is_not_masked_by_one_retained_status():
+        cfg = load_config(mock=True)
+        context = {'receipts': {'preflight_status': [99], 'preflight_ready': [98.5, 99.5]}}
+        observed = external_observation('preflight', cfg, context, 100)
+>       assert observed['active'] and observed['external']
+E       assert (False)
+
+dashboard/tests/test_m3_followup.py:142: AssertionError
+________ test_unexpected_socket_exception_warns_closes_and_drops_sender ________
+
+    def test_unexpected_socket_exception_warns_closes_and_drops_sender():
+        async def exercise():
+            class Socket:
+                closed = False
+                async def send_str(self, value):
+                    raise ValueError('unexpected encoder failure')
+                async def close(self):
+                    self.closed = True
+            socket, warnings = Socket(), []
+            slots = SocketSlots(socket, 1, on_error=warnings.append)
+            slots.offer('{}', {})
+            await asyncio.wait_for(slots.run(), 1)
+            assert socket.closed
+            assert len(warnings) == 1 and 'unexpected encoder failure' in warnings[0]
+>       asyncio.run(exercise())
+
+dashboard/tests/test_m3_followup.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        class Socket:
+            closed = False
+            async def send_str(self, value):
+                raise ValueError('unexpected encoder failure')
+            async def close(self):
+                self.closed = True
+        socket, warnings = Socket(), []
+>       slots = SocketSlots(socket, 1, on_error=warnings.append)
+E       TypeError: SocketSlots.__init__() got an unexpected keyword argument 'on_error'
+
+dashboard/tests/test_m3_followup.py:156: TypeError
+____________ test_aggregate_recovers_next_tick_and_warns_only_once _____________
+
+    def test_aggregate_recovers_next_tick_and_warns_only_once():
+        async def exercise():
+            app = Dashboard(load_config(mock=True), mock=True)
+            calls, values = [], []
+            def tick():
+                calls.append(1)
+                if len(calls) <= 2:
+                    raise ValueError('temporary sample failure')
+            app.world.tick = tick
+            class Slots:
+                def offer(self, state, frames):
+                    values.append(json.loads(state))
+            app.sockets.add(Slots())
+            task = asyncio.create_task(app.aggregate())
+            try:
+                await asyncio.sleep(.36)
+                assert not task.done() and len(values) >= 1
+                assert len([e for e in app.store.events if 'temporary sample failure' in e['text']]) == 1
+            finally:
+                task.cancel()
+                await asyncio.gather(task, return_exceptions=True)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_m3_followup.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        app = Dashboard(load_config(mock=True), mock=True)
+        calls, values = [], []
+        def tick():
+            calls.append(1)
+            if len(calls) <= 2:
+                raise ValueError('temporary sample failure')
+        app.world.tick = tick
+        class Slots:
+            def offer(self, state, frames):
+                values.append(json.loads(state))
+        app.sockets.add(Slots())
+        task = asyncio.create_task(app.aggregate())
+        try:
+            await asyncio.sleep(.36)
+>           assert not task.done() and len(values) >= 1
+E           AssertionError: assert (not True)
+E            +  where True = <built-in method done of _asyncio.Task object at 0xf6c93b5ab780>()
+E            +    where <built-in method done of _asyncio.Task object at 0xf6c93b5ab780> = <Task finished name='Task-5' coro=<Dashboard.aggregate() done, defined at /ws/dashboard/server.py:68> exception=ValueError('temporary sample failure')>.done
+
+dashboard/tests/test_m3_followup.py:180: AssertionError
+______ test_partial_bad_interface_and_ros_failure_keep_http_alive[False] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf6c93b67da20>
+fail_start = False
+
+    @pytest.mark.parametrize('fail_start', [False, True])
+    def test_partial_bad_interface_and_ros_failure_keep_http_alive(monkeypatch, fail_start):
+        from aiohttp.test_utils import TestClient, TestServer
+        import dashboard.ros_io as ros_io
+        async def exercise():
+            cfg = load_config(mock=True)
+            cfg.raw['topics']['limo_status_template'] = None
+            cfg.raw['types']['topics']['typo_type_key'] = 'std_msgs/msg/String'
+            if fail_start:
+                def fail(prefix):
+                    raise ValueError('simulated ROS initialization failure')
+                monkeypatch.setattr(ros_io, '_new_node', fail)
+            app = Dashboard(cfg)
+            async with TestClient(TestServer(app.app())) as client:
+                response = await client.get('/')
+                assert response.status == 200
+                state = app.state()
+                assert any(r['label'] == '인터페이스 설정 오류' and r['blocking'] and not r['ok'] for r in state['checklist'])
+                assert any('limo_status_template' in e['text'] for e in state['events'])
+                if fail_start:
+                    assert any('simulated ROS initialization failure' in e['text'] for e in state['events'])
+                else:
+                    assert app.io.thread.is_alive() and app.io.subscriptions
+>       asyncio.run(exercise())
+
+dashboard/tests/test_m3_followup.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_m3_followup.py:201: in exercise
+    async with TestClient(TestServer(app.app())) as client:
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:414: in __aenter__
+    await self.start_server()
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:291: in start_server
+    await self._server.start_server(loop=self._loop)
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:125: in start_server
+    await self.runner.setup()
+/usr/lib/python3/dist-packages/aiohttp/web_runner.py:279: in setup
+    self._server = await self._make_server()
+/usr/lib/python3/dist-packages/aiohttp/web_runner.py:375: in _make_server
+    await self._app.startup()
+/usr/lib/python3/dist-packages/aiohttp/web_app.py:417: in startup
+    await self.on_startup.send(self)
+/usr/lib/python3/dist-packages/aiosignal/__init__.py:36: in send
+    await receiver(*args, **kwargs)  # type: ignore
+dashboard/server.py:133: in startup
+    self.io = ROSIO(self.cfg, self.store)
+dashboard/ros_io.py:228: in __init__
+    self.specs = interface_specs(cfg)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c93b6fd090>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+>                   raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+E                   ValueError: Missing interface name: topics.limo_status_template
+
+dashboard/ros_io.py:52: ValueError
+_______ test_partial_bad_interface_and_ros_failure_keep_http_alive[True] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf6c937a2c850>
+fail_start = True
+
+    @pytest.mark.parametrize('fail_start', [False, True])
+    def test_partial_bad_interface_and_ros_failure_keep_http_alive(monkeypatch, fail_start):
+        from aiohttp.test_utils import TestClient, TestServer
+        import dashboard.ros_io as ros_io
+        async def exercise():
+            cfg = load_config(mock=True)
+            cfg.raw['topics']['limo_status_template'] = None
+            cfg.raw['types']['topics']['typo_type_key'] = 'std_msgs/msg/String'
+            if fail_start:
+                def fail(prefix):
+                    raise ValueError('simulated ROS initialization failure')
+                monkeypatch.setattr(ros_io, '_new_node', fail)
+            app = Dashboard(cfg)
+            async with TestClient(TestServer(app.app())) as client:
+                response = await client.get('/')
+                assert response.status == 200
+                state = app.state()
+                assert any(r['label'] == '인터페이스 설정 오류' and r['blocking'] and not r['ok'] for r in state['checklist'])
+                assert any('limo_status_template' in e['text'] for e in state['events'])
+                if fail_start:
+                    assert any('simulated ROS initialization failure' in e['text'] for e in state['events'])
+                else:
+                    assert app.io.thread.is_alive() and app.io.subscriptions
+>       asyncio.run(exercise())
+
+dashboard/tests/test_m3_followup.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_m3_followup.py:201: in exercise
+    async with TestClient(TestServer(app.app())) as client:
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:414: in __aenter__
+    await self.start_server()
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:291: in start_server
+    await self._server.start_server(loop=self._loop)
+/usr/lib/python3/dist-packages/aiohttp/test_utils.py:125: in start_server
+    await self.runner.setup()
+/usr/lib/python3/dist-packages/aiohttp/web_runner.py:279: in setup
+    self._server = await self._make_server()
+/usr/lib/python3/dist-packages/aiohttp/web_runner.py:375: in _make_server
+    await self._app.startup()
+/usr/lib/python3/dist-packages/aiohttp/web_app.py:417: in startup
+    await self.on_startup.send(self)
+/usr/lib/python3/dist-packages/aiosignal/__init__.py:36: in send
+    await receiver(*args, **kwargs)  # type: ignore
+dashboard/server.py:133: in startup
+    self.io = ROSIO(self.cfg, self.store)
+dashboard/ros_io.py:228: in __init__
+    self.specs = interface_specs(cfg)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cfg = <dashboard.config.Config object at 0xf6c937a2c460>
+
+    def interface_specs(cfg):
+        """Expand every configured interface; spare robots have no control clients."""
+        groups = {
+            'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
+            'all_drones': [name for name, data in cfg.robots.items()
+                           if data['kind'] == 'drone'],
+            'all_limos': [name for name, data in cfg.robots.items()
+                         if data['kind'] == 'limo'],
+        }
+        specs = []
+        for kind, definitions in _INTERFACES.items():
+            for key, template in cfg.raw.get(kind, {}).items():
+                if key not in definitions:
+                    raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
+                group, channel = definitions[key]
+                if not isinstance(template, str) or not template:
+>                   raise ValueError('Missing interface name: {}.{}'.format(kind, key))
+E                   ValueError: Missing interface name: topics.limo_status_template
+
+dashboard/ros_io.py:52: ValueError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m3_followup.py::test_bad_interface_is_reported_without_losing_valid_specs[topics-limo_status_template-None]
+FAILED dashboard/tests/test_m3_followup.py::test_bad_interface_is_reported_without_losing_valid_specs[topics-new_unsupported_topic-/test]
+FAILED dashboard/tests/test_m3_followup.py::test_bad_interface_is_reported_without_losing_valid_specs[topics-pose_template-/{drone}/pose]
+FAILED dashboard/tests/test_m3_followup.py::test_bad_interface_is_reported_without_losing_valid_specs[topics-pose_template-/{cf.x}/pose]
+FAILED dashboard/tests/test_m3_followup.py::test_type_key_typo_is_an_interface_configuration_error[topics]
+FAILED dashboard/tests/test_m3_followup.py::test_type_key_typo_is_an_interface_configuration_error[services]
+FAILED dashboard/tests/test_m3_followup.py::test_type_key_typo_is_an_interface_configuration_error[actions]
+FAILED dashboard/tests/test_m3_followup.py::test_null_types_are_skipped_even_without_ros_graph
+FAILED dashboard/tests/test_m3_followup.py::test_inventory_warnings_are_separate_from_fatal_role_errors
+FAILED dashboard/tests/test_m3_followup.py::test_missing_spare_prefix_is_fatal_configuration
+FAILED dashboard/tests/test_m3_followup.py::test_visualiser_is_advisory_but_display_gate_stays_blocking
+FAILED dashboard/tests/test_m3_followup.py::test_mock_receives_only_configured_ros_channels
+FAILED dashboard/tests/test_m3_followup.py::test_elapsed_and_ready_only_use_monotonic_receipt_clock
+FAILED dashboard/tests/test_m3_followup.py::test_ready_stream_is_not_masked_by_one_retained_status
+FAILED dashboard/tests/test_m3_followup.py::test_unexpected_socket_exception_warns_closes_and_drops_sender
+FAILED dashboard/tests/test_m3_followup.py::test_aggregate_recovers_next_tick_and_warns_only_once
+FAILED dashboard/tests/test_m3_followup.py::test_partial_bad_interface_and_ros_failure_keep_http_alive[False]
+FAILED dashboard/tests/test_m3_followup.py::test_partial_bad_interface_and_ros_failure_keep_http_alive[True]
+18 failed in 0.96s
+Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0xf6c938ebc310>

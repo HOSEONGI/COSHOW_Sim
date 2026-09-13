@@ -34,32 +34,54 @@ _INTERFACES = {
 
 
 def interface_specs(cfg):
-    """Expand every configured interface; spare robots have no control clients."""
+    """Return (valid expansions, per-key configuration errors), without ROS."""
     groups = {
         'drones': cfg.drones, 'limos': cfg.limos, 'global': [None],
-        'all_drones': [name for name, data in cfg.robots.items()
-                       if data['kind'] == 'drone'],
-        'all_limos': [name for name, data in cfg.robots.items()
-                     if data['kind'] == 'limo'],
+        'all_drones': [n for n, d in cfg.robots.items() if d['kind'] == 'drone'],
+        'all_limos': [n for n, d in cfg.robots.items() if d['kind'] == 'limo'],
     }
-    specs = []
+    specs, errors = [], []
+
+    def mapping(value, kind):
+        if not isinstance(value, dict):
+            errors.append(dict(kind=kind, key='', reason='설정 mapping 필요'))
+            return {}
+        return value
+
+    type_groups = mapping(cfg.raw.get('types', {}), 'types')
     for kind, definitions in _INTERFACES.items():
-        for key, template in cfg.raw.get(kind, {}).items():
-            if key not in definitions:
-                raise ValueError('Unsupported configured interface: {}.{}'.format(kind, key))
-            group, channel = definitions[key]
-            if not isinstance(template, str) or not template:
-                raise ValueError('Missing interface name: {}.{}'.format(kind, key))
-            for robot in groups[group]:
-                try:
+        types = mapping(type_groups.get(kind, {}), 'types.' + kind)
+        for key in types.keys() - definitions.keys():
+            errors.append(dict(kind='types.' + kind, key=key, reason='미지원 타입 설정 키'))
+        for key, template in mapping(cfg.raw.get(kind, {}), kind).items():
+            try:
+                if key not in definitions:
+                    raise ValueError('미지원 인터페이스 설정 키')
+                if key not in types:
+                    errors.append(dict(kind='types.' + kind, key=key,
+                                       reason='타입 설정 키 누락 (미확인은 null로 명시)'))
+                    continue
+                if not isinstance(template, str) or not template.strip():
+                    raise ValueError('인터페이스 이름 없음')
+                # No field traversal, conversions, or format specifications: only
+                # the three explicit robot placeholders belong to this contract.
+                from string import Formatter
+                for _, field, format_spec, conversion in Formatter().parse(template):
+                    if field is not None and (field not in ('cf', 'limo', 'name')
+                                              or format_spec or conversion):
+                        raise ValueError('잘못된 플레이스홀더: ' + str(field))
+                group, channel = definitions[key]
+                expanded = []
+                for robot in groups[group]:
                     name = template.format(cf=robot, limo=robot, name=robot)
-                except (KeyError, ValueError) as exc:
-                    raise ValueError('Invalid {}.{}: {}'.format(kind, key, exc)) from exc
-                specs.append({
-                    'kind': kind, 'key': key, 'robot': robot, 'channel': channel,
-                    'name': name, 'type': cfg.raw.get('types', {}).get(kind, {}).get(key),
-                })
-    return specs
+                    expanded.append(dict(kind=kind, key=key, robot=robot,
+                                         channel=channel, name=name, type=types.get(key)))
+                specs.extend(expanded)
+            except (ValueError, KeyError, TypeError, AttributeError, IndexError) as exc:
+                errors.append(dict(kind=kind, key=key, reason=str(exc)))
+    for kind in type_groups.keys() - _INTERFACES.keys():
+        errors.append(dict(kind='types', key=kind, reason='미지원 인터페이스 종류'))
+    return specs, errors
 
 
 def _finite(value):
@@ -225,13 +247,15 @@ class ROSIO:
 
     def __init__(self, cfg, store):
         self.cfg, self.store = cfg, store
-        self.specs = interface_specs(cfg)
+        self.specs, self.errors = interface_specs(cfg)
         self.node = self.context = self.executor = self.thread = None
         self.service_clients, self.action_clients = {}, {}
         self.subscriptions = []
         self._stopped = threading.Event()
 
     async def start(self):
+        for error in self.errors:
+            self.store.unavailable(None, 'interface', error)
         from rclpy.action import ActionClient
         from rclpy.executors import SingleThreadedExecutor
 
@@ -243,6 +267,9 @@ class ROSIO:
         self.executor.add_node(self.node)
         try:
             for spec in self.specs:
+                if spec['type'] is None:
+                    self._unavailable(spec['robot'], spec['channel'], '타입 미확인 (null)')
+                    continue
                 try:
                     typename = _load_type(spec)
                     if spec['kind'] == 'topics':
@@ -343,35 +370,40 @@ def _server_graph(node):
 
 
 def check_config(cfg, timeout=3):
-    """Inspect from a separate, unsubscribed node and return all PASS/FAIL rows.
-
-    This synchronous CLI helper must run before ROSIO.start(). No subscriber,
-    service client, or action client is created by the checker itself.
-    """
-    try:
-        specs = interface_specs(cfg)
-    except (ValueError, KeyError, TypeError) as exc:
-        return [{'kind': 'config', 'key': 'interfaces', 'name': '', 'expected_type': None,
-                 'actual_types': [], 'ok': False, 'detail': str(exc)}]
+    """Read actual server endpoints; explicit null types are intentional SKIP."""
+    specs, errors = interface_specs(cfg)
     rows = []
     for spec in specs:
+        skipped = spec['type'] is None
         error = None
-        try:
-            _load_type(spec)
-        except Exception as exc:
-            error = '정보 없음: {}'.format(exc)
-        rows.append({'kind': spec['kind'], 'key': spec['key'], 'name': spec['name'],
-                     'expected_type': spec['type'], 'actual_types': [],
-                     'ok': False, 'detail': error or '발행자/서버 없음'})
-    type_errors = [row['detail'] if row['detail'].startswith('정보 없음:') else None for row in rows]
-    for key, name in cfg.raw.get('nodes', {}).items():
-        rows.append({'kind': 'nodes', 'key': key, 'name': name, 'expected_type': None,
-                     'actual_types': [], 'ok': False, 'detail': '노드 없음'})
+        if not skipped:
+            try:
+                _load_type(spec)
+            except Exception as exc:
+                error = '정보 없음: {}'.format(exc)
+        rows.append(dict(kind=spec['kind'], key=spec['key'], name=spec['name'],
+                         expected_type=spec['type'], actual_types=[],
+                         ok=None if skipped else False,
+                         status='skip' if skipped else 'fail',
+                         detail='타입 미확인 (null)' if skipped else error or '발행자/서버 없음'))
+    type_errors = [r['detail'] if r['detail'].startswith('정보 없음:') else None for r in rows]
+    node_rows = [dict(kind='nodes', key=key, name=name, expected_type=None,
+                      actual_types=[], ok=False, status='fail', detail='노드 없음')
+                 for key, name in cfg.raw.get('nodes', {}).items()]
+    rows.extend(node_rows)
+    rows.extend(dict(kind=error['kind'], key=error['key'], name=error['key'],
+                     expected_type=None, actual_types=[], ok=False, status='fail',
+                     detail='인터페이스 설정 오류: ' + error['reason']) for error in errors)
+
+    def graph_error(exc):
+        for row in rows[:len(specs)] + node_rows:
+            if row['status'] != 'skip':
+                row.update(ok=False, status='fail', detail='ROS 그래프 정보 없음: {}'.format(exc))
+
     try:
         context, node = _new_node('dashboard_config_check_')
     except Exception as exc:
-        for row in rows:
-            row['detail'] = 'ROS 그래프 정보 없음: {}'.format(exc)
+        graph_error(exc)
         return rows
     try:
         deadline = time.monotonic() + max(0, timeout)
@@ -379,25 +411,27 @@ def check_config(cfg, timeout=3):
             graph, nodes = _server_graph(node)
             for index, spec in enumerate(specs):
                 row = rows[index]
-                # Node name expansion handles absolute and relative configuration.
-                resolved = node.resolve_topic_name(spec['name']) if spec['kind'] == 'topics' else (
-                    node.resolve_service_name(spec['name']))
-                actual = sorted(graph[spec['kind']].get(resolved, set()))
-                row['actual_types'] = actual
-                row['ok'] = type_errors[index] is None and spec['type'] in actual
-                row['detail'] = type_errors[index] or (
-                    'PASS' if row['ok'] else '타입 불일치' if actual else '발행자/서버 없음')
+                if row['status'] == 'skip':
+                    continue
+                try:
+                    resolved = (node.resolve_topic_name(spec['name']) if spec['kind'] == 'topics'
+                                else node.resolve_service_name(spec['name']))
+                    actual = sorted(graph[spec['kind']].get(resolved, set()))
+                    ok = type_errors[index] is None and spec['type'] in actual
+                    row.update(actual_types=actual, ok=ok, status='pass' if ok else 'fail',
+                               detail=type_errors[index] or ('PASS' if ok else
+                                      '타입 불일치' if actual else '발행자/서버 없음'))
+                except Exception as exc:
+                    row.update(ok=False, status='fail', detail='인터페이스 설정 오류: {}'.format(exc))
             full_names = {namespace.rstrip('/') + '/' + name for name, namespace in nodes}
-            for row in rows[len(specs):]:
-                row['ok'] = '/' + str(row['name']).strip('/') in full_names
-                row['detail'] = 'PASS' if row['ok'] else '노드 없음'
-            if all(row['ok'] for row in rows) or time.monotonic() >= deadline:
+            for row in node_rows:
+                ok = '/' + str(row['name']).strip('/') in full_names
+                row.update(ok=ok, status='pass' if ok else 'fail', detail='PASS' if ok else '노드 없음')
+            if all(row['ok'] or row['status'] == 'skip' for row in rows) or time.monotonic() >= deadline:
                 return rows
             time.sleep(min(0.05, max(0, deadline - time.monotonic())))
     except Exception as exc:
-        for row in rows:
-            row['ok'] = False
-            row['detail'] = 'ROS 그래프 정보 없음: {}'.format(exc)
+        graph_error(exc)
         return rows
     finally:
         node.destroy_node()

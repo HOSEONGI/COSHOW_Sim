@@ -104,7 +104,7 @@ class Measurements:
                     maximum_state_gap_s=round(max(gaps), 3) if gaps else None,
                     binary_frames=sum(self.frames.values()), per_camera=dict(self.frames),
                     robot_count=len(robots), role_drones=roles, spare_drones=spare_names, limos=limo_names,
-                    disconnected_spare=disconnected[0], spare_link_blocking=False,
+                    disconnected_spare=disconnected[0], spare_link_blocking=advisory['blocking'],
                     mission_phases=sorted(p for p in self.phases if p),
                     mission_age=round(state['mission']['age'], 3),
                     external_bt=state['run']['external_bt'], run_state=state['run']['state'])

@@ -32,7 +32,7 @@ class TelemetryStore:
                         external_bt=False, last_error=None)
         self.stack = dict(crazyflie_server='down', aideck='down', roster_hash=None,
                           applied_hash=None, radios=len(cfg.radio_counts), radio_counts=cfg.radio_counts)
-        self.context = dict(nodes=[], processes={n: dict(alive=False, exited_at=None)
+        self.context = dict(interface_errors=[], nodes=[], processes={n: dict(alive=False, exited_at=None)
                                                 for n in ('bt', 'preflight')},
                             receipts={n: deque(maxlen=100) for n in ('mission', 'preflight_status', 'preflight_ready')},
                             orphans=[], env={**os.environ, **cfg.raw.get('commands', {}).get('env', {})},
@@ -89,7 +89,21 @@ class TelemetryStore:
         self.receive(name, 'ping', value)
 
     def unavailable(self, name, channel, reason):
-        self.event('warning', str(name) + ' ' + channel + ': ' + reason)
+        with self.lock:
+            if channel == 'interface' and isinstance(reason, dict):
+                if reason not in self.context['interface_errors']:
+                    self.context['interface_errors'].append(copy.deepcopy(reason))
+            self.event('warning', str(name) + ' ' + channel + ': ' + str(reason))
+
+    def set_run(self, **changes):
+        with self.lock:
+            if 'state' in changes and changes['state'] != self.run['state']:
+                changes.setdefault('since', self.clock())
+            self.run.update(copy.deepcopy(changes))
+
+    def set_stack(self, **changes):
+        with self.lock:
+            self.stack.update(copy.deepcopy(changes))
 
     def event(self, level, text):
         with self.lock:
@@ -109,8 +123,11 @@ class TelemetryStore:
             def aged(item):
                 return dict(item[0], age=max(0, now - item[1])) if item else None
             mission, preflight = aged(self._mission), aged(self._preflight)
-            if preflight is not None and self._ready is not None:
-                preflight['ready'] = self._ready[0]
+            if self._ready is not None:
+                if preflight is None:
+                    preflight = dict(ready=self._ready[0], age=max(0, now - self._ready[1]))
+                else:
+                    preflight['ready'] = self._ready[0]
             robots = {}
             for name, meta in self.cfg.robots.items():
                 channels = self.data[name]
@@ -133,7 +150,8 @@ class TelemetryStore:
                     robot.update(value('limo_status', {}))
                     robot['nav_ready'] = value('nav_ready')
                 robots[name] = robot
-            result = dict(type='state', t=time.time(), run=self.run, stack=self.stack,
+            run = dict(self.run, elapsed_s=max(0, now - self.run['since']))
+            result = dict(type='state', t=time.time(), run=run, stack=self.stack,
                           mission=mission, preflight=preflight, robots=robots,
                           checklist=[], events=list(self.events)[-30:])
             return copy.deepcopy(result)

@@ -1,0 +1,4 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 -m pytest dashboard/tests/test_m3_followup.py dashboard/tests/test_core.py dashboard/tests/test_checklist.py dashboard/tests/test_ros_io.py -q
+........................................................................ [ 64%]
+........................................                                 [100%]
+112 passed in 5.10s

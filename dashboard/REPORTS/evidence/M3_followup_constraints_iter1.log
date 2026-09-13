@@ -1,0 +1,8 @@
+$ docker run --rm -e ROS_DOMAIN_ID=83 -e ROS_LOCALHOST_ONLY=1 -v "$PWD":/ws -v coshow_build:/ws_build coshow-humble-dev python3 dashboard/tests/verify_m2_constraints.py
+Python: 3.10.12
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 68, in <module>
+    main()
+  File "/ws/dashboard/tests/verify_m2_constraints.py", line 56, in main
+    assert not re.search(requests, path.read_text()), path
+AssertionError: /ws/dashboard/static/vendor/three.core.js

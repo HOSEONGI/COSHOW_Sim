@@ -44,6 +44,7 @@ types:
 freshness_s: {pose: 0.8, status: 1.0, odom: 1.0, camera: 2.0, detection_hold: 0.5}
 external_node_grace_s: 20.0
 battery_v: {warn: 3.75, block: 3.60}
+# limo_battery_v: {warn: null, block: null}  # Optional; unverified thresholds do not block.
 camera_min_fps: 5.0
 frame_forward_max_fps: 15
 kiosk: {visitor_offset_px: 1920}

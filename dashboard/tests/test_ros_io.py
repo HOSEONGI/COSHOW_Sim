@@ -67,7 +67,7 @@ def config():
 
 
 def test_interface_expansion_monitors_spares_without_creating_spare_control(config):
-    specs = adapter_module().interface_specs(config)
+    specs, errors = adapter_module().interface_specs(config)
     statuses = [s['robot'] for s in specs if s['key'] == 'status_template']
     assert statuses == ['observer', 'seeker', 'reserve']
     odometry = [s['robot'] for s in specs if s['key'] == 'odom_template']
@@ -80,8 +80,8 @@ def test_interface_expansion_monitors_spares_without_creating_spare_control(conf
 
 def test_unknown_configured_interface_is_not_silently_ignored(config):
     config.raw['topics']['new_unsupported_topic'] = '/unexpected'
-    with pytest.raises(ValueError, match='new_unsupported_topic'):
-        adapter_module().interface_specs(config)
+    specs, errors = adapter_module().interface_specs(config)
+    assert specs and any(e['key'] == 'new_unsupported_topic' for e in errors)
 
 
 @pytest.fixture
@@ -185,7 +185,7 @@ def world(config, ros_types):
     context = Context()
     rclpy.init(args=[], context=context)
     node = rclpy.create_node(config.raw['nodes']['server'], context=context)
-    specs = adapter_module().interface_specs(config)
+    specs, errors = adapter_module().interface_specs(config)
     publishers, services, actions = {}, [], []
     for spec in specs:
         if spec['kind'] == 'topics':

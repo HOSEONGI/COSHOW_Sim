@@ -20,9 +20,13 @@ def read_yaml(path):
 class Config:
     def __init__(self, path=None, field_path=None, mock=False):
         self.path = Path(path or HERE / 'config/dashboard.yaml').expanduser().resolve()
-        self.errors = []
+        self.errors, self.warnings = [], []
         self.raw = self._read(self.path)
         self.dashboard_ok = bool(self.raw)
+        for key in ('robots', 'fleet', 'commands', 'topics', 'services', 'actions', 'nodes', 'types'):
+            if not isinstance(self.raw.get(key), dict):
+                self.errors.append(key + ': 필수 설정 블록 누락 또는 mapping 아님')
+                self.raw[key] = {}
         self.field_path = Path(field_path or self.path.with_name('field.yaml')).resolve()
         self.field = self._read(self.field_path)
         self.field_ok = bool(self.field)
@@ -92,7 +96,10 @@ class Config:
         for role, physical in self.roster.items():
             if role not in self.drones or physical not in drone_ids:
                 self.errors.append('로스터 배정 없음: ' + str(role) + ' ← ' + str(physical))
-        prefix = self.raw.get('spare_prefix', 'spare_')
+        prefix = self.raw.get('spare_prefix')
+        if not isinstance(prefix, str) or not prefix:
+            self.errors.append('spare_prefix: 필수 설정 없음')
+            prefix = ''
         network = self.raw.get('network', {})
         for item in drones:
             role = next((n for n in self.drones if self.roster.get(n) == item['id']), None)
@@ -101,11 +108,14 @@ class Config:
                                      ip=item.get('aideck_ip') or network.get('aideck_ips', {}).get(name),
                                      uri=item.get('uri'))
             uri = item.get('uri')
-            if uri and uri.startswith('radio://'):
+            if isinstance(uri, str) and uri.startswith('radio://') and len(uri.split('/')) == 6:
                 radio = uri.split('/')[2]
                 self.radio_counts[radio] = self.radio_counts.get(radio, 0) + 1
             else:
-                self.errors.append('fleet ' + item['id'] + ': radio URI 미설정 또는 형식 오류')
+                (self.errors if role or uri is not None else self.warnings).append(
+                    'fleet ' + item['id'] + ': radio URI 미설정 또는 형식 오류')
+            if not self.robots[name]['ip']:
+                (self.errors if role else self.warnings).append('fleet ' + item['id'] + ': AI Deck IP 미설정')
         for role in self.drones:
             if role not in self.robots:
                 self.robots[role] = dict(kind='drone', role=role, fleet_id=None, uri=None,
@@ -118,6 +128,10 @@ class Config:
                 continue
             self.robots[name] = dict(kind='limo', role=name if name in self.limos else None,
                                      fleet_id=item['id'], ip=item.get('ip') or network.get('limo_ips', {}).get(name))
+        for name, meta in self.robots.items():
+            if meta['kind'] == 'limo' and not meta['ip']:
+                (self.errors if meta['role'] else self.warnings).append(
+                    'fleet ' + str(meta['fleet_id']) + ' (' + name + '): LIMO IP 미설정')
         for role in self.limos:
             if role not in self.robots:
                 self.robots[role] = dict(kind='limo', role=role, fleet_id=None,

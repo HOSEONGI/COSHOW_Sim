@@ -1,0 +1,3 @@
+$ /usr/bin/python3 dashboard/tests/fake_ros_world.py --config /ws/dashboard/run/m3_followup/dashboard.yaml
+FIXTURE READY: robots=14 nodes=4 topics=41 services=8 actions=2
+FIXTURE CLOSED: command_requests=0
