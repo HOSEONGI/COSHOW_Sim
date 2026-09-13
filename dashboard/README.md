@@ -149,3 +149,20 @@ python3 dashboard/tests/analyze_stage.py dashboard/logs/session.jsonl
 Docker는 Python 3.10·ROS 메시지·더미 프로세스와 서비스 순서를 검증한다.
 mock은 화면과 프로토콜을 검증한다. Webots·실기체·물리 모니터는 사람이
 Stage A–D 순서로 확인한다. 현장 테스트 전 결과를 실기체 승인으로 간주하지 않는다.
+
+### 개발 검증 재현
+
+제공된 Docker 하네스는 가벼운 이미지다. 기존 시뮬 검출 노드의 영상 회귀까지
+포함한 424개 결과는 테스트 컨테이너에 OpenCV 4.10.0.84를 추가한 환경에서
+측정했다. 기본 이미지에서 OpenCV가 없으면 해당 13개는 SKIP한다.
+다음은 인터넷이 있는 개발 환경에서만 실행한다. 운영 대시보드 의존성이나
+행사 머신의 설치 패키지를 바꾸는 명령이 아니다.
+
+```bash
+bash dashboard/docker/run.sh bash -lc 'python3 -m pip install --no-deps opencv-contrib-python-headless==4.10.0.84 && python3 -m pytest dashboard/tests -q'
+node --test dashboard/tests/test_*.mjs
+```
+
+[실제 검증 패키지 버전](REPORTS/evidence/M7_test_environment.log)을 함께 보존했다.
+운영 AI Deck 노드는 별도 pip wheel 없이 Ubuntu OpenCV 4.5.4로 설치·검출을
+검증했다. Webots의 기존 시뮬 환경과 운영 카메라 노드의 호환 경로를 구별한다.

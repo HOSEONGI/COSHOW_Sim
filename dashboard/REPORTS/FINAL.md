@@ -20,7 +20,7 @@ M4 `107681f` → M5 `df6c0f6` → M6 `afe20b2`를 `dashboard` 브랜치에 커�
 
 ## 직접 확인한 것
 
-- **Python 3.10.12 / ROS Humble: 424 passed.** [전체 명령과 출력](evidence/M7_final_python.log).
+- **Python 3.10.12 / ROS Humble: 424 passed.** 기존 시뮬 검출 영상 테스트에만 OpenCV 4.10 wheel을 추가한 [환경](evidence/M7_test_environment.log)이다. [전체 명령과 출력](evidence/M7_final_python.log).
 - **Node v26.3.0: 46 passed.** [프런트엔드 회귀](evidence/M7_final_node.log).
 - [설정·의존·오프라인 감사](evidence/M7_final_constraints.log): Python runtime 10개,
   작성 JS 9개(문자열 656/숫자 449), vendor 2개 제외. 외부 이름 상수·CDN·외부 fetch·
