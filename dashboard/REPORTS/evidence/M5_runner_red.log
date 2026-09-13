@@ -1,0 +1,114 @@
+F...F....F
+=================================== FAILURES ===================================
+_____________ test_entire_command_acceptance_table[preflight-IDLE] _____________
+
+setup = (<dashboard.runner.Runner object at 0xedae7adad690>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xedae7adad330>, <test_runner.Controls object at 0xedae7adad6f0>, [], {}, ...)
+state = 'IDLE', cmd = 'preflight'
+
+    @pytest.mark.parametrize('state', list(ACCEPTED))
+    @pytest.mark.parametrize('cmd', ['preflight', 'start', 'estop', 'reset'])
+    def test_entire_command_acceptance_table(setup, state, cmd):
+        async def exercise():
+            runner, _, store, *_ = setup
+            store.set_run(state=state)
+            accepted, reason = await runner.command(cmd)
+            assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+            if state == 'LANDING':
+                assert '착륙 중' in reason
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, _, store, *_ = setup
+        store.set_run(state=state)
+        accepted, reason = await runner.command(cmd)
+>       assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+E       AssertionError: ('IDLE', 'preflight', 'not implemented')
+E       assert False == ('preflight' in {'preflight', 'reset'})
+
+dashboard/tests/test_runner.py:126: AssertionError
+___________ test_entire_command_acceptance_table[preflight-LANDING] ____________
+
+setup = (<dashboard.runner.Runner object at 0xedae7ac0b8e0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xedae7ac0bbb0>, <test_runner.Controls object at 0xedae7ac0ba00>, [], {}, ...)
+state = 'LANDING', cmd = 'preflight'
+
+    @pytest.mark.parametrize('state', list(ACCEPTED))
+    @pytest.mark.parametrize('cmd', ['preflight', 'start', 'estop', 'reset'])
+    def test_entire_command_acceptance_table(setup, state, cmd):
+        async def exercise():
+            runner, _, store, *_ = setup
+            store.set_run(state=state)
+            accepted, reason = await runner.command(cmd)
+            assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+            if state == 'LANDING':
+                assert '착륙 중' in reason
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, _, store, *_ = setup
+        store.set_run(state=state)
+        accepted, reason = await runner.command(cmd)
+        assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+        if state == 'LANDING':
+>           assert '착륙 중' in reason
+E           AssertionError: assert '착륙 중' in 'not implemented'
+
+dashboard/tests/test_runner.py:128: AssertionError
+______________ test_entire_command_acceptance_table[start-READY] _______________
+
+setup = (<dashboard.runner.Runner object at 0xedae7aded9c0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xedae7adef820>, <test_runner.Controls object at 0xedae7adec340>, [], {}, ...)
+state = 'READY', cmd = 'start'
+
+    @pytest.mark.parametrize('state', list(ACCEPTED))
+    @pytest.mark.parametrize('cmd', ['preflight', 'start', 'estop', 'reset'])
+    def test_entire_command_acceptance_table(setup, state, cmd):
+        async def exercise():
+            runner, _, store, *_ = setup
+            store.set_run(state=state)
+            accepted, reason = await runner.command(cmd)
+            assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+            if state == 'LANDING':
+                assert '착륙 중' in reason
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, _, store, *_ = setup
+        store.set_run(state=state)
+        accepted, reason = await runner.command(cmd)
+>       assert accepted == (cmd in ACCEPTED[state]), (state, cmd, reason)
+E       AssertionError: ('READY', 'start', 'not implemented')
+E       assert False == ('start' in {'estop', 'reset', 'start'})
+
+dashboard/tests/test_runner.py:126: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_entire_command_acceptance_table[preflight-IDLE]
+FAILED dashboard/tests/test_runner.py::test_entire_command_acceptance_table[preflight-LANDING]
+FAILED dashboard/tests/test_runner.py::test_entire_command_acceptance_table[start-READY]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 3 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+3 failed, 7 passed in 0.08s

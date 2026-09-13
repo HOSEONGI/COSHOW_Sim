@@ -135,6 +135,7 @@ class MockWorld:
         self.cfg, self.store, self.fail = cfg, store, fail
         self.started = self.checking = None
         self.landing_until, self.after_landing = None, None
+        self.land_sent_at = None
         self.last_json, self.signature = -math.inf, None
         from dashboard.ros_io import interface_specs
         specs, errors = interface_specs(cfg)
@@ -166,6 +167,8 @@ class MockWorld:
             self.store.context['processes']['bt']['alive'] = True
         elif cmd in ('estop', 'reset') and state != 'IDLE':
             self.store.set_run(state='LANDING')
+            self.store.event('info', '착륙 시퀀스 시작')
+            self.land_sent_at = now + .5
             self.after_landing = 'ABORTED' if cmd == 'estop' else 'IDLE'
             self.landing_until = now + .5 + self.cfg.bt.get('coshow', {}).get('durations', {}).get('land', 8)
         if cmd == 'reset' and state == 'IDLE':
@@ -185,6 +188,9 @@ class MockWorld:
     def _tick(self):
         now = self.store.clock()
         run = self.store.run['state']
+        if run == 'LANDING' and self.land_sent_at is not None and now >= self.land_sent_at:
+            self.store.event('info', 'land 전송 {0}/{0} · MOCK'.format(len(self.cfg.drones)))
+            self.land_sent_at = None
         if run == 'LANDING' and now >= self.landing_until:
             self.store.set_run(state=self.after_landing, preflight_pid=None, bt_pid=None, since=now)
             run = self.after_landing

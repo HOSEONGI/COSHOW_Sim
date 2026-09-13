@@ -108,7 +108,7 @@ class TelemetryStore:
     def event(self, level, text):
         with self.lock:
             # Avoid drowning the bounded event window with identical graph failures.
-            if self.events and self.events[-1]['text'] == text:
+            if self.events and self.events[-1]['text'] == text and not text.startswith('cmd:'):
                 return
             self.events.append(dict(t=time.time(), level=level, text=text))
 

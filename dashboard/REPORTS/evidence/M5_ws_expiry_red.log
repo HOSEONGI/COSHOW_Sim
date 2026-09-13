@@ -1,0 +1,86 @@
+✔ binary forwarding strips index and ignores frames before hello (22.12975ms)
+✔ initial open socket without state reconnects (hello=false) (0.288ms)
+✔ initial open socket without state reconnects (hello=true) (0.188458ms)
+✔ newly opened reconnect gets its own state deadline despite old stale state (0.206041ms)
+✔ a state received at monotonic zero still has a watchdog deadline (0.157667ms)
+✔ hello is required again after reconnect; obsolete sockets cannot refresh it (0.171375ms)
+✔ stop closes the socket and prevents watchdog or retry work (0.11025ms)
+✔ admin loses controls immediately on close and at 1.5 seconds without state (0.180333ms)
+✖ admin expires exactly 1.5 seconds after an off-grid state receipt (0.796291ms)
+✔ admin state refresh replaces the expiry timer and stop cancels it (0.180625ms)
+✖ admin send rejects an expired state even when browser timers have not run (0.157667ms)
+✖ admin initial state deadline starts at an off-grid socket open (0.1525ms)
+✔ visitor cannot send commands even on an active socket (0.067333ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 10
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.87775
+
+✖ failing tests:
+
+test at dashboard/tests/test_visitor_ws.mjs:180:1
+✖ admin expires exactly 1.5 seconds after an off-grid state receipt (0.796291ms)
+  AssertionError [ERR_ASSERTION]: state received at 100 ms expires at 1600 ms
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:187:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_visitor_ws.mjs:203:1
+✖ admin send rejects an expired state even when browser timers have not run (0.157667ms)
+  AssertionError [ERR_ASSERTION]: send must check receipt age independently of timer callbacks
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:209:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dashboard/tests/test_visitor_ws.mjs:214:1
+✖ admin initial state deadline starts at an off-grid socket open (0.1525ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_visitor_ws.mjs:218:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0
+rootdir: /ws
+plugins: ament-flake8-0.12.15, launch-testing-1.0.14, ament-lint-0.12.15, ament-copyright-0.12.15, launch-testing-ros-0.19.14, ament-xmllint-0.12.15, ament-pep257-0.12.15, colcon-core-0.21.1
+collected 53 items
+
+dashboard/tests/test_runner.py ................................................REAL_SPAWN {"pid": 24, "sid": 24, "core": [0, 0], "cwd": "/tmp/pytest-of-root/pytest-0/test_real_process_spawn_core_l0/bt", "inherited": "inherited", "override": "configured"} requested_rc=-6 SIGINT=1 core_files=0
+.REAL_ORPHAN matched=1 recovered=1 unrelated_signals=0 pidfiles_cleared=true
+....
+
+============================= 53 passed in 26.90s ==============================

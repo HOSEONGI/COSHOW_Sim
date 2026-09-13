@@ -1,0 +1,110 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_preflight_death_during_bt_spawn_still_signals_new_bt_before_land _____
+
+setup = (<dashboard.runner.Runner object at 0xf26105e07cd0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...bt': <test_runner.Process object at 0xf26105e04dc0>, 'preflight': <test_runner.Process object at 0xf26105e047f0>}, ...)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf26105e07e20>
+
+    def test_preflight_death_during_bt_spawn_still_signals_new_bt_before_land(setup, monkeypatch):
+        async def exercise():
+            runner = await launch(setup, False)
+            _, _, store, _, events, processes, _ = setup
+            entered, release = asyncio.Event(), asyncio.Event()
+            original = module.asyncio.create_subprocess_exec
+            async def delayed(*argv, **kwargs):
+                if 'mission.py' in argv:
+                    entered.set()
+                    await release.wait()
+                return await original(*argv, **kwargs)
+            monkeypatch.setattr(module.asyncio, 'create_subprocess_exec', delayed)
+            store.ready(True)
+            await until(lambda: store.run['state'] == 'READY')
+            await runner.command('start')
+            await entered.wait()
+            processes['preflight'].exit(0)
+            await until(lambda: store.run['state'] == 'LANDING')
+            release.set()
+            await until(lambda: store.run['state'] == 'ABORTED')
+            assert events[0][:3] == ('signal', 'bt', signal.SIGINT)
+            assert processes['bt'].returncode is not None
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner = await launch(setup, False)
+        _, _, store, _, events, processes, _ = setup
+        entered, release = asyncio.Event(), asyncio.Event()
+        original = module.asyncio.create_subprocess_exec
+        async def delayed(*argv, **kwargs):
+            if 'mission.py' in argv:
+                entered.set()
+                await release.wait()
+            return await original(*argv, **kwargs)
+        monkeypatch.setattr(module.asyncio, 'create_subprocess_exec', delayed)
+        store.ready(True)
+        await until(lambda: store.run['state'] == 'READY')
+        await runner.command('start')
+        await entered.wait()
+        processes['preflight'].exit(0)
+        await until(lambda: store.run['state'] == 'LANDING')
+        release.set()
+        await until(lambda: store.run['state'] == 'ABORTED')
+>       assert events[0][:3] == ('signal', 'bt', signal.SIGINT)
+E       AssertionError: assert ('land', 'alpha', 0) == ('signal', 'b...ls.SIGINT: 2>)
+E         At index 0 diff: 'land' != 'signal'
+E         Full diff:
+E         - ('signal', 'bt', <Signals.SIGINT: 2>)
+E         + ('land', 'alpha', 0)
+
+dashboard/tests/test_runner.py:395: AssertionError
+_________ test_cancel_wait_is_inside_bt_exit_deadline_not_added_to_it __________
+
+setup = (<dashboard.runner.Runner object at 0xf26105dc4040>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...bt': <test_runner.Process object at 0xf26105dc4c70>, 'preflight': <test_runner.Process object at 0xf26105dc4760>}, ...)
+
+    def test_cancel_wait_is_inside_bt_exit_deadline_not_added_to_it(setup):
+        async def exercise():
+            runner = await launch(setup)
+            _, _, store, io, events, processes, _ = setup
+            processes['bt'].stubborn = True
+            io.cancel_result = 'hang'
+            await runner.command('estop')
+            await until(lambda: store.run['state'] == 'ABORTED', timeout=5)
+            land_at = next(e[-1] for e in events if e[0] == 'land')
+            killed_at = next(e[-1] for e in events if e[:3] == ('signal', 'bt', signal.SIGKILL))
+            assert killed_at - land_at < 2.2
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:413: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner = await launch(setup)
+        _, _, store, io, events, processes, _ = setup
+        processes['bt'].stubborn = True
+        io.cancel_result = 'hang'
+        await runner.command('estop')
+        await until(lambda: store.run['state'] == 'ABORTED', timeout=5)
+        land_at = next(e[-1] for e in events if e[0] == 'land')
+        killed_at = next(e[-1] for e in events if e[:3] == ('signal', 'bt', signal.SIGKILL))
+>       assert killed_at - land_at < 2.2
+E       assert (66059.006372999 - 66055.979764474) < 2.2
+
+dashboard/tests/test_runner.py:411: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_preflight_death_during_bt_spawn_still_signals_new_bt_before_land
+FAILED dashboard/tests/test_runner.py::test_cancel_wait_is_inside_bt_exit_deadline_not_added_to_it
+2 failed, 45 deselected in 3.79s

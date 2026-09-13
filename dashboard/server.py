@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline dashboard HTTP/WS core. Real process controls are added in M5."""
+"""Offline dashboard HTTP/WS and owned run lifecycle."""
 import argparse
 import asyncio
 import contextlib
@@ -57,6 +57,7 @@ class Dashboard:
         self.store = TelemetryStore(cfg)
         self.sockets, self.tasks = set(), []
         self.io, self.world = None, None
+        self.runner = None
         if mock:
             from dashboard.mock import MockWorld
             self.world = MockWorld(cfg, self.store, mock_fail)
@@ -102,20 +103,25 @@ class Dashboard:
             return
         accepted, reason = False, '관리자 연결만 허용'
         if admin:
+            if self.store.stack.get('busy') and cmd in ('preflight', 'start'):
+                self.store.event('warning', 'cmd:{} rejected(스택 기동 또는 설정 적용 중)'.format(cmd))
+                return
             if self.world:
                 if cmd == 'start' and any(r['blocking'] and not r['ok'] for r in self.state()['checklist']):
                     reason = 'blocking 점검 항목 실패'
                 else:
                     accepted, reason = self.world.command(cmd)
+            elif self.runner:
+                accepted, reason = await self.runner.command(cmd)
             else:
-                reason = 'M2 관찰 모드: 프로세스 제어는 M5에서 제공'
+                reason = '실행 제어 초기화 대기'
         text = 'cmd:{} {}'.format(cmd, 'accepted' if accepted else 'rejected(' + reason + ')')
         self.store.event('info' if accepted else 'warning', text)
 
     async def websocket(self, request):
         role = request.query.get('role', 'visitor')
-        if role == 'admin' and request.remote not in ('127.0.0.1', '::1'):
-            raise web.HTTPForbidden(text='관리자 소켓은 로컬 연결만 허용합니다')
+        if role == 'admin':
+            self.require_local(request)
         ws = web.WebSocketResponse(max_msg_size=4096, heartbeat=20)
         await ws.prepare(request)
         slots, sender = SocketSlots(ws, len(self.cfg.drones),
@@ -148,10 +154,23 @@ class Dashboard:
                 await self.io.start()
             except Exception as exc:
                 self.store.unavailable(None, 'ros', 'ROS 시작 실패: {}'.format(exc))
-            self.tasks.append(asyncio.create_task(Pinger(self.cfg, self.store).run()))
+            self.ping_task = asyncio.create_task(Pinger(self.cfg, self.store).run())
+            self.tasks.append(self.ping_task)
+            from dashboard.runner import Runner
+            self.runner = Runner(self.cfg, self.store, self.io, self.state)
+            await self.runner.start()
         self.tasks.append(asyncio.create_task(self.aggregate()))
 
+    async def shutdown(self, app):
+        # on_shutdown runs before aiohttp waits for open WebSocket handlers.
+        # Keep ROS, receipt aging and telemetry alive throughout the sequence.
+        if self.runner:
+            await self.runner.close()
+        await asyncio.gather(*(s.ws.close() for s in tuple(self.sockets)), return_exceptions=True)
+
     async def cleanup(self, app):
+        if self.runner:
+            await self.runner.close()
         for task in self.tasks:
             task.cancel()
         await asyncio.gather(*self.tasks, return_exceptions=True)
@@ -159,18 +178,38 @@ class Dashboard:
         if self.io:
             await self.io.close()
 
+    @staticmethod
+    def require_local(request):
+        if request.remote not in ('127.0.0.1', '::1'):
+            raise web.HTTPForbidden(text='관리자는 로컬 연결만 허용합니다')
+        origin = request.headers.get('Origin')
+        if origin and origin != '{}://{}'.format(request.scheme, request.host):
+            raise web.HTTPForbidden(text='다른 사이트에서 보낸 관리자 요청은 허용하지 않습니다')
+
+    async def admin_settings(self, request):
+        self.require_local(request)
+        return web.json_response(dict(landed_z=(self.cfg.bt.get('coshow', {}).get('tolerances') or {}).get('landed_z')))
+
+
+
     def app(self):
         app = web.Application()
         app.router.add_get('/ws', self.websocket)
         async def visitor(request):
             return web.FileResponse(Path(__file__).resolve().parent / 'static/visitor.html')
         app.router.add_get('/visitor.html', visitor)
+        async def admin(request):
+            self.require_local(request)
+            return web.FileResponse(Path(__file__).resolve().parent / 'static/admin.html')
+        app.router.add_get('/admin.html', admin)
+        app.router.add_get('/api/admin', self.admin_settings)
         async def health(request):
-            return web.json_response(dict(milestone='M3', mock=self.mock, websocket='/ws', visitor='/visitor.html',
-                                           mode='mock' if self.mock else 'observation'))
+            return web.json_response(dict(milestone='M5', mock=self.mock, websocket='/ws', visitor='/visitor.html',
+                                           admin='/admin.html', mode='mock' if self.mock else 'operations'))
         app.router.add_get('/', health)
         app.router.add_static('/static/', Path(__file__).resolve().parent / 'static', show_index=False)
         app.on_startup.append(self.startup)
+        app.on_shutdown.append(self.shutdown)
         app.on_cleanup.append(self.cleanup)
         return app
 

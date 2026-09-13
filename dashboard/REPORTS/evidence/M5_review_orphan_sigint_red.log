@@ -1,0 +1,12 @@
+{"old_sigint_sent": true, "adopted_sigint_sent": false, "same_pid": true, "state": "ABORTED"}
+OBSERVED ['SIGINT 1', 'SIGINT 2']
+Traceback (most recent call last):
+  File "/ws/dashboard/run/review_orphan_sigint.py", line 69, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/ws/dashboard/run/review_orphan_sigint.py", line 61, in main
+    assert len(signals) == 1, 'same BT PID received a second SIGINT after backend restart'
+AssertionError: same BT PID received a second SIGINT after backend restart

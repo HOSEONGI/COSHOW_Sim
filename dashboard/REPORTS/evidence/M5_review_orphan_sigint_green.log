@@ -1,0 +1,2 @@
+{"old_sigint_sent": true, "adopted_sigint_sent": true, "same_pid": true, "state": "ABORTED"}
+OBSERVED ['SIGINT 1']

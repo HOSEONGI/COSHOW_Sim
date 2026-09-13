@@ -1,0 +1,3 @@
+'docker' 'run' '--rm' '-e' 'ROS_DOMAIN_ID=87' '-e' 'ROS_LOCALHOST_ONLY=1' '-v' '/Users/hoseon_mini/Documents/ChatGPT/'\''26 CO-SHOW DEMO/COSHOW_Sim:/ws' '-v' 'coshow_build:/ws_build' 'coshow-humble-dev' 'python3' '-m' 'pytest' 'dashboard/tests/test_ros_control.py' '-q'
+...............                                                          [100%]
+15 passed in 4.78s

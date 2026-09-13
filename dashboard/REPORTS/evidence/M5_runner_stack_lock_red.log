@@ -1,0 +1,38 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_stack_restart_and_flight_commands_cannot_overlap _____________
+
+setup = (<dashboard.runner.Runner object at 0xeba3d00509a0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...test_runner.Controls object at 0xeba3d00510c0>, [], {'preflight': <test_runner.Process object at 0xeba3d0051b70>}, ...)
+
+    def test_stack_restart_and_flight_commands_cannot_overlap(setup):
+        async def exercise():
+            runner, _, store, *_ = setup
+            store.set_stack(busy=True)
+            for current, cmd in [('IDLE', 'preflight'), ('READY', 'start')]:
+                store.set_run(state=current)
+                assert not (await runner.command(cmd))[0]
+                assert store.run['state'] == current
+            store.set_stack(busy=False)
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:426: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, _, store, *_ = setup
+        store.set_stack(busy=True)
+        for current, cmd in [('IDLE', 'preflight'), ('READY', 'start')]:
+            store.set_run(state=current)
+>           assert not (await runner.command(cmd))[0]
+E           assert not True
+
+dashboard/tests/test_runner.py:422: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_stack_restart_and_flight_commands_cannot_overlap
+1 failed, 49 deselected in 0.06s

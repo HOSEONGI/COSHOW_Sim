@@ -243,7 +243,11 @@ def _qos(channel):
 
 
 class ROSIO:
-    """Own the observation node and role-only, currently uncalled clients."""
+    """Own observation and role-only emergency control clients.
+
+    The runner owns sequence ordering and fresh-pose landing confirmation;
+    this boundary validates targets, constructs ROS requests, and bounds replies.
+    """
 
     def __init__(self, cfg, store):
         self.cfg, self.store = cfg, store
@@ -252,12 +256,15 @@ class ROSIO:
         self.service_clients, self.action_clients = {}, {}
         self.subscriptions = []
         self._stopped = threading.Event()
+        self._control_pending = {}
+        self._close_lock = asyncio.Lock()
 
     async def start(self):
         for error in self.errors:
             self.store.unavailable(None, 'interface', error)
         from rclpy.action import ActionClient
         from rclpy.executors import SingleThreadedExecutor
+        from rosidl_runtime_py.utilities import get_service
 
         if self.node is not None:
             return
@@ -281,6 +288,9 @@ class ROSIO:
                     else:
                         self.action_clients[spec['robot']] = ActionClient(
                             self.node, typename, spec['name'])
+                        self.service_clients[(spec['robot'], 'cancel')] = self.node.create_client(
+                            get_service('action_msgs/srv/CancelGoal'),
+                            spec['name'].rstrip('/') + '/_action/cancel_goal')
                 except Exception as exc:
                     self._unavailable(spec['robot'], spec['channel'], exc)
             self.node.create_timer(0.5, self._poll_graph)
@@ -330,10 +340,166 @@ class ROSIO:
                     self._unavailable(None, 'ros', exc)
                     self._stopped.wait(0.1)
 
+    def _control_warning(self, robot, channel, reason):
+        label = {'land': '착륙', 'arm': '무장 해제', 'cancel': '취소'}[channel]
+        text = '{} {} 미확인: {}'.format(robot, label, reason)
+        event = getattr(self.store, 'event', None)
+        if callable(event):
+            event('warning', text)
+        else:
+            self._unavailable(robot, channel, text)
+
+    def _control_client(self, robot, channel):
+        if self._stopped.is_set() or self.node is None:
+            self._control_warning(robot, channel, 'ROS 어댑터 종료 또는 시작 전 — 건너뜀')
+            return None
+        client = self.service_clients.get((robot, channel))
+        try:
+            if client is not None and client.service_is_ready():
+                return client
+        except Exception as exc:
+            self._control_warning(robot, channel, str(exc))
+            return None
+        self._control_warning(robot, channel, '설정된 서비스 없음 — 건너뜀')
+        return None
+
+    async def _control_call(self, robot, channel, client, request):
+        """Bridge a rclpy Future without ever spinning/blocking the asyncio loop."""
+        loop = asyncio.get_running_loop()
+        waiter = loop.create_future()
+        future = None
+
+        def deliver(value, error):
+            if not waiter.done():
+                if error is not None:
+                    waiter.set_exception(error)
+                else:
+                    waiter.set_result(value)
+
+        def complete(done):
+            # rclpy invokes this on its executor thread. Only the asyncio loop
+            # may complete its waiter; late replies after timeout are harmless.
+            try:
+                value, error = done.result(), None
+            except Exception as exc:
+                value, error = None, exc
+            try:
+                loop.call_soon_threadsafe(deliver, value, error)
+            except RuntimeError:
+                pass  # Owning asyncio loop already closed during shutdown.
+
+        try:
+            future = client.call_async(request)
+            self._control_pending[future] = (loop, waiter, client)
+            future.add_done_callback(complete)
+            response = await asyncio.wait_for(waiter, timeout=1.0)
+            if response is None:
+                self._control_warning(robot, channel, '서비스 응답 없이 종료 — 건너뜀')
+                return None
+            if channel == 'cancel' and response.return_code != response.ERROR_NONE:
+                self._control_warning(robot, channel, '취소 거부 (code={})'.format(response.return_code))
+                return False
+            return True
+        except asyncio.TimeoutError:
+            self._control_warning(robot, channel, '서비스 응답 1초 초과')
+            return False
+        except Exception as exc:
+            self._control_warning(robot, channel, str(exc))
+            return False
+        finally:
+            if future is not None:
+                self._control_pending.pop(future, None)
+                self._discard_request(client, future)
+
+    @staticmethod
+    def _discard_request(client, future):
+        if not future.done():
+            future.cancel()
+        try:
+            client.remove_pending_request(future)
+        except (KeyError, RuntimeError):
+            pass  # A response callback or node shutdown may have removed it.
+
+    async def land(self, robot, height, duration):
+        if robot not in self.cfg.drones:
+            self._control_warning(robot, 'land', '역할 드론만 제어 가능')
+            return False
+        if (not _protocol_number(height) or not _protocol_number(duration) or
+                height < 0 or height > 3.4028234663852886e38 or duration <= 0 or
+                duration >= 2147483648):
+            self._control_warning(robot, 'land', '유효하지 않은 높이 또는 지속 시간')
+            return False
+        total_ns = round(duration * 1000000000)
+        seconds, nanoseconds = divmod(total_ns, 1000000000)
+        if seconds >= 2147483648 or total_ns == 0:
+            self._control_warning(robot, 'land', 'ROS Duration 범위 초과')
+            return False
+        client = self._control_client(robot, 'land')
+        if client is None:
+            return None
+        try:
+            request = client.srv_type.Request()
+            request.group_mask = 0
+            request.height = float(height)
+            request.duration.sec, request.duration.nanosec = seconds, nanoseconds
+        except Exception as exc:
+            self._control_warning(robot, 'land', str(exc))
+            return False
+        return await self._control_call(robot, 'land', client, request)
+
+    async def arm(self, robot, armed):
+        # Arming belongs to preflight's safety checks, never the dashboard.
+        if robot not in self.cfg.drones or armed is not False:
+            self._control_warning(robot, 'arm', '역할 드론의 arm=false만 허용')
+            return False
+        client = self._control_client(robot, 'arm')
+        if client is None:
+            return None
+        try:
+            request = client.srv_type.Request()
+            request.arm = False
+        except Exception as exc:
+            self._control_warning(robot, 'arm', str(exc))
+            return False
+        return await self._control_call(robot, 'arm', client, request)
+
+    async def cancel(self, robot):
+        if robot not in self.cfg.limos:
+            self._control_warning(robot, 'cancel', '역할 지상 차량만 제어 가능')
+            return False
+        client = self._control_client(robot, 'cancel')
+        if client is None:
+            return None
+        try:
+            request = client.srv_type.Request()
+            request.goal_info.goal_id.uuid = [0] * 16
+            request.goal_info.stamp.sec = 0
+            request.goal_info.stamp.nanosec = 0
+        except Exception as exc:
+            self._control_warning(robot, 'cancel', str(exc))
+            return False
+        return await self._control_call(robot, 'cancel', client, request)
+
     async def close(self):
+        async with self._close_lock:
+            self._stopped.set()
+            for future, (loop, waiter, client) in list(self._control_pending.items()):
+                self._discard_request(client, future)
+                # close may be called after executor stop, so do not depend on
+                # its future callback running to unblock an awaiting control.
+                def finish(target=waiter):
+                    if not target.done():
+                        target.set_result(None)
+                try:
+                    loop.call_soon_threadsafe(finish)
+                except RuntimeError:
+                    pass
+            await asyncio.to_thread(self._close_ros)
+
+    def _close_ros(self):
         self._stopped.set()
         if self.thread is not None:
-            await asyncio.to_thread(self.thread.join, 2)
+            self.thread.join(2)
         if self.executor is not None:
             self.executor.shutdown(timeout_sec=1)
         for client in self.action_clients.values():

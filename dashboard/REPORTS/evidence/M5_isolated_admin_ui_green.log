@@ -1,0 +1,2 @@
+ACTUAL MOCK ready blocking OK; short press no start; 600ms hold starts exactly once; immediate estop; all LANDING controls locked [{"cmd":"preflight"},{"cmd":"start"},{"cmd":"estop"}]
+PASS admin UI: 6 role rows; no-ack after1s onlyestop; closebanner+alllocked; sticky emergency visible at event scroll; externalrequests0; errors0

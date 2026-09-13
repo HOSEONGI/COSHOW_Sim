@@ -1,0 +1,19 @@
+✔ every run state follows command table and LANDING defeats retry timeout (1.42725ms)
+✔ snapshot ack ignores history and matches only the pending command (0.222333ms)
+✔ binary forwarding strips index and ignores frames before hello (26.707ms)
+✔ initial open socket without state reconnects (hello=false) (0.3435ms)
+✔ initial open socket without state reconnects (hello=true) (0.175625ms)
+✔ newly opened reconnect gets its own state deadline despite old stale state (0.182625ms)
+✔ a state received at monotonic zero still has a watchdog deadline (0.174958ms)
+✔ hello is required again after reconnect; obsolete sockets cannot refresh it (0.18175ms)
+✔ stop closes the socket and prevents watchdog or retry work (0.119416ms)
+✔ admin loses controls immediately on close and at 1.5 seconds without state (0.168042ms)
+✔ visitor cannot send commands even on an active socket (0.13675ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.731708

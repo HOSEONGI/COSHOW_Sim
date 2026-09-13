@@ -1,0 +1,28 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_preflight_coordinate_placeholders_reject_missing_base_without_crashing __
+
+setup = (<dashboard.runner.Runner object at 0xeff56366fee0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xeff56366fe50>, <test_runner.Controls object at 0xeff56366f7f0>, [], {}, ...)
+
+    def test_preflight_coordinate_placeholders_reject_missing_base_without_crashing(setup):
+        _, cfg, *_ = setup
+        cfg.raw['commands']['preflight'] += ' -p expected_x:={expected_x}'
+        cfg.bt['coshow']['drones']['alpha']['base'] = None
+        with pytest.raises(ValueError, match='base'):
+>           command_argv(cfg, 'preflight')
+
+dashboard/tests/test_runner.py:530: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/runner.py:32: in command_argv
+    values = [bases.get(name, {}).get('base', [None, None])[index] for name in cfg.drones]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0xeff56366e0e0>
+
+>   values = [bases.get(name, {}).get('base', [None, None])[index] for name in cfg.drones]
+E   TypeError: 'NoneType' object is not subscriptable
+
+dashboard/runner.py:32: TypeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_preflight_coordinate_placeholders_reject_missing_base_without_crashing
+1 failed, 52 deselected in 0.06s

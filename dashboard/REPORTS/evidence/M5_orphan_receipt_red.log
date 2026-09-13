@@ -1,0 +1,183 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_orphan_recovery_restores_first_sigint_before_reset_without_second_signal _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-8/test_orphan_recovery_restores_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff4ff09fa6e0>
+
+    def test_orphan_recovery_restores_first_sigint_before_reset_without_second_signal(tmp_path, monkeypatch):
+        async def exercise():
+            old_runner, cfg, _, _ = real_setup(tmp_path, monkeypatch)
+            (tmp_path / 'dummy.py').write_text('''import signal, time
+    signal.signal(signal.SIGINT, lambda sig, frame: print('SIGINT', flush=True))
+    print('READY', flush=True)
+    while True:
+        time.sleep(.02)
+    ''')
+            owned = await module.spawn_process(command_argv(cfg, 'bt'), cfg.bt_cwd, {},
+                module.HERE / 'logs/bt.log', module.HERE / 'run/bt.pid')
+            await until(lambda: 'READY' in owned.log_path.read_text())
+            restarted_store = TelemetryStore(cfg)
+            restarted = Runner(cfg, restarted_store, None, restarted_store.snapshot)
+            try:
+                await old_runner._signal(owned, signal.SIGINT)
+                await until(lambda: 'SIGINT' in owned.log_path.read_text())
+                await restarted.start()
+                assert restarted.children['bt'].pid == owned.pid
+                assert restarted.children['bt'].sigint_sent is True, 'orphan lost already-sent SIGINT state'
+                assert restarted_store.run['state'] == 'ABORTED'
+                await restarted.command('reset')
+                await until(lambda: restarted_store.run['state'] == 'IDLE', timeout=5)
+                await owned.proc.wait()
+                assert owned.log_path.read_text().splitlines().count('SIGINT') == 1
+                assert not list((module.HERE / 'run').glob('*.signal.json'))
+            finally:
+                await restarted.close()
+                if owned.returncode is None:
+                    owned.proc.kill()
+                await owned.proc.wait()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:596: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+        async def exercise():
+            old_runner, cfg, _, _ = real_setup(tmp_path, monkeypatch)
+            (tmp_path / 'dummy.py').write_text('''import signal, time
+    signal.signal(signal.SIGINT, lambda sig, frame: print('SIGINT', flush=True))
+    print('READY', flush=True)
+    while True:
+        time.sleep(.02)
+    ''')
+            owned = await module.spawn_process(command_argv(cfg, 'bt'), cfg.bt_cwd, {},
+                module.HERE / 'logs/bt.log', module.HERE / 'run/bt.pid')
+            await until(lambda: 'READY' in owned.log_path.read_text())
+            restarted_store = TelemetryStore(cfg)
+            restarted = Runner(cfg, restarted_store, None, restarted_store.snapshot)
+            try:
+                await old_runner._signal(owned, signal.SIGINT)
+                await until(lambda: 'SIGINT' in owned.log_path.read_text())
+                await restarted.start()
+                assert restarted.children['bt'].pid == owned.pid
+>               assert restarted.children['bt'].sigint_sent is True, 'orphan lost already-sent SIGINT state'
+E               AssertionError: orphan lost already-sent SIGINT state
+E               assert False is True
+E                +  where False = OwnedProcess(proc=<dashboard.runner._OrphanProcess object at 0xff4ff09f9fc0>, argv=['/usr/bin/python3', '/tmp/pytest-o...h('/tmp/pytest-of-root/pytest-8/test_orphan_recovery_restores_0/dashboard/run/bt.pid'), sigint_sent=False, orphan=True).sigint_sent
+
+dashboard/tests/test_runner.py:584: AssertionError
+____ test_sigint_receipt_does_not_apply_to_different_process_identity[pid] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_does_not_a0')
+mismatch = 'pid'
+
+    @pytest.mark.parametrize('mismatch', ['pid', 'argv', 'identity'])
+    def test_sigint_receipt_does_not_apply_to_different_process_identity(tmp_path, mismatch):
+>       assert hasattr(module, '_restore_sigint'), 'persistent SIGINT receipt support missing'
+E       AssertionError: persistent SIGINT receipt support missing
+E       assert False
+E        +  where False = hasattr(module, '_restore_sigint')
+
+dashboard/tests/test_runner.py:601: AssertionError
+____ test_sigint_receipt_does_not_apply_to_different_process_identity[argv] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_does_not_a1')
+mismatch = 'argv'
+
+    @pytest.mark.parametrize('mismatch', ['pid', 'argv', 'identity'])
+    def test_sigint_receipt_does_not_apply_to_different_process_identity(tmp_path, mismatch):
+>       assert hasattr(module, '_restore_sigint'), 'persistent SIGINT receipt support missing'
+E       AssertionError: persistent SIGINT receipt support missing
+E       assert False
+E        +  where False = hasattr(module, '_restore_sigint')
+
+dashboard/tests/test_runner.py:601: AssertionError
+__ test_sigint_receipt_does_not_apply_to_different_process_identity[identity] __
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_does_not_a2')
+mismatch = 'identity'
+
+    @pytest.mark.parametrize('mismatch', ['pid', 'argv', 'identity'])
+    def test_sigint_receipt_does_not_apply_to_different_process_identity(tmp_path, mismatch):
+>       assert hasattr(module, '_restore_sigint'), 'persistent SIGINT receipt support missing'
+E       AssertionError: persistent SIGINT receipt support missing
+E       assert False
+E        +  where False = hasattr(module, '_restore_sigint')
+
+dashboard/tests/test_runner.py:601: AssertionError
+____________ test_sigint_receipt_is_durable_before_signal_delivery _____________
+
+setup = (<dashboard.runner.Runner object at 0xff4feffff820>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...bt': <test_runner.Process object at 0xff4feffff460>, 'preflight': <test_runner.Process object at 0xff4feffff4f0>}, ...)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff4feffff9a0>
+
+    def test_sigint_receipt_is_durable_before_signal_delivery(setup, monkeypatch):
+        async def exercise():
+            runner = await launch(setup)
+            child = runner.children['bt']
+            original = child.proc.send_signal
+            observed = []
+    
+            def delivered(sig):
+                if sig == signal.SIGINT:
+                    path = child.pid_path.with_suffix('.signal.json')
+                    assert path.exists(), 'SIGINT was delivered before its receipt was persisted'
+                    receipt = json.loads(path.read_text())
+                    assert receipt['pid'] == child.pid and receipt['argv'] == child.argv
+                    assert receipt['sigint_sent'] is True
+                    observed.append(True)
+                original(sig)
+    
+            monkeypatch.setattr(child.proc, 'send_signal', delivered)
+            await runner.command('estop')
+            await until(lambda: runner.store.run['state'] == 'ABORTED')
+            assert observed == [True]
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:635: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_runner.py:632: in exercise
+    await until(lambda: runner.store.run['state'] == 'ABORTED')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+predicate = <function test_sigint_receipt_is_durable_before_signal_delivery.<locals>.exercise.<locals>.<lambda> at 0xff4ff096fc70>
+timeout = 4
+
+    async def until(predicate, timeout=4):
+        deadline = time.monotonic() + timeout
+        while not predicate():
+>           assert time.monotonic() < deadline, 'timed out waiting for lifecycle transition'
+E           AssertionError: timed out waiting for lifecycle transition
+E           assert 67025.889350237 < 67025.882877062
+E            +  where 67025.889350237 = <built-in function monotonic>()
+E            +    where <built-in function monotonic> = time.monotonic
+
+dashboard/tests/test_runner.py:97: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_orphan_recovery_restores_first_sigint_before_reset_without_second_signal
+FAILED dashboard/tests/test_runner.py::test_sigint_receipt_does_not_apply_to_different_process_identity[pid]
+FAILED dashboard/tests/test_runner.py::test_sigint_receipt_does_not_apply_to_different_process_identity[argv]
+FAILED dashboard/tests/test_runner.py::test_sigint_receipt_does_not_apply_to_different_process_identity[identity]
+FAILED dashboard/tests/test_runner.py::test_sigint_receipt_is_durable_before_signal_delivery
+5 failed, 53 deselected in 6.80s
+Task exception was never retrieved
+future: <Task finished name='Task-19' coro=<Runner._sequence() done, defined at /ws/dashboard/runner.py:416> exception=AssertionError("SIGINT was delivered before its receipt was persisted\nassert False\n +  where False = <bound method Path.exists of PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json')>()\n +    where <bound method Path.exists of PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json')> = PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json').exists")>
+Traceback (most recent call last):
+  File "/ws/dashboard/runner.py", line 425, in _sequence
+    await self._signal(bt, signal.SIGINT)
+  File "/ws/dashboard/runner.py", line 376, in _signal
+    child.proc.send_signal(sig)
+  File "/ws/dashboard/tests/test_runner.py", line 623, in delivered
+    assert path.exists(), 'SIGINT was delivered before its receipt was persisted'
+AssertionError: SIGINT was delivered before its receipt was persisted
+assert False
+ +  where False = <bound method Path.exists of PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json')>()
+ +    where <bound method Path.exists of PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json')> = PosixPath('/tmp/pytest-of-root/pytest-8/test_sigint_receipt_is_durable0/dashboard/run/bt.signal.json').exists

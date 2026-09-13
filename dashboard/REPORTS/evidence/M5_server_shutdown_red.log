@@ -1,0 +1,44 @@
+docker exec -e ROS_DOMAIN_ID=90 -e ROS_LOCALHOST_ONLY=1 coshow-m4-images-test bash -lc 'source /opt/ros/humble/setup.bash && source /ws_build/install/setup.bash && cd /ws && python3 dashboard/tests/verify_m5_server_shutdown.py --scenario stubborn --regression-late-cleanup'
+SCOPE: production aiohttp web.run_app, Dashboard, Runner and ROSIO; actual local DDS; safe child commands; readiness checklist fixture; open admin WS; no hardware
+SERVER_LOG stubborn NEGATIVE CONTROL: early on_shutdown hook removed in test application only
+FIXTURE: readiness checklist only; mock=False; production Dashboard/Runner/ROSIO
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/subprocess.py", line 134, in wait
+    return await self._transport._wait()
+  File "/usr/lib/python3.10/asyncio/base_subprocess.py", line 235, in _wait
+    return await waiter
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 296, in scenario
+    await asyncio.wait_for(process.wait(), EXIT_BOUND)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 398, in <module>
+    asyncio.run(probe(arguments))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 375, in probe
+    await scenario(name, args.regression_late_cleanup)
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 298, in scenario
+    raise AssertionError('SERVER SHUTDOWN STALL: still alive after {}s with open admin WS'.format(EXIT_BOUND)) from exc
+AssertionError: SERVER SHUTDOWN STALL: still alive after 6s with open admin WS
+
+EXIT_CODE=1
+

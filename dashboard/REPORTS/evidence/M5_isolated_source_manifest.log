@@ -1,0 +1,6 @@
+M5-only staging sources; matching blobs are committed in milestone M5.
+Reproduce after checking out that commit: python3 -m pytest dashboard/tests/test_runner.py dashboard/tests/test_ros_control.py dashboard/tests/test_m5_server.py -q; node dashboard/tests/verify_m5_admin.mjs (with local mock URL/QA browser vars).
+2c688170f9603b6b21af7a05f7e9dc103de71b9551cc85c0ad545260cd5b8d93  M5_server.py
+c2fae1daf04902a8ec9f2c2d5664f7fd57649b82e4e55f51d268782aec932896  M5_admin.js
+4926939962f14ff6835571b8882b198bdb8d30383676074b4cd0233afaf28536  M5_admin.css
+a2d6e3038b839cbd3d2d38dae9928d2775b7025622af13c1c6bde5e58f36f685  M5_state.py

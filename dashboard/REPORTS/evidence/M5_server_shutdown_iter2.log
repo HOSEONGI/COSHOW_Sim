@@ -1,0 +1,26 @@
+docker exec -e ROS_DOMAIN_ID=90 -e ROS_LOCALHOST_ONLY=1 coshow-m4-images-test bash -lc 'source /opt/ros/humble/setup.bash && source /ws_build/install/setup.bash && cd /ws && python3 dashboard/tests/verify_m5_server_shutdown.py'
+SCOPE: production aiohttp web.run_app, Dashboard, Runner and ROSIO; actual local DDS; safe child commands; readiness checklist fixture; open admin WS; no hardware
+SERVER_LOG stubborn FIXTURE: readiness checklist only; mock=False; production Dashboard/Runner/ROSIO
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 400, in <module>
+    asyncio.run(probe(arguments))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 377, in probe
+    await scenario(name, args.regression_late_cleanup)
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 353, in scenario
+    print('SCENARIO', json.dumps(dict(name=name, exit_seconds=round(elapsed, 4),
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type uint8 is not JSON serializable
+
+EXIT_CODE=1
+

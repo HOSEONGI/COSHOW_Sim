@@ -1,0 +1,18 @@
+docker exec -e ROS_DOMAIN_ID=90 -e ROS_LOCALHOST_ONLY=1 coshow-m4-images-test bash -lc 'source /opt/ros/humble/setup.bash && source /ws_build/install/setup.bash && cd /ws && python3 dashboard/tests/verify_m5_server_shutdown.py'
+SCOPE: production aiohttp web.run_app, Dashboard, Runner and ROSIO; actual local DDS; safe child commands; readiness checklist fixture; open admin WS; no hardware
+SERVER_LOG stubborn FIXTURE: readiness checklist only; mock=False; production Dashboard/Runner/ROSIO
+Traceback (most recent call last):
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 398, in <module>
+    asyncio.run(probe(arguments))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 375, in probe
+    await scenario(name, args.regression_late_cleanup)
+  File "/ws/dashboard/tests/verify_m5_server_shutdown.py", line 338, in scenario
+    assert sorted(event['robot'] for event in arms) == sorted(cfg.drones)
+AssertionError
+
+EXIT_CODE=1
+
