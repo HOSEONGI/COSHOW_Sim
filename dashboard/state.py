@@ -1,5 +1,5 @@
 """Thread-safe latest telemetry, aged only using local monotonic receipt time."""
-from collections import deque
+from collections import Counter, deque
 import copy
 import math
 import os
@@ -80,10 +80,14 @@ class TelemetryStore:
     def nodes(self, value):
         with self.lock:
             self.context['nodes'] = list(value)
-            names = {('/' + ns.strip('/') + '/' + n).replace('//', '/') for n, ns in value}
+            names = Counter(('/' + ns.strip('/') + '/' + n).replace('//', '/')
+                            for n, ns in self.context['nodes'])
             for key, field in (('server', 'crazyflie_server'), ('aideck', 'aideck')):
                 target = '/' + self.cfg.raw.get('nodes', {}).get(key, '').strip('/')
-                self.stack[field] = 'external' if target in names else 'down'
+                owned = self.context.get('stack_processes', {}).get(field, {})
+                alive = bool(owned.get('alive'))
+                expected = max(int(alive), owned.get('expected_nodes', 0))
+                self.stack[field] = 'external' if names[target] > expected else ('up' if alive else 'down')
 
     def ping(self, name, value):
         self.receive(name, 'ping', value)

@@ -1,0 +1,11 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at /Users/hoseon_mini/Documents/ChatGPT/'26 CO-SHOW DEMO/COSHOW_Sim/dashboard/tests/verify_m6_admin.mjs:47:55 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v26.3.0

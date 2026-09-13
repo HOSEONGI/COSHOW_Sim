@@ -1,0 +1,37 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_concurrent_roster_saves_reject_stale_expected_hash_before_any_write ___
+
+fleet_cfg = <dashboard.config.Config object at 0xe859bc3a5a20>
+
+    def test_concurrent_roster_saves_reject_stale_expected_hash_before_any_write(fleet_cfg):
+        fleet = fleet_module()
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        original_hash = manager.generated.roster_hash
+        first, stale = dict(fleet_cfg.roster), dict(fleet_cfg.roster)
+        first[fleet_cfg.drones[0]] = fleet_cfg.raw['fleet']['drones'][6]['id']
+        stale[fleet_cfg.drones[1]] = fleet_cfg.raw['fleet']['drones'][7]['id']
+        async def exercise():
+            return await asyncio.gather(manager.save_roster(first, expected_hash=original_hash),
+                                        manager.save_roster(stale, expected_hash=original_hash),
+                                        return_exceptions=True)
+>       saved, rejected = asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+>       return await asyncio.gather(manager.save_roster(first, expected_hash=original_hash),
+                                    manager.save_roster(stale, expected_hash=original_hash),
+                                    return_exceptions=True)
+E       TypeError: FleetManager.save_roster() got an unexpected keyword argument 'expected_hash'
+
+dashboard/tests/test_fleet.py:57: TypeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_concurrent_roster_saves_reject_stale_expected_hash_before_any_write
+1 failed, 41 deselected in 0.10s

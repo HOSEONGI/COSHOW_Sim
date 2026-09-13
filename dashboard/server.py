@@ -58,6 +58,10 @@ class Dashboard:
         self.sockets, self.tasks = set(), []
         self.io, self.world = None, None
         self.runner = None
+        self.fleet = None
+        self.ping_task = None
+        self.mock_fail = mock_fail
+        self.mock_applied_hash = None
         if mock:
             from dashboard.mock import MockWorld
             self.world = MockWorld(cfg, self.store, mock_fail)
@@ -78,6 +82,12 @@ class Dashboard:
             try:
                 if self.world:
                     self.world.tick()
+                if self.fleet:
+                    if self.mock:
+                        self.store.set_stack(roster_hash=self.fleet.generated.roster_hash if self.fleet.generated else None,
+                                             applied_hash=self.mock_applied_hash)
+                    else:
+                        self.fleet.refresh()
                 state = json.dumps(self.state(), ensure_ascii=False, allow_nan=False)
                 frames, now = {}, time.monotonic()
                 period = 1 / max(.1, float(self.cfg.raw.get('frame_forward_max_fps', 15)))
@@ -159,6 +169,10 @@ class Dashboard:
             from dashboard.runner import Runner
             self.runner = Runner(self.cfg, self.store, self.io, self.state)
             await self.runner.start()
+        from dashboard.fleet import FleetManager
+        self.fleet = FleetManager(self.cfg, self.store, self.reconfigure)
+        if self.mock and self.fleet.generated:
+            self.mock_applied_hash = self.fleet.generated.roster_hash
         self.tasks.append(asyncio.create_task(self.aggregate()))
 
     async def shutdown(self, app):
@@ -166,6 +180,8 @@ class Dashboard:
         # Keep ROS, receipt aging and telemetry alive throughout the sequence.
         if self.runner:
             await self.runner.close()
+        if self.fleet:
+            await self.fleet.close()
         await asyncio.gather(*(s.ws.close() for s in tuple(self.sockets)), return_exceptions=True)
 
     async def cleanup(self, app):
@@ -188,9 +204,73 @@ class Dashboard:
 
     async def admin_settings(self, request):
         self.require_local(request)
-        return web.json_response(dict(landed_z=(self.cfg.bt.get('coshow', {}).get('tolerances') or {}).get('landed_z')))
+        return web.json_response(dict(landed_z=(self.cfg.bt.get('coshow', {}).get('tolerances') or {}).get('landed_z'),
+            fleet=self.cfg.raw.get('fleet', {}), roster=self.cfg.roster,
+            robots=self.cfg.robots, mock=self.mock,
+            roster_hash=self.fleet.generated.roster_hash if self.fleet and self.fleet.generated else None))
 
+    async def reconfigure(self, cfg):
+        if self.ping_task:
+            self.ping_task.cancel()
+            await asyncio.gather(self.ping_task, return_exceptions=True)
+            if self.ping_task in self.tasks:
+                self.tasks.remove(self.ping_task)
+        if self.io:
+            await self.io.close()
+        # Old executor/ping callbacks can finish during shutdown; clear those
+        # receipts after both are stopped so a replacement never inherits them.
+        with self.store.lock:
+            self.store.data = {name: {} for name in cfg.robots}
+            self.store.frames.clear()
+            self.store.reset_cached()
+            self.store.context['interface_errors'].clear()
+        if self.mock:
+            from dashboard.mock import MockWorld
+            self.world = MockWorld(cfg, self.store, self.mock_fail)
+        else:
+            from dashboard.ros_io import ROSIO
+            from dashboard.pinger import Pinger
+            self.io = ROSIO(cfg, self.store)
+            try:
+                await self.io.start()
+            except Exception as exc:
+                self.store.unavailable(None, 'ros', 'ROS 재설정 실패: {}'.format(exc))
+            self.runner.reconfigure()
+            self.runner.io = self.io
+            self.ping_task = asyncio.create_task(Pinger(cfg, self.store).run())
+            self.tasks.append(self.ping_task)
+        # Reconnect gives each sender a new camera-index count and hello.
+        await asyncio.gather(*(slots.ws.close() for slots in tuple(self.sockets)), return_exceptions=True)
 
+    async def fleet_action(self, request):
+        self.require_local(request)
+        if not self.fleet:
+            raise web.HTTPServiceUnavailable(text='플릿 제어 초기화 대기')
+        action = request.match_info['action']
+        try:
+            if action == 'recommend':
+                result = self.fleet.recommend_roster()
+            elif action == 'roster':
+                payload = await request.json()
+                result = await self.fleet.save_roster(payload.get('roster'), payload.get('expected_hash'))
+            elif action in ('start', 'restart'):
+                if self.mock:
+                    async with self.fleet._operation():
+                        generated = self.fleet.regenerate()
+                        if generated is None:
+                            raise ValueError(self.store.stack.get('generation_error'))
+                        self.mock_applied_hash = generated.roster_hash
+                        self.store.set_stack(applied_hash=self.mock_applied_hash)
+                        self.store.event('info', 'MOCK 스택 {} 완료'.format(action))
+                        result = self.store.snapshot()['stack']
+                else:
+                    result = await (self.fleet.start_stack() if action == 'start' else self.fleet.restart_stack())
+            else:
+                raise web.HTTPNotFound()
+        except (ValueError, TypeError, AttributeError, OSError) as exc:
+            self.store.event('warning', '플릿 요청 거부: {}'.format(exc))
+            return web.json_response(dict(ok=False, error=str(exc)), status=409)
+        return web.json_response(dict(ok=True, result=result))
 
     def app(self):
         app = web.Application()
@@ -203,6 +283,9 @@ class Dashboard:
             return web.FileResponse(Path(__file__).resolve().parent / 'static/admin.html')
         app.router.add_get('/admin.html', admin)
         app.router.add_get('/api/admin', self.admin_settings)
+        app.router.add_get('/api/fleet/{action:recommend}', self.fleet_action)
+        app.router.add_put('/api/fleet/{action:roster}', self.fleet_action)
+        app.router.add_post('/api/fleet/{action:start|restart}', self.fleet_action)
         async def health(request):
             return web.json_response(dict(milestone='M5', mock=self.mock, websocket='/ws', visitor='/visitor.html',
                                            admin='/admin.html', mode='mock' if self.mock else 'operations'))

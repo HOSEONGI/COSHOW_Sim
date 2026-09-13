@@ -1,4 +1,5 @@
 import {connect} from './ws.js';
+import {createFleetUI} from './fleet-ui.js';
 import {buttons,commandReply,landingText} from './admin-model.js';
 import {elapsed,makeNames,fixed,coordinate} from './view-model.js';
 const $=selector=>document.querySelector(selector),actions=[...document.querySelectorAll('[data-cmd]')];
@@ -73,7 +74,7 @@ function render(){
   set('#start-note',`무장된 드론 ${hello.drones.length}대가 이륙합니다`);
   const reply=commandReply(state.events||[],pending);
   if(reply){pending=null;clearTimeout(ackTimer);set('#command-response',reply.text);}
-  controls();checklist();robotRows();
+  controls();checklist();robotRows();fleetUI.update(hello,state,connected);
   const stages=state.preflight?.stages||[];
   $('#preflight-stages').replaceChildren(...['서버 준비','추정기 초기화','안전 관문','무장'].map((label,index)=>{
     const result=stages[index]?.result||'pending';return element('li',`${label} · ${statusLabels[result]||result}`,'status-'+result);
@@ -83,12 +84,12 @@ function render(){
   if(signature!==lastEvents){lastEvents=signature;$('#events').replaceChildren(...[...(state.events||[])].reverse().map(event=>{
     const row=element('li');row.dataset.level=event.level;row.append(element('time',new Date(event.t*1000).toLocaleTimeString()),element('span',event.text));return row;}));}
 }
-fetch('/api/admin').then(response=>response.ok?response.json():{}).then(value=>{settings=value;render();}).catch(()=>{});
-const connection=connect({role:'admin',onHello(value){hello=value;cameraEpoch++;cameraSizes.clear();name=makeNames(value);set('#mock-state',value.mock?'MOCK':'');render();},
+const fleetUI=createFleetUI({onSettings(value){settings=value;render();}});
+const connection=connect({role:'admin',onHello(value){hello=value;cameraEpoch++;cameraSizes.clear();name=makeNames(value);set('#mock-state',value.mock?'MOCK':'');fleetUI.load();render();},
   onFrame(index,jpeg){
     const id=hello?.drones[index],epoch=cameraEpoch;if(!id||cameraSizes.has(id))return;cameraSizes.set(id,'해상도 확인 중');
     createImageBitmap(new Blob([jpeg],{type:'image/jpeg'})).then(bitmap=>{try{if(epoch===cameraEpoch)cameraSizes.set(id,`${bitmap.width}×${bitmap.height}`);}finally{bitmap.close();}}).catch(()=>{if(epoch===cameraEpoch)cameraSizes.delete(id);});
   },
   onState(value){state=value;set('#last-received',`마지막 수신 ${new Date().toLocaleTimeString()}`);render();},
-  onConnection(value){connected=value;$('#connection-banner').hidden=value;controls();if(value&&!pending)set('#command-response','서버 연결됨');}});
+  onConnection(value){connected=value;$('#connection-banner').hidden=value;controls();fleetUI.update(hello,state,connected);if(value&&!pending)set('#command-response','서버 연결됨');}});
 window.addEventListener('pagehide',()=>{connection();cameraEpoch++;clearTimeout(ackTimer);clearTimeout(holdTimer);},{once:true});

@@ -1,0 +1,458 @@
+FFFFFFFFFFFFFFFFFFFFF                                                    [100%]
+=================================== FAILURES ===================================
+________ test_generates_three_files_with_only_template_robots_replaced _________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd495171c0>
+
+    def test_generates_three_files_with_only_template_robots_replaced(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+___________ test_camera_roles_only_and_preflight_tokens_come_from_bt ___________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49536410>
+
+    def test_camera_roles_only_and_preflight_tokens_come_from_bt(fleet_cfg):
+>       generated = fleet_module().generate_config(fleet_cfg)
+
+dashboard/tests/test_fleet.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+___ test_combined_hash_is_deterministic_and_changes_for_any_generated_input ____
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49549a50>
+
+    def test_combined_hash_is_deterministic_and_changes_for_any_generated_input(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[duplicate_role] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd4928f0a0>
+problem = 'duplicate_role'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_role] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49549b40>
+problem = 'missing_role'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[unknown_id] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49534af0>
+problem = 'unknown_id'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_uri] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd4954aa10>
+problem = 'missing_uri'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[duplicate_uri] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd4928ce20>
+problem = 'duplicate_uri'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[six_on_radio] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49516a40>
+problem = 'six_on_radio'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_camera_ip] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49516ad0>
+problem = 'missing_camera_ip'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[small_grid] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd494735b0>
+problem = 'small_grid'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+____ test_bootstrap_persists_only_enabled_template_roles_and_never_guesses _____
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49535ba0>
+
+    def test_bootstrap_persists_only_enabled_template_roles_and_never_guesses(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_ test_save_roster_is_persistent_refreshes_metadata_and_invalidates_applied_hash _
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd495543a0>
+
+    def test_save_roster_is_persistent_refreshes_metadata_and_invalidates_applied_hash(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_______ test_roster_and_stack_mutations_rejected_outside_idle[CHECKING] ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49516f50>
+state = 'CHECKING'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_________ test_roster_and_stack_mutations_rejected_outside_idle[READY] _________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49536c80>, state = 'READY'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+________ test_roster_and_stack_mutations_rejected_outside_idle[RUNNING] ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49536020>
+state = 'RUNNING'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+_________ test_roster_and_stack_mutations_rejected_outside_idle[DONE] __________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd495346d0>, state = 'DONE'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+________ test_roster_and_stack_mutations_rejected_outside_idle[LANDING] ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49531930>
+state = 'LANDING'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+________ test_roster_and_stack_mutations_rejected_outside_idle[ABORTED] ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49554f70>
+state = 'ABORTED'
+
+    @pytest.mark.parametrize('state', ['CHECKING', 'READY', 'RUNNING', 'DONE', 'LANDING', 'ABORTED'])
+    def test_roster_and_stack_mutations_rejected_outside_idle(fleet_cfg, state):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+________ test_recommendation_uses_fresh_link_and_battery_without_saving ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49549810>
+
+    def test_recommendation_uses_fresh_link_and_battery_without_saving(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:186: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+________ test_external_stack_is_recognized_and_never_restarted_or_owned ________
+
+fleet_cfg = <dashboard.config.Config object at 0xe4cd49517bb0>
+
+    def test_external_stack_is_recognized_and_never_restarted_or_owned(fleet_cfg):
+>       fleet = fleet_module()
+
+dashboard/tests/test_fleet.py:200: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fleet_module():
+>       assert importlib.util.find_spec('dashboard.fleet') is not None, 'M6 fleet backend missing'
+E       AssertionError: M6 fleet backend missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0xe4cd4a9e6a70>('dashboard.fleet')
+E        +    where <function find_spec at 0xe4cd4a9e6a70> = <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'>.find_spec
+E        +      where <module 'importlib.util' from '/usr/lib/python3.10/importlib/util.py'> = importlib.util
+
+dashboard/tests/test_fleet.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_generates_three_files_with_only_template_robots_replaced
+FAILED dashboard/tests/test_fleet.py::test_camera_roles_only_and_preflight_tokens_come_from_bt
+FAILED dashboard/tests/test_fleet.py::test_combined_hash_is_deterministic_and_changes_for_any_generated_input
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[duplicate_role]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_role]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[unknown_id]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_uri]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[duplicate_uri]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[six_on_radio]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_camera_ip]
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[small_grid]
+FAILED dashboard/tests/test_fleet.py::test_bootstrap_persists_only_enabled_template_roles_and_never_guesses
+FAILED dashboard/tests/test_fleet.py::test_save_roster_is_persistent_refreshes_metadata_and_invalidates_applied_hash
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[CHECKING]
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[READY]
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[RUNNING]
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[DONE]
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[LANDING]
+FAILED dashboard/tests/test_fleet.py::test_roster_and_stack_mutations_rejected_outside_idle[ABORTED]
+FAILED dashboard/tests/test_fleet.py::test_recommendation_uses_fresh_link_and_battery_without_saving
+FAILED dashboard/tests/test_fleet.py::test_external_stack_is_recognized_and_never_restarted_or_owned
+21 failed in 0.84s

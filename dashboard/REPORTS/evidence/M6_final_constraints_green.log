@@ -1,0 +1,11 @@
+Python: 3.10.12
+Runtime imports: aiohttp, argparse, asyncio, collections, contextlib, copy, dashboard, dataclasses, hashlib, inspect, ipaddress, json, math, os, pathlib, platform, rclpy, re, resource, rosidl_runtime_py, shlex, shutil, signal, string, sys, tempfile, threading, time, uuid, yaml
+PASS: 10 runtime files, Python 3.10 grammar, no match/union/newer stdlib
+External literal patterns: ['cf23\\w*', '/preflight(?:/|$)', '/coshow(?:/|$)', '/(?:land|arm)(?:/|$)', 'navigate_to_pose', '/aideck(?:/|$)', 'marker_detections', '\\blimo_[A-Za-z0-9_]*', '\\bspare_[A-Za-z0-9_]*']
+Internal schema-key allowlist: ['limo_area', 'limo_at', 'limo_battery_v', 'limo_ips', 'limo_status', 'limo_status_template', 'spare_area', 'spare_prefix', 'spare_unarmed']
+PASS: every Python runtime string literal tested; no external-name literal matched outside schema keys
+PASS: 9 authored JavaScript files, 655 string literals, 448 number literals
+PASS: no authored JavaScript external-name literals or hardcoded mission marker range 11..14
+2 vendor JavaScript files excluded from external-name/literal audit
+PASS: only aiohttp/PyYAML + stdlib/ROS; no socket/UDP module
+PASS: no external dependency/request syntax in static HTML/JS/CSS; vendor comment URLs are allowed

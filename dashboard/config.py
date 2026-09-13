@@ -18,7 +18,8 @@ def read_yaml(path):
 
 
 class Config:
-    def __init__(self, path=None, field_path=None, mock=False):
+    def __init__(self, path=None, field_path=None, mock=False, roster_override=None):
+        self.mock = bool(mock)
         self.path = Path(path or HERE / 'config/dashboard.yaml').expanduser().resolve()
         self.errors, self.warnings = [], []
         self.raw = self._read(self.path)
@@ -61,7 +62,7 @@ class Config:
         self.roster = {}
         self.robots = {}
         self.radio_counts = {}
-        self._inventory(mock)
+        self._inventory(mock, roster_override)
 
     def resolve(self, value):
         # Paths in dashboard.yaml are relative to dashboard/, not shell cwd.
@@ -74,13 +75,23 @@ class Config:
             self.errors.append(str(path) + ': ' + str(exc))
             return {}
 
-    def _inventory(self, mock):
+    def _inventory(self, mock, roster_override=None):
         fleet = self.raw.get('fleet', {})
         drones = fleet.get('drones', [])
-        roster_path = self.resolve(self.raw.get('roster_file', 'run/roster.yaml'))
-        if mock:
+        roster_path = None
+        if roster_override is None and not mock:
+            try:
+                value = self.raw.get('roster_file', 'run/roster.yaml')
+                if not isinstance(value, str) or not value.strip():
+                    raise ValueError('비어 있지 않은 파일 경로가 필요합니다')
+                roster_path = self.resolve(value)
+            except (OSError, TypeError, ValueError) as exc:
+                self.errors.append('roster_file: ' + str(exc))
+        if roster_override is not None:
+            self.roster = copy.deepcopy(roster_override)
+        elif mock:
             self.roster = {role: item['id'] for role, item in zip(self.drones, drones)}
-        elif roster_path.exists():
+        elif roster_path is not None and roster_path.exists():
             self.roster = self._read(roster_path)
         elif self.raw.get('crazyflies_template'):
             template = self._read(self.resolve(self.raw['crazyflies_template']))
@@ -165,5 +176,5 @@ class Config:
                     camera_min_fps=self.raw.get('camera_min_fps'))
 
 
-def load_config(path=None, field_path=None, mock=False):
-    return Config(path, field_path, mock)
+def load_config(path=None, field_path=None, mock=False, roster_override=None):
+    return Config(path, field_path, mock, roster_override)

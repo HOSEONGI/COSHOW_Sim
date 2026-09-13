@@ -1,0 +1,122 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+___ test_mock_roster_save_is_isolated_persistent_and_keeps_mock_bt_overrides ___
+
+fleet_cfg = <dashboard.config.Config object at 0xfe9412eb1e40>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_roster_save_is_isola0')
+
+    def test_mock_roster_save_is_isolated_persistent_and_keeps_mock_bt_overrides(fleet_cfg, tmp_path):
+        fleet = fleet_module()
+        bt = yaml.safe_load(fleet_cfg.bt_path.read_text())
+        bt['coshow']['preflight']['required'] = False
+        bt['bt_runner']['bt_visualiser']['enabled'] = True
+        fleet_cfg.bt_path.write_text(yaml.safe_dump(bt))
+        production_roster = fleet_cfg.resolve(fleet_cfg.raw['roster_file'])
+        production_roster.parent.mkdir(parents=True, exist_ok=True)
+        production_roster.write_text('operator-owned: preserve\n')
+        production_bytes = production_roster.read_bytes()
+        cfg = load_config(fleet_cfg.path, mock=True)
+        store = TelemetryStore(cfg)
+        isolated = tmp_path / 'isolated-mock'
+        manager = fleet.FleetManager(cfg, store, run_dir=isolated)
+>       assert manager.roster_path == isolated / 'roster.yaml'
+E       AssertionError: assert PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_roster_save_is_isola0/run/roster.yaml') == (PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_roster_save_is_isola0/isolated-mock') / 'roster.yaml')
+E        +  where PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_roster_save_is_isola0/run/roster.yaml') = <dashboard.fleet.FleetManager object at 0xfe9412eb2290>.roster_path
+
+dashboard/tests/test_fleet.py:370: AssertionError
+_ test_roster_override_is_in_memory_and_never_reads_or_writes_operator_roster __
+
+fleet_cfg = <dashboard.config.Config object at 0xfe9412b08be0>
+
+    def test_roster_override_is_in_memory_and_never_reads_or_writes_operator_roster(fleet_cfg):
+        replacement = dict(fleet_cfg.roster)
+        replacement[fleet_cfg.drones[1]] = fleet_cfg.raw['fleet']['drones'][6]['id']
+>       cfg = load_config(fleet_cfg.path, mock=True, roster_override=replacement)
+E       TypeError: load_config() got an unexpected keyword argument 'roster_override'
+
+dashboard/tests/test_fleet.py:389: TypeError
+_______________ test_mock_stack_controls_cannot_reach_real_spawn _______________
+
+fleet_cfg = <dashboard.config.Config object at 0xfe9413b453c0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_stack_controls_canno0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xfe94145740d0>
+
+    def test_mock_stack_controls_cannot_reach_real_spawn(fleet_cfg, tmp_path, monkeypatch):
+        fleet = fleet_module()
+        cfg = load_config(fleet_cfg.path, mock=True)
+        manager = fleet.FleetManager(cfg, TelemetryStore(cfg), run_dir=tmp_path / 'mock')
+        attempts = []
+    
+        async def forbidden(*args, **kwargs):
+            attempts.append(args)
+            raise AssertionError('mock reached process spawn')
+    
+        monkeypatch.setattr('dashboard.runner.spawn_process', forbidden)
+        for operation in (manager.start_stack, manager.restart_stack):
+            with pytest.raises(ValueError, match='MOCK'):
+>               asyncio.run(operation())
+
+dashboard/tests/test_fleet.py:407: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/fleet.py:350: in start_stack
+    return await self._start()
+dashboard/fleet.py:330: in _start
+    child = await spawn_process(argv, self.cfg.bt_cwd.parent,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (['ros2', 'launch', 'crazyflie', 'launch.py', 'backend:=cflib', 'mocap:=False', ...], PosixPath('/ws'), {'DISPLAY': ':...lie_server.log'), PosixPath('/tmp/pytest-of-root/pytest-11/test_mock_stack_controls_canno0/mock/crazyflie_server.pid'))
+kwargs = {}
+
+    async def forbidden(*args, **kwargs):
+        attempts.append(args)
+>       raise AssertionError('mock reached process spawn')
+E       AssertionError: mock reached process spawn
+
+dashboard/tests/test_fleet.py:402: AssertionError
+___________ test_landing_progress_has_one_current_sequence_boundary ____________
+
+setup = (<dashboard.runner.Runner object at 0xfe9412917ca0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...bt': <test_runner.Process object at 0xfe94129178b0>, 'preflight': <test_runner.Process object at 0xfe9412917a30>}, ...)
+
+    def test_landing_progress_has_one_current_sequence_boundary(setup):
+        async def exercise():
+            runner = await launch(setup)
+            runner.store.event('info', 'land 전송 4/4')
+            await runner.command('estop')
+            await runner.command('estop')
+            boundaries = [event for event in runner.store.events if event['text'] == '착륙 시퀀스 시작']
+            assert len(boundaries) == 1
+            assert runner.store.events[-1]['text'] == '착륙 시퀀스 시작'
+            await until(lambda: runner.store.run['state'] == 'ABORTED')
+            assert sum(event['text'] == '착륙 시퀀스 시작' for event in runner.store.events) == 1
+            await runner.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:650: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner = await launch(setup)
+        runner.store.event('info', 'land 전송 4/4')
+        await runner.command('estop')
+        await runner.command('estop')
+        boundaries = [event for event in runner.store.events if event['text'] == '착륙 시퀀스 시작']
+>       assert len(boundaries) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+dashboard/tests/test_runner.py:645: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_mock_roster_save_is_isolated_persistent_and_keeps_mock_bt_overrides
+FAILED dashboard/tests/test_fleet.py::test_roster_override_is_in_memory_and_never_reads_or_writes_operator_roster
+FAILED dashboard/tests/test_fleet.py::test_mock_stack_controls_cannot_reach_real_spawn
+FAILED dashboard/tests/test_runner.py::test_landing_progress_has_one_current_sequence_boundary
+4 failed, 89 deselected in 0.34s

@@ -1,0 +1,94 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_________ test_save_publishes_busy_lease_during_async_reconfiguration __________
+
+fleet_cfg = <dashboard.config.Config object at 0xf829a33ffc40>
+
+    def test_save_publishes_busy_lease_during_async_reconfiguration(fleet_cfg):
+        fleet = fleet_module()
+        store = TelemetryStore(fleet_cfg)
+        observed = []
+    
+        async def callback(cfg):
+            observed.append(store.stack.get('busy'))
+            await asyncio.sleep(0)
+    
+        manager = fleet.FleetManager(fleet_cfg, store, on_reconfigure=callback)
+        asyncio.run(manager.save_roster(fleet_cfg.roster))
+>       assert observed == [True]
+E       assert [None] == [True]
+E         At index 0 diff: None != True
+E         Full diff:
+E         - [True]
+E         + [None]
+
+dashboard/tests/test_fleet.py:228: AssertionError
+______ test_owned_stack_start_restart_preserves_own_graph_grace_and_hash _______
+
+fleet_cfg = <dashboard.config.Config object at 0xf829a2952410>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_owned_stack_start_restart0')
+
+    def test_owned_stack_start_restart_preserves_own_graph_grace_and_hash(fleet_cfg, tmp_path):
+        fleet = fleet_module()
+        store = TelemetryStore(fleet_cfg)
+        manager = fleet.FleetManager(fleet_cfg, store)
+        script = write_dummy(tmp_path)
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(script))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        fleet_cfg.raw['commands']['env'] = {'M6_TEST_ENV': 'merged'}
+    
+        async def run():
+            import json
+            try:
+                await manager.start_stack()
+                original = dict(manager.children)
+                assert store.stack['applied_hash'] == store.stack['roster_hash']
+                for kind, child in original.items():
+                    assert child.pid != __import__('os').getpgrp()
+                    assert int(child.pid_path.read_text()) == child.pid
+                    deadline = time.monotonic() + 3
+                    while not child.log_path.read_text() and time.monotonic() < deadline:
+                        await asyncio.sleep(.01)
+                    report = json.loads(child.log_path.read_text().splitlines()[0])
+                    assert report['core'] == [0, 0] and report['pgid'] == child.pid
+                    assert report['marker'] == 'merged' and report['path'] is True
+                    assert report['cwd'] == str(fleet_cfg.bt_cwd.parent)
+                # ROS nodes from our old processes can remain in DDS after SIGINT.
+                store.context['nodes'] = [(fleet_cfg.raw['nodes'][key], '/') for key in ('server', 'aideck')]
+                await manager.restart_stack()
+                assert all(manager.children[kind].pid != child.pid for kind, child in original.items())
+                assert all(child.sigint_sent and child.returncode is not None for child in original.values())
+                assert all(child.log_path.read_text().count('SIGINT') == 1 for child in original.values())
+                assert store.stack['applied_hash'] == store.stack['roster_hash']
+            finally:
+                await manager.close()
+            assert not manager.children
+            assert not list(manager.run_dir.glob('*.pid'))
+>       asyncio.run(run())
+
+dashboard/tests/test_fleet.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_fleet.py:288: in run
+    await manager.restart_stack()
+dashboard/fleet.py:357: in restart_stack
+    return await self._start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <dashboard.fleet.FleetManager object at 0xf829a272b910>
+
+    async def _start(self):
+        from dashboard.runner import spawn_process, stop_process
+        self.refresh()
+        if any(self.store.stack.get(kind) in ('up', 'external') for kind in ('crazyflie_server', 'aideck')):
+>           raise ValueError('이미 실행 중이거나 외부에서 기동한 스택이 있습니다')
+E           ValueError: 이미 실행 중이거나 외부에서 기동한 스택이 있습니다
+
+dashboard/fleet.py:311: ValueError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_save_publishes_busy_lease_during_async_reconfiguration
+FAILED dashboard/tests/test_fleet.py::test_owned_stack_start_restart_preserves_own_graph_grace_and_hash
+2 failed, 23 deselected in 0.24s

@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import yaml
+import pytest
 
 from dashboard.config import load_config
 from dashboard.state import TelemetryStore
@@ -202,6 +203,22 @@ def test_mock_accepts_absolute_namespaced_nodes():
     app.world.checking -= 7
     app.world.tick()
     assert not [r for r in app.state()['checklist'] if r['blocking'] and not r['ok']]
+
+
+@pytest.mark.parametrize('alive,expected,observed,status', [
+    (True, 1, 0, 'up'), (True, 1, 1, 'up'), (True, 1, 2, 'external'),
+    (False, 1, 1, 'down'), (False, 1, 2, 'external'),
+    (False, 0, 0, 'down'), (False, 0, 1, 'external'),
+    (True, 2, 2, 'up'), (True, 2, 3, 'external')])
+def test_graph_respects_owned_stack_and_counts_duplicate_external_nodes(alive, expected, observed, status):
+    cfg = load_config(mock=True)
+    cfg.raw['nodes']['server'] = '/isolated/server'
+    cfg.raw['nodes']['aideck'] = '/isolated/camera'
+    store = TelemetryStore(cfg)
+    store.context['stack_processes'] = {kind: dict(alive=alive, expected_nodes=expected, pid=123 if alive else None)
+                                        for kind in ('crazyflie_server', 'aideck')}
+    store.nodes([('server', '/isolated'), ('camera', '/isolated')] * observed)
+    assert store.stack['crazyflie_server'] == store.stack['aideck'] == status
 
 
 def test_unknown_fleet_radio_cannot_silently_pass_static_config(tmp_path):

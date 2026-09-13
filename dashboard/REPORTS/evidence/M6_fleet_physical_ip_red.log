@@ -1,0 +1,37 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_camera_ip] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe96e074d4700>
+problem = 'missing_camera_ip'
+
+    @pytest.mark.parametrize('problem', ['duplicate_role', 'missing_role', 'unknown_id', 'missing_uri',
+                                        'duplicate_uri', 'six_on_radio', 'missing_camera_ip', 'small_grid'])
+    def test_generation_rejects_invalid_assignment_or_unusable_inventory(fleet_cfg, problem):
+        fleet = fleet_module()
+        role = fleet_cfg.drones[0]
+        inventory = fleet_cfg.raw['fleet']['drones']
+        if problem == 'duplicate_role':
+            fleet_cfg.roster[fleet_cfg.drones[1]] = fleet_cfg.roster[role]
+        elif problem == 'missing_role':
+            fleet_cfg.roster.pop(role)
+        elif problem == 'unknown_id':
+            fleet_cfg.roster[role] = 'unknown'
+        elif problem == 'missing_uri':
+            inventory[-1]['uri'] = None
+        elif problem == 'duplicate_uri':
+            inventory[-1]['uri'] = inventory[0]['uri']
+        elif problem == 'six_on_radio':
+            for index, drone in enumerate(inventory[:6]):
+                drone['uri'] = 'radio://0/80/2M/{:010X}'.format(index + 1)
+        elif problem == 'missing_camera_ip':
+            inventory[0]['aideck_ip'] = None
+        elif problem == 'small_grid':
+            fleet_cfg.field['spare_area'] = {'x': [0, .1], 'y': [0, .1], 'pitch': .4}
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+dashboard/tests/test_fleet.py:129: Failed
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_generation_rejects_invalid_assignment_or_unusable_inventory[missing_camera_ip]
+1 failed, 24 deselected in 0.12s

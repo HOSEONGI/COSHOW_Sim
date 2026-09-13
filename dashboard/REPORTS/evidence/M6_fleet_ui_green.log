@@ -1,0 +1,21 @@
+Executed UTC: 2026-09-13T03:40:46.597105+00:00
+Working directory: /Users/hoseon_mini/Documents/ChatGPT/'26 CO-SHOW DEMO/COSHOW_Sim
+Node: v26.3.0
+$ node --test dashboard/tests/test_fleet_ui.mjs
+
+✔ fleet writes stay locked until fresh settings load, including initial state delivery (3.049542ms)
+✔ reconnect reload discards the old roster confirmation and uses the new physical assignment (1.750334ms)
+✔ an older settings response cannot overwrite a newer hello reload (0.595209ms)
+✔ failed settings refresh keeps writes locked and late events cannot submit outside IDLE (0.440375ms)
+✔ leaving IDLE closes an open review and rejects a queued confirmation event (0.857334ms)
+✔ a recommendation from before reconnect cannot replace the freshly loaded roster draft (0.50575ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.775834
+
+PROCESS EXIT 0

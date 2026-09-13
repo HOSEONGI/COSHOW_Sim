@@ -1,0 +1,658 @@
+FFFFFFFFFFFFF.FFFFF.F...F.                                               [100%]
+=================================== FAILURES ===================================
+_ test_reconfigure_reloads_current_safety_settings_and_rejects_missing_values __
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e9e9570>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e9e9780>, <test_runner.Controls object at 0xe15b5e9e9b10>, [], {}, ...)
+
+    def test_reconfigure_reloads_current_safety_settings_and_rejects_missing_values(setup):
+        runner, cfg, store, *_ = setup
+        cfg.raw['land']['height'] = .03
+        cfg.raw['freshness_s']['pose'] = .25
+        cfg.bt['coshow']['durations']['land'] = 1.5
+        cfg.bt['coshow']['tolerances']['landed_z'] = .04
+>       runner.reconfigure()
+E       AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:125: AttributeError
+_____ test_reconfigure_cannot_change_inflight_safety_thresholds[CHECKING] ______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e7f55d0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e7f4790>, <test_runner.Controls object at 0xe15b5e7f4d30>, [], {}, ...)
+state = 'CHECKING'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+_______ test_reconfigure_cannot_change_inflight_safety_thresholds[READY] _______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e6bd780>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e6bda20>, <test_runner.Controls object at 0xe15b5e6bd660>, [], {}, ...)
+state = 'READY'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+______ test_reconfigure_cannot_change_inflight_safety_thresholds[RUNNING] ______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e9ebbe0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e9eba60>, <test_runner.Controls object at 0xe15b5e9ebc70>, [], {}, ...)
+state = 'RUNNING'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+______ test_reconfigure_cannot_change_inflight_safety_thresholds[LANDING] ______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e6cdcf0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e6ce980>, <test_runner.Controls object at 0xe15b5e6ce410>, [], {}, ...)
+state = 'LANDING'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+_______ test_reconfigure_cannot_change_inflight_safety_thresholds[DONE] ________
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e6bfc40>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e6bef50>, <test_runner.Controls object at 0xe15b5e6bf490>, [], {}, ...)
+state = 'DONE'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+______ test_reconfigure_cannot_change_inflight_safety_thresholds[ABORTED] ______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e9090c0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e908e20>, <test_runner.Controls object at 0xe15b5e908d30>, [], {}, ...)
+state = 'ABORTED'
+
+    @pytest.mark.parametrize('state', [state for state in ACCEPTED if state != 'IDLE'])
+    def test_reconfigure_cannot_change_inflight_safety_thresholds(setup, state):
+        runner, cfg, store, *_ = setup
+        old_height = runner.land_height
+        cfg.raw['land']['height'] = .9
+        store.set_run(state=state)
+        with pytest.raises(ValueError, match='IDLE'):
+>           runner.reconfigure()
+E           AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:143: AttributeError
+______ test_reconfigure_requires_idle_process_and_task_state[live_child] _______
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e7f78e0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e7f7f10>, <test_runner.Controls object at 0xe15b5e7f4fa0>, [], {}, ...)
+pending = 'live_child'
+
+    @pytest.mark.parametrize('pending', ['live_child', 'launch', 'landing', 'closing'])
+    def test_reconfigure_requires_idle_process_and_task_state(setup, pending):
+        async def exercise():
+            runner, cfg, _, *_ = setup
+            cfg.raw['land']['height'] = .9
+            task = None
+            if pending == 'live_child':
+                runner.children['bt'] = SimpleNamespace(returncode=None)
+            elif pending == 'closing':
+                runner._closing = True
+            else:
+                task = asyncio.create_task(asyncio.Event().wait())
+                if pending == 'launch':
+                    runner._launches.add(task)
+                else:
+                    runner._landing_task = task
+            try:
+                with pytest.raises(ValueError):
+                    runner.reconfigure()
+                assert runner.land_height == 0
+            finally:
+                if task:
+                    task.cancel()
+                    await asyncio.gather(task, return_exceptions=True)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, cfg, _, *_ = setup
+        cfg.raw['land']['height'] = .9
+        task = None
+        if pending == 'live_child':
+            runner.children['bt'] = SimpleNamespace(returncode=None)
+        elif pending == 'closing':
+            runner._closing = True
+        else:
+            task = asyncio.create_task(asyncio.Event().wait())
+            if pending == 'launch':
+                runner._launches.add(task)
+            else:
+                runner._landing_task = task
+        try:
+            with pytest.raises(ValueError):
+>               runner.reconfigure()
+E               AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:165: AttributeError
+________ test_reconfigure_requires_idle_process_and_task_state[launch] _________
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e6bf5b0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e6bc610>, <test_runner.Controls object at 0xe15b5e6bfca0>, [], {}, ...)
+pending = 'launch'
+
+    @pytest.mark.parametrize('pending', ['live_child', 'launch', 'landing', 'closing'])
+    def test_reconfigure_requires_idle_process_and_task_state(setup, pending):
+        async def exercise():
+            runner, cfg, _, *_ = setup
+            cfg.raw['land']['height'] = .9
+            task = None
+            if pending == 'live_child':
+                runner.children['bt'] = SimpleNamespace(returncode=None)
+            elif pending == 'closing':
+                runner._closing = True
+            else:
+                task = asyncio.create_task(asyncio.Event().wait())
+                if pending == 'launch':
+                    runner._launches.add(task)
+                else:
+                    runner._landing_task = task
+            try:
+                with pytest.raises(ValueError):
+                    runner.reconfigure()
+                assert runner.land_height == 0
+            finally:
+                if task:
+                    task.cancel()
+                    await asyncio.gather(task, return_exceptions=True)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, cfg, _, *_ = setup
+        cfg.raw['land']['height'] = .9
+        task = None
+        if pending == 'live_child':
+            runner.children['bt'] = SimpleNamespace(returncode=None)
+        elif pending == 'closing':
+            runner._closing = True
+        else:
+            task = asyncio.create_task(asyncio.Event().wait())
+            if pending == 'launch':
+                runner._launches.add(task)
+            else:
+                runner._landing_task = task
+        try:
+            with pytest.raises(ValueError):
+>               runner.reconfigure()
+E               AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:165: AttributeError
+________ test_reconfigure_requires_idle_process_and_task_state[landing] ________
+
+setup = (<dashboard.runner.Runner object at 0xe15b5dfb3e80>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5dfb3e50>, <test_runner.Controls object at 0xe15b5dfb3ee0>, [], {}, ...)
+pending = 'landing'
+
+    @pytest.mark.parametrize('pending', ['live_child', 'launch', 'landing', 'closing'])
+    def test_reconfigure_requires_idle_process_and_task_state(setup, pending):
+        async def exercise():
+            runner, cfg, _, *_ = setup
+            cfg.raw['land']['height'] = .9
+            task = None
+            if pending == 'live_child':
+                runner.children['bt'] = SimpleNamespace(returncode=None)
+            elif pending == 'closing':
+                runner._closing = True
+            else:
+                task = asyncio.create_task(asyncio.Event().wait())
+                if pending == 'launch':
+                    runner._launches.add(task)
+                else:
+                    runner._landing_task = task
+            try:
+                with pytest.raises(ValueError):
+                    runner.reconfigure()
+                assert runner.land_height == 0
+            finally:
+                if task:
+                    task.cancel()
+                    await asyncio.gather(task, return_exceptions=True)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, cfg, _, *_ = setup
+        cfg.raw['land']['height'] = .9
+        task = None
+        if pending == 'live_child':
+            runner.children['bt'] = SimpleNamespace(returncode=None)
+        elif pending == 'closing':
+            runner._closing = True
+        else:
+            task = asyncio.create_task(asyncio.Event().wait())
+            if pending == 'launch':
+                runner._launches.add(task)
+            else:
+                runner._landing_task = task
+        try:
+            with pytest.raises(ValueError):
+>               runner.reconfigure()
+E               AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:165: AttributeError
+________ test_reconfigure_requires_idle_process_and_task_state[closing] ________
+
+setup = (<dashboard.runner.Runner object at 0xe15b5e9084c0>, namespace(raw={'commands': {'bt': 'python3 mission.py', 'prefligh...dashboard.state.TelemetryStore object at 0xe15b5e90ab60>, <test_runner.Controls object at 0xe15b5e90bf40>, [], {}, ...)
+pending = 'closing'
+
+    @pytest.mark.parametrize('pending', ['live_child', 'launch', 'landing', 'closing'])
+    def test_reconfigure_requires_idle_process_and_task_state(setup, pending):
+        async def exercise():
+            runner, cfg, _, *_ = setup
+            cfg.raw['land']['height'] = .9
+            task = None
+            if pending == 'live_child':
+                runner.children['bt'] = SimpleNamespace(returncode=None)
+            elif pending == 'closing':
+                runner._closing = True
+            else:
+                task = asyncio.create_task(asyncio.Event().wait())
+                if pending == 'launch':
+                    runner._launches.add(task)
+                else:
+                    runner._landing_task = task
+            try:
+                with pytest.raises(ValueError):
+                    runner.reconfigure()
+                assert runner.land_height == 0
+            finally:
+                if task:
+                    task.cancel()
+                    await asyncio.gather(task, return_exceptions=True)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_runner.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        runner, cfg, _, *_ = setup
+        cfg.raw['land']['height'] = .9
+        task = None
+        if pending == 'live_child':
+            runner.children['bt'] = SimpleNamespace(returncode=None)
+        elif pending == 'closing':
+            runner._closing = True
+        else:
+            task = asyncio.create_task(asyncio.Event().wait())
+            if pending == 'launch':
+                runner._launches.add(task)
+            else:
+                runner._landing_task = task
+        try:
+            with pytest.raises(ValueError):
+>               runner.reconfigure()
+E               AttributeError: 'Runner' object has no attribute 'reconfigure'
+
+dashboard/tests/test_runner.py:165: AttributeError
+_ test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[readonly_roster] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe15b5e6cf820>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe15b5e8a4670>
+failure = 'readonly_roster'
+
+    @pytest.mark.parametrize('failure', ['readonly_roster', 'parent_is_file', 'missing_config', 'malformed_path'])
+    def test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure(fleet_cfg, tmp_path, monkeypatch, failure):
+        fleet = fleet_module()
+        if failure == 'readonly_roster':
+            def denied(path, data):
+                raise PermissionError('operator roster is read-only')
+            monkeypatch.setattr(fleet, '_atomic_write', denied)
+        elif failure == 'parent_is_file':
+            parent = tmp_path / 'not_a_directory'
+            parent.write_text('preserve this operator file')
+            fleet_cfg.raw['roster_file'] = str(parent / 'roster.yaml')
+        elif failure == 'missing_config':
+            fleet_cfg = load_config(tmp_path / 'missing-dashboard.yaml')
+        else:
+            raw = yaml.safe_load(fleet_cfg.path.read_text())
+            raw['roster_file'] = None
+            fleet_cfg.path.write_text(yaml.safe_dump(raw))
+            fleet_cfg = load_config(fleet_cfg.path)
+        store = TelemetryStore(fleet_cfg)
+        store.set_stack(applied_hash='previously-applied')
+>       manager = fleet.FleetManager(fleet_cfg, store, run_dir=tmp_path / 'isolated-generated')
+
+dashboard/tests/test_fleet.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:203: in __init__
+    _atomic_write(self.roster_path, yaml.safe_dump(cfg.roster, sort_keys=False).encode('utf-8'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres0/run/roster.yaml')
+data = b'cf230: CF01\ncf231: CF02\ncf232: CF03\ncf233: CF04\n'
+
+    def denied(path, data):
+>       raise PermissionError('operator roster is read-only')
+E       PermissionError: operator roster is read-only
+
+dashboard/tests/test_fleet.py:138: PermissionError
+_ test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[parent_is_file] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe15b5ea18d30>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe15b5e1416f0>
+failure = 'parent_is_file'
+
+    @pytest.mark.parametrize('failure', ['readonly_roster', 'parent_is_file', 'missing_config', 'malformed_path'])
+    def test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure(fleet_cfg, tmp_path, monkeypatch, failure):
+        fleet = fleet_module()
+        if failure == 'readonly_roster':
+            def denied(path, data):
+                raise PermissionError('operator roster is read-only')
+            monkeypatch.setattr(fleet, '_atomic_write', denied)
+        elif failure == 'parent_is_file':
+            parent = tmp_path / 'not_a_directory'
+            parent.write_text('preserve this operator file')
+            fleet_cfg.raw['roster_file'] = str(parent / 'roster.yaml')
+        elif failure == 'missing_config':
+            fleet_cfg = load_config(tmp_path / 'missing-dashboard.yaml')
+        else:
+            raw = yaml.safe_load(fleet_cfg.path.read_text())
+            raw['roster_file'] = None
+            fleet_cfg.path.write_text(yaml.safe_dump(raw))
+            fleet_cfg = load_config(fleet_cfg.path)
+        store = TelemetryStore(fleet_cfg)
+        store.set_stack(applied_hash='previously-applied')
+>       manager = fleet.FleetManager(fleet_cfg, store, run_dir=tmp_path / 'isolated-generated')
+
+dashboard/tests/test_fleet.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:203: in __init__
+    _atomic_write(self.roster_path, yaml.safe_dump(cfg.roster, sort_keys=False).encode('utf-8'))
+dashboard/fleet.py:174: in _atomic_write
+    path.parent.mkdir(parents=True, exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres1/not_a_directory')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           self._accessor.mkdir(self, mode)
+E           FileExistsError: [Errno 17] File exists: '/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres1/not_a_directory'
+
+/usr/lib/python3.10/pathlib.py:1175: FileExistsError
+_ test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[malformed_path] _
+
+fleet_cfg = <dashboard.config.Config object at 0xe15b5e6ce950>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-16/test_fleet_initialization_pres3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe15b5e6bdf00>
+failure = 'malformed_path'
+
+    @pytest.mark.parametrize('failure', ['readonly_roster', 'parent_is_file', 'missing_config', 'malformed_path'])
+    def test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure(fleet_cfg, tmp_path, monkeypatch, failure):
+        fleet = fleet_module()
+        if failure == 'readonly_roster':
+            def denied(path, data):
+                raise PermissionError('operator roster is read-only')
+            monkeypatch.setattr(fleet, '_atomic_write', denied)
+        elif failure == 'parent_is_file':
+            parent = tmp_path / 'not_a_directory'
+            parent.write_text('preserve this operator file')
+            fleet_cfg.raw['roster_file'] = str(parent / 'roster.yaml')
+        elif failure == 'missing_config':
+            fleet_cfg = load_config(tmp_path / 'missing-dashboard.yaml')
+        else:
+            raw = yaml.safe_load(fleet_cfg.path.read_text())
+            raw['roster_file'] = None
+            fleet_cfg.path.write_text(yaml.safe_dump(raw))
+>           fleet_cfg = load_config(fleet_cfg.path)
+
+dashboard/tests/test_fleet.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/config.py:172: in load_config
+    return Config(path, field_path, mock, roster_override)
+dashboard/config.py:65: in __init__
+    self._inventory(mock, roster_override)
+dashboard/config.py:81: in _inventory
+    roster_path = self.resolve(self.raw.get('roster_file', 'run/roster.yaml'))
+dashboard/config.py:69: in resolve
+    return (HERE / Path(value).expanduser()).resolve()
+/usr/lib/python3.10/pathlib.py:960: in __new__
+    self = cls._from_parts(args)
+/usr/lib/python3.10/pathlib.py:594: in _from_parts
+    drv, root, parts = self._parse_args(args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'pathlib.PosixPath'>, args = (None,)
+
+    @classmethod
+    def _parse_args(cls, args):
+        # This is useful when you don't want to create an instance, just
+        # canonicalize some constructor arguments.
+        parts = []
+        for a in args:
+            if isinstance(a, PurePath):
+                parts += a._parts
+            else:
+>               a = os.fspath(a)
+E               TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+/usr/lib/python3.10/pathlib.py:578: TypeError
+_____ test_initial_roster_permission_failure_recovers_and_persists_roster ______
+
+fleet_cfg = <dashboard.config.Config object at 0xe15b5df77fd0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe15b5ea18d30>
+
+    def test_initial_roster_permission_failure_recovers_and_persists_roster(fleet_cfg, monkeypatch):
+        fleet = fleet_module()
+        original = fleet._atomic_write
+        def denied(path, data):
+            raise PermissionError('roster not writable yet')
+        monkeypatch.setattr(fleet, '_atomic_write', denied)
+        store = TelemetryStore(fleet_cfg)
+>       manager = fleet.FleetManager(fleet_cfg, store)
+
+dashboard/tests/test_fleet.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:203: in __init__
+    _atomic_write(self.roster_path, yaml.safe_dump(cfg.roster, sort_keys=False).encode('utf-8'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-16/test_initial_roster_permission0/run/roster.yaml')
+data = b'cf230: CF01\ncf231: CF02\ncf232: CF03\ncf233: CF04\n'
+
+    def denied(path, data):
+>       raise PermissionError('roster not writable yet')
+E       PermissionError: roster not writable yet
+
+dashboard/tests/test_fleet.py:169: PermissionError
+___ test_malformed_persisted_mock_roster_blocks_generation_until_valid_save ____
+
+fleet_cfg = <dashboard.config.Config object at 0xe15b5dfb0a90>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-16/test_malformed_persisted_mock_0')
+
+    def test_malformed_persisted_mock_roster_blocks_generation_until_valid_save(fleet_cfg, tmp_path):
+        fleet = fleet_module()
+        cfg = load_config(mock=True)
+        isolated = tmp_path / 'mock'
+        isolated.mkdir()
+        roster_path = isolated / 'roster.yaml'
+        roster_path.write_text('this is not a mapping')
+        store = TelemetryStore(cfg)
+        manager = fleet.FleetManager(cfg, store, run_dir=isolated)
+>       assert manager.generated is None and store.stack['generation_error']
+E       AssertionError: assert (GeneratedConfig(files={'crazyflies.generated.yaml': b'fileversion: 3\nrobots:\n  cf230:\n    enabled: true\n    uri: r...', 'expected_x:=[-1.0,-1.5,-1.5,-1.5]', '-p', 'expected_y:=[0.0,1.5,0.0,-1.5]'], radio_counts={'0': 4, '1': 4, '2': 2}) is None)
+E        +  where GeneratedConfig(files={'crazyflies.generated.yaml': b'fileversion: 3\nrobots:\n  cf230:\n    enabled: true\n    uri: r...', 'expected_x:=[-1.0,-1.5,-1.5,-1.5]', '-p', 'expected_y:=[0.0,1.5,0.0,-1.5]'], radio_counts={'0': 4, '1': 4, '2': 2}) = <dashboard.fleet.FleetManager object at 0xe15b5dfb1ba0>.generated
+
+dashboard/tests/test_fleet.py:190: AssertionError
+_ test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-1-0-up] _
+
+alive = True, expected = 1, observed = 0, status = 'up'
+
+    @pytest.mark.parametrize('alive,expected,observed,status', [
+        (True, 1, 0, 'up'), (True, 1, 1, 'up'), (True, 1, 2, 'external'),
+        (False, 1, 1, 'down'), (False, 1, 2, 'external'),
+        (False, 0, 0, 'down'), (False, 0, 1, 'external'),
+        (True, 2, 2, 'up'), (True, 2, 3, 'external')])
+    def test_graph_respects_owned_stack_and_counts_duplicate_external_nodes(alive, expected, observed, status):
+        cfg = load_config(mock=True)
+        cfg.raw['nodes']['server'] = '/isolated/server'
+        cfg.raw['nodes']['aideck'] = '/isolated/camera'
+        store = TelemetryStore(cfg)
+        store.context['stack_processes'] = {kind: dict(alive=alive, expected_nodes=expected, pid=123 if alive else None)
+                                            for kind in ('crazyflie_server', 'aideck')}
+        store.nodes([('server', '/isolated'), ('camera', '/isolated')] * observed)
+>       assert store.stack['crazyflie_server'] == store.stack['aideck'] == status
+E       AssertionError: assert 'down' == 'up'
+E         - up
+E         + down
+
+dashboard/tests/test_core.py:221: AssertionError
+_ test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-1-1-up] _
+
+alive = True, expected = 1, observed = 1, status = 'up'
+
+    @pytest.mark.parametrize('alive,expected,observed,status', [
+        (True, 1, 0, 'up'), (True, 1, 1, 'up'), (True, 1, 2, 'external'),
+        (False, 1, 1, 'down'), (False, 1, 2, 'external'),
+        (False, 0, 0, 'down'), (False, 0, 1, 'external'),
+        (True, 2, 2, 'up'), (True, 2, 3, 'external')])
+    def test_graph_respects_owned_stack_and_counts_duplicate_external_nodes(alive, expected, observed, status):
+        cfg = load_config(mock=True)
+        cfg.raw['nodes']['server'] = '/isolated/server'
+        cfg.raw['nodes']['aideck'] = '/isolated/camera'
+        store = TelemetryStore(cfg)
+        store.context['stack_processes'] = {kind: dict(alive=alive, expected_nodes=expected, pid=123 if alive else None)
+                                            for kind in ('crazyflie_server', 'aideck')}
+        store.nodes([('server', '/isolated'), ('camera', '/isolated')] * observed)
+>       assert store.stack['crazyflie_server'] == store.stack['aideck'] == status
+E       AssertionError: assert 'external' == 'up'
+E         - up
+E         + external
+
+dashboard/tests/test_core.py:221: AssertionError
+_ test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[False-1-1-down] _
+
+alive = False, expected = 1, observed = 1, status = 'down'
+
+    @pytest.mark.parametrize('alive,expected,observed,status', [
+        (True, 1, 0, 'up'), (True, 1, 1, 'up'), (True, 1, 2, 'external'),
+        (False, 1, 1, 'down'), (False, 1, 2, 'external'),
+        (False, 0, 0, 'down'), (False, 0, 1, 'external'),
+        (True, 2, 2, 'up'), (True, 2, 3, 'external')])
+    def test_graph_respects_owned_stack_and_counts_duplicate_external_nodes(alive, expected, observed, status):
+        cfg = load_config(mock=True)
+        cfg.raw['nodes']['server'] = '/isolated/server'
+        cfg.raw['nodes']['aideck'] = '/isolated/camera'
+        store = TelemetryStore(cfg)
+        store.context['stack_processes'] = {kind: dict(alive=alive, expected_nodes=expected, pid=123 if alive else None)
+                                            for kind in ('crazyflie_server', 'aideck')}
+        store.nodes([('server', '/isolated'), ('camera', '/isolated')] * observed)
+>       assert store.stack['crazyflie_server'] == store.stack['aideck'] == status
+E       AssertionError: assert 'external' == 'down'
+E         - down
+E         + external
+
+dashboard/tests/test_core.py:221: AssertionError
+_ test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-2-2-up] _
+
+alive = True, expected = 2, observed = 2, status = 'up'
+
+    @pytest.mark.parametrize('alive,expected,observed,status', [
+        (True, 1, 0, 'up'), (True, 1, 1, 'up'), (True, 1, 2, 'external'),
+        (False, 1, 1, 'down'), (False, 1, 2, 'external'),
+        (False, 0, 0, 'down'), (False, 0, 1, 'external'),
+        (True, 2, 2, 'up'), (True, 2, 3, 'external')])
+    def test_graph_respects_owned_stack_and_counts_duplicate_external_nodes(alive, expected, observed, status):
+        cfg = load_config(mock=True)
+        cfg.raw['nodes']['server'] = '/isolated/server'
+        cfg.raw['nodes']['aideck'] = '/isolated/camera'
+        store = TelemetryStore(cfg)
+        store.context['stack_processes'] = {kind: dict(alive=alive, expected_nodes=expected, pid=123 if alive else None)
+                                            for kind in ('crazyflie_server', 'aideck')}
+        store.nodes([('server', '/isolated'), ('camera', '/isolated')] * observed)
+>       assert store.stack['crazyflie_server'] == store.stack['aideck'] == status
+E       AssertionError: assert 'external' == 'up'
+E         - up
+E         + external
+
+dashboard/tests/test_core.py:221: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_runner.py::test_reconfigure_reloads_current_safety_settings_and_rejects_missing_values
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[CHECKING]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[READY]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[RUNNING]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[LANDING]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[DONE]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_cannot_change_inflight_safety_thresholds[ABORTED]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_requires_idle_process_and_task_state[live_child]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_requires_idle_process_and_task_state[launch]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_requires_idle_process_and_task_state[landing]
+FAILED dashboard/tests/test_runner.py::test_reconfigure_requires_idle_process_and_task_state[closing]
+FAILED dashboard/tests/test_fleet.py::test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[readonly_roster]
+FAILED dashboard/tests/test_fleet.py::test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[parent_is_file]
+FAILED dashboard/tests/test_fleet.py::test_fleet_initialization_preserves_degraded_state_on_configuration_io_failure[malformed_path]
+FAILED dashboard/tests/test_fleet.py::test_initial_roster_permission_failure_recovers_and_persists_roster
+FAILED dashboard/tests/test_fleet.py::test_malformed_persisted_mock_roster_blocks_generation_until_valid_save
+FAILED dashboard/tests/test_core.py::test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-1-0-up]
+FAILED dashboard/tests/test_core.py::test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-1-1-up]
+FAILED dashboard/tests/test_core.py::test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[False-1-1-down]
+FAILED dashboard/tests/test_core.py::test_graph_respects_owned_stack_and_counts_duplicate_external_nodes[True-2-2-up]
+20 failed, 6 passed, 105 deselected in 0.62s
