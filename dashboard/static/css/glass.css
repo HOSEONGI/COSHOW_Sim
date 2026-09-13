@@ -100,7 +100,8 @@ h1,h2,h3 {font-weight:500; font-size:var(--t-title); line-height:1.2;}
 .robot-panel[data-kind="limo"] .robot-values dd {font-size:var(--t-value); margin-top:0;}
 [data-mode="idle"] .robot-values dd,[data-mode="waiting"] .robot-values dd,[data-mode="offline"] .robot-values dd {color:var(--ink-3);}
 [data-mode="idle"] .mission dd,[data-mode="waiting"] .mission dd,[data-mode="offline"] .mission dd {color:var(--ink-3);}
-html[data-fx="low"] .glass {backdrop-filter:none; background:rgba(14,21,48,.78);}
+html[data-fx="low"] .glass {backdrop-filter:none; background:rgba(255,255,255,.08);}
+html[data-fx="low"] .narrative,html[data-fx="low"] .idle-intro {background:rgba(14,21,48,.78);}
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after {animation:none !important; transition:none !important; scroll-behavior:auto !important;}
 }

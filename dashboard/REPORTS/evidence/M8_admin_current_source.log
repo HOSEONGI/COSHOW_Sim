@@ -1,0 +1,9 @@
+CURRENT_SOURCE static/js/admin.js a223e72f9339b85ba3bd17609e953ab9d718a1e2fcddb5530f09b9f87a249cf6
+CURRENT_SOURCE static/js/admin-model.js 31986cffe530528e53534d31937724953e7df71b605c361fdae573286ab7a4eb
+CURRENT_SOURCE static/js/fleet-ui.js eede788031efd1b8aaa5e713a6cd35e2a94ac2e2e62a0919ea4d9e73f905e6a7
+CURRENT_SOURCE static/js/ws.js 0bc4f813711c47400f08e8c4e3de67fd319cb797e4972909162231acc5a6e6e4
+CURRENT_SOURCE static/css/admin.css 0a70791cfdadbb61e4099ce670eafb3bb4daadbdc6ba5ac818c911e58198026f
+CURRENT_SOURCE static/admin.html a07f4e9e5bd214be7120ac34e67eda75d12e9cb4294d4338dc911a3da4035ed2
+ACTUAL MOCK ready blocking OK; short press no start; 600ms hold starts exactly once; immediate estop; all LANDING controls locked [{"cmd":"preflight"},{"cmd":"start"},{"cmd":"estop"}]
+DISCONNECTED_BOUNDS {"banner":{"x":0,"y":0,"width":1600,"height":44},"bar":{"x":20,"y":44,"width":1560,"height":119.59375},"emergency":{"x":1492.359375,"y":50,"width":87.640625,"height":46}}
+PASS current-source admin UI: 6 role rows; no-ack after1s onlyestop; disconnect clears retry and locks controls; sticky emergency below banner at event scroll; externalrequests0; errors0; M8 READY/RUNNING/LANDING screenshots

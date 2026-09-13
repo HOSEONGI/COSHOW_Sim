@@ -1,0 +1,23 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+______________ test_check_config_reports_spare_exclusion_warning _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xeffa8399f5b0>
+capsys = <_pytest.capture.CaptureFixture object at 0xeffa8399f520>
+
+    def test_check_config_reports_spare_exclusion_warning(monkeypatch, capsys):
+        cfg = load_config(mock=True)
+        spare = next(row for row in cfg.raw['fleet']['drones'] if row['id'] not in cfg.roster.values())
+        spare['uri'] = None
+        monkeypatch.setattr(server, 'load_config', lambda *a, **kw: cfg)
+        monkeypatch.setattr(ros_io, 'check_config', lambda *a: [])
+        monkeypatch.setattr(sys, 'argv', ['server.py', '--check-config'])
+        assert server.main() == 0
+        output = capsys.readouterr().out
+>       assert '스페어 생성에서 제외' in output and spare['id'] in output
+E       AssertionError: assert ('스페어 생성에서 제외' in 'ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False\nPASS\tgeneration\t08f28436a2b31a105d03e6b91a0c56f3a7f01e5fb1a35857aa03948139635795\t3 files\n')
+
+dashboard/tests/test_m8_config_check.py:36: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m8_config_check.py::test_check_config_reports_spare_exclusion_warning
+1 failed, 2 passed in 0.09s

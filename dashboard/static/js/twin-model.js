@@ -96,11 +96,12 @@ export class PoseTrack {
 
 export function robotAppearance(hello,id,row,state,view,elapsed=0) {
   const threshold=hello.freshness_s?.[row.kind==='limo'?'odom':'pose']??1;
-  const fresh=Boolean(valid(row.pose)&&Number.isFinite(row.pose_age)&&row.pose_age+elapsed<=threshold && !['offline','waiting'].includes(view.mode));
+  const fresh=Boolean(valid(row.pose)&&Number.isFinite(row.pose_age)&&row.pose_age+elapsed<=threshold);
+  const visible=fresh&&view.mode!=='offline';
   const allowed=view.mode==='active'&&!['LANDING','ABORTED'].includes(state?.run?.state);
   const missionFresh=state?.run?.state==='DONE'||(Number.isFinite(state?.mission?.age)&&state.mission.age+elapsed<=3);
   const signal=allowed&&fresh&&missionFresh?state?.mission?.led?.[id]:'off';
-  return {fresh,opacity:fresh?(row.role==null?.5:1):.28,stem:fresh&&row.kind==='drone',
+  return {fresh,opacity:visible?(row.role==null?.5:1):.28,stem:visible&&row.kind==='drone',
     signal:['blue','red','green'].includes(signal)?signal:'off'};
 }
 

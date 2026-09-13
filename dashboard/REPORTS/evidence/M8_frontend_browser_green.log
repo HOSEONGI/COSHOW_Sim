@@ -1,0 +1,10 @@
+PASS B6 only warning spare checklist rows are visible below failures
+PASS B6 role table remains six rows and full inventory stays collapsed
+PASS C4 disconnect replaces stale ACK retry with unavailable message
+PASS C3 scrolled disconnect banner never covers emergency control
+C3 BOUNDS {"banner":{"top":0,"bottom":44,"left":0,"right":1600},"control":{"top":44,"bottom":163.59375,"left":20,"right":1580},"emergency":{"top":50,"bottom":96,"left":1492.359375,"right":1580},"height":1050,"scroll":468}
+PASS C4 pending ACK timer cannot overwrite disconnect after one second
+PASS C4 reconnect discards pending command and unlocks normal controls
+PASS C1 low effects retains distinct panel surfaces and opaque narrative
+C1 SURFACES [{"className":"narrative glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"idle-intro glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"mission glass glass-strong","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(255, 255, 255, 0.08)","backdrop":"none"}]
+PASS no external requests or browser errors

@@ -1,0 +1,2 @@
+HTTP {"idle_stop":200,"ready_stop_rejected":409,"ready_roster_rejected":409,"missing_expected_hash":409,"restore":200,"restart":200}
+PASS M8 actualmock fleet: explicit IDLE stop -> both down/applied_hash null -> start restores matching stack; six default role rows, ordinary spare check groups hidden, collapsed14 inventory, draft unsaved, review dialog, save/reconnect/physicalreplacement, hash blocks, restart matches, READY stop+roster UI/HTTP reject, missing expected_hash 409, originalmockroster restored; pageerrors0 external0

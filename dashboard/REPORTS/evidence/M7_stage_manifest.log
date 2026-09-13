@@ -7,3 +7,12 @@ FULL_ARTIFACT dashboard/logs/M7_stage_full.jsonl 33260161 f35d640d0e845f9a8da2dc
 FULL_ARTIFACT dashboard/logs/M7_poses_full.csv 1468508 5c1a6428571ebf828538e63f8518351dfa7d77ba7e9c9255e167951117c4b364
 FULL_ARTIFACT dashboard/logs/M7_probe_stdout.log 27931 e30cc0f3bc46ee28e9f8ff1b531d5b6c2a37abf4a83c82c3e69197e8c5d45539
 PASS complete eight-phase mock sequence; every recorded state contains full protocol payload
+
+M8 D3 CORRECTION: dashboard/logs/ is gitignored; FULL_ARTIFACT paths above were local retained files, not repository-contained files.
+ORIGINAL_TO_RETAINED /home/coshow/COSHOW/dashboard/logs/m7_stage_final.jsonl -> dashboard/logs/M7_stage_full.jsonl
+ORIGINAL_TO_RETAINED /home/coshow/COSHOW/dashboard/logs/m7_poses_final.csv -> dashboard/logs/M7_poses_full.csv
+ORIGINAL_TO_RETAINED /home/coshow/COSHOW/dashboard/logs/m7_probe_stdout.log -> dashboard/logs/M7_probe_stdout.log -> evidence/M7_stage_probe.log (command header prepended)
+M7_stage_analysis.log names the original container m7_stage_final.jsonl; this is the same byte sequence as M7_stage_full.jsonl.
+TRACKED_FULL_COPY evidence/M7_stage_full.jsonl.gz (gzip decompress SHA256 f35d640d0e845f9a8da2dc1523c3f7e99161293f86f50ed3fd0e2dc2218d1091)
+TRACKED_FULL_COPY evidence/M7_poses_full.csv.gz (gzip decompress SHA256 5c1a6428571ebf828538e63f8518351dfa7d77ba7e9c9255e167951117c4b364)
+ARCHIVE_VERIFICATION evidence/M8_install_archive.log and evidence/M8_install_manifest.log

@@ -1,0 +1,17 @@
+✔ fleet writes stay locked until fresh settings load, including initial state delivery (3.026083ms)
+✔ explicit stack stop requires fresh settings, IDLE, connection and no active fleet operation (0.640208ms)
+✔ explicit stack stop posts once, blocks concurrent actions, then allows a new start from received down state (0.618584ms)
+✔ an external stack cannot be stopped from the UI or a queued click handler (0.429792ms)
+✔ reconnect reload discards the old roster confirmation and uses the new physical assignment (1.73875ms)
+✔ an older settings response cannot overwrite a newer hello reload (0.345917ms)
+✔ failed settings refresh keeps writes locked and late events cannot submit outside IDLE (0.309708ms)
+✔ leaving IDLE closes an open review and rejects a queued confirmation event (0.212916ms)
+✔ a recommendation from before reconnect cannot replace the freshly loaded roster draft (0.498458ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.899042

@@ -1,0 +1,1 @@
+FAIL clone path: setup_env.sh requires ~/COSHOW (/home/coshow/COSHOW); current clone is /source. Use the existing clone at ~/COSHOW.

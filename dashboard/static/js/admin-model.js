@@ -1,5 +1,14 @@
 const acceptance={IDLE:['preflight','reset'],CHECKING:['estop','reset'],READY:['start','estop','reset'],
   RUNNING:['estop','reset'],LANDING:[],DONE:['estop','reset'],ABORTED:['reset']};
+export function checklistRows(state) {
+  const rows=[],spareWarnings=[];
+  for(const row of state.checklist||[]) {
+    const robot=state.robots?.[row.group];
+    if(robot&&robot.role==null) {if(row.status==='warning')spareWarnings.push(row);}
+    else rows.push(row);
+  }
+  return {rows,spareWarnings};
+}
 export function buttons(state,connected,pending) {
   return Object.fromEntries(['preflight','start','estop','reset'].map(cmd=>[cmd,Boolean(connected &&
     acceptance[state?.run?.state]?.includes(cmd) && (!pending || cmd==='estop'&&pending.elapsed>=1000) &&

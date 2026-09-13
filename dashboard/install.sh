@@ -8,6 +8,11 @@ if [[ $EUID -eq 0 ]]; then
   printf 'FAIL user: run bash dashboard/install.sh as the desktop user, without sudo.\n' >&2
   exit 2
 fi
+EXPECTED_PROJECT_DIR="$(realpath -m "$HOME/COSHOW")"
+if [[ "$(realpath "$PROJECT_DIR")" != "$EXPECTED_PROJECT_DIR" ]]; then
+  printf 'FAIL clone path: setup_env.sh requires ~/COSHOW (%s); current clone is %s. Use the existing clone at ~/COSHOW.\n' "$EXPECTED_PROJECT_DIR" "$PROJECT_DIR" >&2
+  exit 2
+fi
 if [[ ! -f /opt/ros/humble/setup.bash || ! -f "$PROJECT_DIR/setup_env.sh" ]]; then
   printf 'FAIL environment: existing ROS Humble and project setup_env.sh are required.\n' >&2
   exit 2

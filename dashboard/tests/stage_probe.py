@@ -7,6 +7,7 @@ This tool never sends commands. --record saves every hello/state as JSONL;
 import argparse
 import asyncio
 from collections import Counter, deque
+from contextlib import contextmanager
 import csv
 from datetime import datetime, timezone
 import json
@@ -153,6 +154,44 @@ async def collect(url, recorder, seconds=0, interval=5, emit=print):
             emit(recorder.table())
 
 
+@contextmanager
+def open_recordings(record=None, poses=None, emit=print):
+    """Reserve both outputs before announcing them; preserve previous evidence."""
+    tag = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+    logs = Path(__file__).resolve().parents[1] / 'logs'
+    streams, created = [], []
+    committed = False
+    try:
+        for value, suffix in ((record, '.jsonl'), (poses, '_poses.csv')):
+            if value is None:
+                streams.append(None)
+                continue
+            requested = Path(value) if value else logs / ('stage_' + tag + suffix)
+            requested.parent.mkdir(parents=True, exist_ok=True)
+            candidate, counter = requested, 0
+            while True:
+                try:
+                    stream = candidate.open('x', encoding='utf-8', newline='')
+                    break
+                except FileExistsError:
+                    counter += 1
+                    candidate = requested.with_name('{}{}_{}{}'.format(
+                        requested.stem, '_' + tag, counter, requested.suffix))
+            streams.append(stream)
+            created.append(candidate)
+        committed = True
+        for path in created:
+            emit('OUTPUT ' + str(path.resolve()))
+        yield tuple(streams)
+    finally:
+        for stream in streams:
+            if stream is not None:
+                stream.close()
+        if not committed:
+            for path in created:
+                path.unlink(missing_ok=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--url', default='http://127.0.0.1:8080')
@@ -163,28 +202,16 @@ def main():
     args = parser.parse_args()
     if not math.isfinite(args.seconds) or args.seconds < 0:
         parser.error('--seconds must be finite and nonnegative')
-    tag = datetime.now().strftime('%Y%m%d_%H%M%S')
-    logs = Path(__file__).resolve().parents[1] / 'logs'
-    streams = []
-    def open_output(value, suffix):
-        if value is None:
-            return None
-        path = Path(value) if value else logs / ('stage_' + tag + suffix)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        # Refuse to silently overwrite a previous rehearsal's evidence.
-        stream = path.open('x', encoding='utf-8', newline='')
-        streams.append(stream)
-        print('OUTPUT', path.resolve(), flush=True)
-        return stream
     try:
-        recorder = ProbeRecorder(open_output(args.record, '.jsonl'), open_output(args.dump_poses, '_poses.csv'), args.fleet)
-        asyncio.run(collect(args.url, recorder, seconds=args.seconds,
-                            emit=lambda value: print(value, flush=True)))
+        with open_recordings(args.record, args.dump_poses,
+                             emit=lambda value: print(value, flush=True)) as (record, poses):
+            recorder = ProbeRecorder(record, poses, args.fleet)
+            asyncio.run(collect(args.url, recorder, seconds=args.seconds,
+                                emit=lambda value: print(value, flush=True)))
     except KeyboardInterrupt:
         print('Stopped read-only recording.', flush=True)
-    finally:
-        for stream in streams:
-            stream.close()
+    except OSError as exc:
+        parser.exit(2, 'Cannot use recording outputs: {}\n'.format(exc))
 
 
 if __name__ == '__main__':

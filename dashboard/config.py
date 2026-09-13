@@ -97,7 +97,7 @@ class Config:
             template = self._read(self.resolve(self.raw['crazyflies_template']))
             by_uri = {d.get('uri'): d['id'] for d in drones if d.get('uri')}
             self.roster = {name: by_uri[r['uri']] for name, r in template.get('robots', {}).items()
-                           if name in self.drones and r.get('enabled') is True and r.get('uri') in by_uri}
+                           if name in self.drones and r.get('uri') in by_uri}
         drone_ids = [d['id'] for d in drones]
         if len(drone_ids) != len(set(drone_ids)):
             self.errors.append('fleet.drones id 중복')
@@ -123,7 +123,8 @@ class Config:
                 radio = uri.split('/')[2]
                 self.radio_counts[radio] = self.radio_counts.get(radio, 0) + 1
             else:
-                (self.errors if role or uri is not None else self.warnings).append(
+                (self.errors if role or not (uri is None or isinstance(uri, str) and not uri.strip())
+                 else self.warnings).append(
                     'fleet ' + item['id'] + ': radio URI 미설정 또는 형식 오류')
             if not self.robots[name]['ip']:
                 (self.errors if role else self.warnings).append('fleet ' + item['id'] + ': AI Deck IP 미설정')

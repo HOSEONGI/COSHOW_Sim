@@ -1,0 +1,70 @@
+FFF.                                                                     [100%]
+=================================== FAILURES ===================================
+_______________ test_empty_spare_uri_is_a_warning_and_excluded[] _______________
+
+fleet_cfg = <dashboard.config.Config object at 0xe42b3f7ef9d0>, empty = ''
+
+    @pytest.mark.parametrize('empty', ['', '   '])
+    def test_empty_spare_uri_is_a_warning_and_excluded(fleet_cfg, empty):
+        fleet_cfg.raw['fleet']['drones'][-1]['uri'] = empty
+>       generated = fleet_module().generate_config(fleet_cfg)
+
+dashboard/tests/test_fleet.py:748: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:161: in generate_config
+    radio = _radio(uri, physical)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+uri = '', label = 'CF10'
+
+    def _radio(uri, label):
+        if not isinstance(uri, str):
+            raise ValueError(label + ': radio URI 미설정 또는 형식 오류')
+        match = re.fullmatch(r'radio://(\d+)/(\d+)/(250K|1M|2M)/([0-9A-Fa-f]{10})', uri or '')
+        if not match or not 0 <= int(match.group(2)) <= 125:
+>           raise ValueError(label + ': radio URI 미설정 또는 형식 오류')
+E           ValueError: CF10: radio URI 미설정 또는 형식 오류
+
+dashboard/fleet.py:57: ValueError
+_____________ test_empty_spare_uri_is_a_warning_and_excluded[   ] ______________
+
+fleet_cfg = <dashboard.config.Config object at 0xe42b3fd569b0>, empty = '   '
+
+    @pytest.mark.parametrize('empty', ['', '   '])
+    def test_empty_spare_uri_is_a_warning_and_excluded(fleet_cfg, empty):
+        fleet_cfg.raw['fleet']['drones'][-1]['uri'] = empty
+>       generated = fleet_module().generate_config(fleet_cfg)
+
+dashboard/tests/test_fleet.py:748: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:161: in generate_config
+    radio = _radio(uri, physical)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+uri = '   ', label = 'CF10'
+
+    def _radio(uri, label):
+        if not isinstance(uri, str):
+            raise ValueError(label + ': radio URI 미설정 또는 형식 오류')
+        match = re.fullmatch(r'radio://(\d+)/(\d+)/(250K|1M|2M)/([0-9A-Fa-f]{10})', uri or '')
+        if not match or not 0 <= int(match.group(2)) <= 125:
+>           raise ValueError(label + ': radio URI 미설정 또는 형식 오류')
+E           ValueError: CF10: radio URI 미설정 또는 형식 오류
+
+dashboard/fleet.py:57: ValueError
+____________ test_missing_fallback_type_has_no_code_literal_default ____________
+
+fleet_cfg = <dashboard.config.Config object at 0xe42b4142c160>
+
+    def test_missing_fallback_type_has_no_code_literal_default(fleet_cfg):
+        fleet_cfg.raw['fleet'].pop('robot_type')
+        fleet_cfg.raw.pop('robot_type', None)
+>       with pytest.raises(ValueError, match='robot_type'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+dashboard/tests/test_fleet.py:756: Failed
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_empty_spare_uri_is_a_warning_and_excluded[]
+FAILED dashboard/tests/test_fleet.py::test_empty_spare_uri_is_a_warning_and_excluded[   ]
+FAILED dashboard/tests/test_fleet.py::test_missing_fallback_type_has_no_code_literal_default
+3 failed, 1 passed, 57 deselected in 0.23s

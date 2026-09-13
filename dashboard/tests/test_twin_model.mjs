@@ -94,6 +94,15 @@ test('freshness ages between packets, removes altitude stems, and suppresses sta
   assert.equal(stale.fresh,false);assert.equal(stale.stem,false);assert.equal(stale.signal,'off');
   assert.ok(stale.opacity<.5);
 });
+test('waiting for mission data preserves fresh pose opacity and altitude stems independently of connection loss',()=>{
+  for(const mission of [null,{age:3.5,led:{finder:'red'}}]) {
+    const waiting=robotAppearance(hello,'finder',row,{...state,mission},{...active,mode:'waiting'},0);
+    assert.deepEqual(waiting,{fresh:true,opacity:1,stem:true,signal:'off'});
+    const offline=robotAppearance(hello,'finder',row,{...state,mission},{...active,mode:'offline'},0);
+    assert.equal(offline.fresh,true,'pose freshness remains independent from connection state');
+    assert.equal(offline.opacity,.28);assert.equal(offline.stem,false);assert.equal(offline.signal,'off');
+  }
+});
 test('run and connection priority ignore mission LEDs while DONE can retain the last mission',()=>{
   for(const mode of ['idle','offline','waiting','paused']) assert.equal(robotAppearance(hello,'finder',row,state,{...active,mode},0).signal,'off');
   for(const run of ['LANDING','ABORTED']) assert.equal(robotAppearance(hello,'finder',row,{...state,run:{state:run}},active,0).signal,'off');

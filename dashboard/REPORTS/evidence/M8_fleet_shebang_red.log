@@ -1,0 +1,56 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_stack_recovery_handles_ros2_style_shebang_executables __________
+
+fleet_cfg = <dashboard.config.Config object at 0xe3c04f289720>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-32/test_stack_recovery_handles_ro0')
+
+    def test_stack_recovery_handles_ros2_style_shebang_executables(fleet_cfg, tmp_path):
+        from dashboard.runner import stop_process
+        fleet = fleet_module()
+        script = write_dummy(tmp_path)
+        executable = tmp_path / 'console-entrypoint'
+        executable.write_text('#!' + sys.executable + '\n' + script.read_text())
+        executable.chmod(0o755)
+        fleet_cfg.raw['commands'].update(crazyflie_server=shlex.quote(str(executable)),
+                                        aideck=shlex.quote(str(executable)))
+        async def exercise():
+            first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            recovered = None
+            try:
+                await first.start_stack()
+                recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await recovered.recover_stacks()
+                assert len(recovered.children) == 2
+                assert recovered.store.stack['applied_hash'] == first.generated.roster_hash
+            finally:
+                if recovered:
+                    await recovered.detach_monitors()
+                for child in first.children.values():
+                    await stop_process(child)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:742: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        recovered = None
+        try:
+            await first.start_stack()
+            recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            await recovered.recover_stacks()
+>           assert len(recovered.children) == 2
+E           assert 0 == 2
+E            +  where 0 = len({})
+E            +    where {} = <dashboard.fleet.FleetManager object at 0xe3c04f5fbf40>.children
+
+dashboard/tests/test_fleet.py:735: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_stack_recovery_handles_ros2_style_shebang_executables
+1 failed, 56 deselected in 0.29s

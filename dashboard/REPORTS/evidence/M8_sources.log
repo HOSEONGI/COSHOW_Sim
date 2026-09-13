@@ -1,0 +1,11 @@
+M8 input SHA256; read-only package references, user request governs scope.
+BASE_HEAD 4a9d0218120095bb8f9945bd7d47c8f6363ff5eb
+c85f99d984f613289d2ea1d80cc8bec790cb75eadd814895e8503d68ab81eb34  /Users/hoseon_mini/Desktop/InMOLab/_project/04.Crazyflie-Demo_COSS/08_outputs/astra_handoff_2026-09-13_final_review.zip
+d49796cd96f2dcd81225c242cb39055b7d6a294fbe458ad9b666ac1109fbd637  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/reviews/FINAL_review_and_stageA_go.md
+47cc8efdcf2b218f3f2bf44ccda58da0a47098e8d22eb1871dbd096ae555ee8e  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/06_staged_test_plan.md
+ab955a161c0b948cf1c920f101d5b87931c0cabe6528bb7adfa2cf0eb7ce9695  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/README.md
+730d4ead2fb4816f80168cb30b09cce8a106868540252f3320f75659c73ca252  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/01_context.md
+3cb132a52675b5445fe2423d6d5eb820664fda46f08d58b31181158f1337ffd8  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/02_spec.md
+493244a9f75c6c65a381d94a0d7e59cff607579998ee7fd7a97156d27d246ee9  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/03_implementation_guide.md
+81c7f401087fa613653a81e0e71588d684331509e518ddbab7dec6c59aea775c  /private/tmp/coshow-handoff-final-review-20260913/astra_handoff/05_verification_and_reporting.md
+DECISION_2026-09-14 f5709a9db43a32ed874b63457fc262f872e10861e874c2fe77d76ff1991f41bb  /Users/hoseon_mini/Desktop/InMOLab/_project/04.Crazyflie-Demo_COSS/01_project_docs/astra_handoff/reviews/M8_decision_stack_shutdown.md

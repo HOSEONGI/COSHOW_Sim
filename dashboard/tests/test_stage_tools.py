@@ -6,7 +6,9 @@ import io
 import json
 import os
 from pathlib import Path
+import shlex
 import subprocess
+import sys
 
 import pytest
 
@@ -129,6 +131,48 @@ def test_stage_websocket_probe_never_sends_admin_commands():
     asyncio.run(exercise())
 
 
+def test_recording_collision_selects_new_names_and_preserves_existing_bytes(tmp_path):
+    tool = module('stage_probe')
+    record, poses = tmp_path / 'stage.jsonl', tmp_path / 'poses.csv'
+    record.write_text('previous JSONL evidence')
+    poses.write_text('previous CSV evidence')
+    output = []
+    with tool.open_recordings(str(record), str(poses), emit=output.append) as streams:
+        assert len(output) == 2
+        assert all(Path(stream.name) not in (record, poses) for stream in streams)
+        streams[0].write('new JSONL evidence')
+        streams[1].write('new CSV evidence')
+    assert record.read_text() == 'previous JSONL evidence'
+    assert poses.read_text() == 'previous CSV evidence'
+    assert len(list(tmp_path.iterdir())) == 4
+
+
+def test_recording_second_output_failure_rolls_back_only_new_first_output(tmp_path):
+    tool = module('stage_probe')
+    record = tmp_path / 'stage.jsonl'
+    invalid_parent = tmp_path / 'operator-evidence'
+    invalid_parent.write_text('keep this evidence')
+    output = []
+    with pytest.raises(OSError):
+        with tool.open_recordings(str(record), str(invalid_parent / 'poses.csv'), emit=output.append):
+            raise AssertionError('incomplete output transaction was exposed')
+    assert not record.exists()
+    assert output == []
+    assert invalid_parent.read_text() == 'keep this evidence'
+
+
+def test_recording_cli_output_error_is_concise_and_leaves_no_empty_jsonl(tmp_path):
+    invalid_parent = tmp_path / 'not-directory'
+    invalid_parent.write_text('operator file')
+    record = tmp_path / 'stage.jsonl'
+    result = subprocess.run([sys.executable, str(ROOT / 'dashboard/tests/stage_probe.py'),
+        '--record', str(record), '--dump-poses', str(invalid_parent / 'poses.csv'), '--seconds', '.01'],
+        text=True, capture_output=True)
+    assert result.returncode == 2 and 'Traceback' not in result.stderr
+    assert 'recording outputs' in result.stderr
+    assert not record.exists()
+
+
 @pytest.mark.parametrize('script', ['install.sh', 'run.sh', 'kiosk.sh'])
 def test_launch_scripts_parse_as_bash(script):
     path = ROOT / 'dashboard' / script
@@ -148,12 +192,39 @@ def test_kiosk_rejects_invalid_scale_before_launching(scale):
 def test_kiosk_rejects_wayland_with_operator_action():
     path = ROOT / 'dashboard/kiosk.sh'
     assert path.exists(), 'Missing kiosk script'
-    result = subprocess.run(['bash', str(path), '--dry-run'], text=True, capture_output=True,
+    result = subprocess.run(['bash', str(path)], text=True, capture_output=True,
                             env=dict(os.environ, VISITOR_SCALE='1', XDG_SESSION_TYPE='wayland'))
     assert result.returncode != 0 and 'Ubuntu on Xorg' in result.stderr
+
+
+def test_kiosk_dry_run_needs_no_x_server_and_does_not_execute_xrandr(tmp_path):
+    marker = tmp_path / 'xrandr-was-run'
+    for name, body in [('google-chrome', '#!/bin/sh\nexit 0\n'),
+                       ('xrandr', '#!/bin/sh\ntouch ' + shlex.quote(str(marker)) + '\nexit 99\n')]:
+        path = tmp_path / name
+        path.write_text(body)
+        path.chmod(0o755)
+    result = subprocess.run(['bash', str(ROOT / 'dashboard/kiosk.sh'), '--dry-run'], text=True,
+        capture_output=True, env=dict(os.environ, PATH=str(tmp_path) + os.pathsep + os.environ['PATH'],
+                                     XDG_SESSION_TYPE='wayland', DISPLAY=''))
+    assert result.returncode == 0, result.stderr
+    assert 'visitor.html' in result.stdout and '--window-position=1920' in result.stdout
+    assert not marker.exists()
 
 
 @pytest.mark.skipif(os.geteuid() != 0, reason='root rejection is exercised by the Linux Docker harness')
 def test_installer_refuses_whole_script_sudo_before_any_changes():
     result = subprocess.run(['bash', str(ROOT / 'dashboard/install.sh')], text=True, capture_output=True)
     assert result.returncode == 2 and 'without sudo' in result.stderr
+
+
+@pytest.mark.skipif(os.geteuid() != 0, reason='UID boundary exercised in the Linux Docker harness')
+def test_installer_wrong_clone_path_has_blocking_diagnostic_before_setup_or_apt():
+    import pwd
+    account = pwd.getpwnam('nobody')
+    result = subprocess.run(['bash', str(ROOT / 'dashboard/install.sh')], text=True, capture_output=True,
+                            env=dict(os.environ, HOME=account.pw_dir),
+                            preexec_fn=lambda: os.setuid(account.pw_uid))
+    assert result.returncode == 2 and 'FAIL clone path' in result.stderr
+    assert '~/COSHOW' in result.stderr and 'setup_env.sh' in result.stderr
+    assert 'apt-get' not in result.stdout and 'Traceback' not in result.stderr

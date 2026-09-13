@@ -37,7 +37,11 @@ def test_roster_http_reconnects_and_replacement_cannot_inherit_telemetry(tmp_pat
         class Socket:
             async def close(self): closed.append(True)
         app.sockets.add(SimpleNamespaceHashable(ws=Socket()))
+        before = app.fleet.roster_path.read_bytes()
         response = await app.fleet_action(request('roster', {'roster': replacement}))
+        assert response.status == 409 and 'expected_hash' in json.loads(response.body)['error']
+        assert app.fleet.roster_path.read_bytes() == before and closed == []
+        response = await app.fleet_action(request('roster', {'roster': replacement, 'expected_hash': old_hash}))
         assert response.status == 200
         assert closed == [True]
         assert not app.store.latest_frames()
@@ -65,12 +69,13 @@ def test_running_and_nonlocal_fleet_writes_are_rejected_and_stack_blocks_start(t
     async def run():
         app = make_dashboard(tmp_path)
         before = app.fleet.roster_path.read_bytes()
-        for action in ('roster', 'start', 'restart'):
+        for action in ('roster', 'start', 'restart', 'stop'):
             with pytest.raises(web.HTTPForbidden):
                 await app.fleet_action(request(action, {'roster': app.cfg.roster}, remote='10.0.0.2'))
         app.store.set_run(state='RUNNING')
-        for action in ('roster', 'start', 'restart'):
-            response = await app.fleet_action(request(action, {'roster': app.cfg.roster}))
+        for action in ('roster', 'start', 'restart', 'stop'):
+            response = await app.fleet_action(request(action, {'roster': app.cfg.roster,
+                'expected_hash': app.fleet.generated.roster_hash}))
             assert response.status == 409
             assert 'IDLE' in json.loads(response.body)['error']
         assert app.fleet.roster_path.read_bytes() == before
@@ -81,4 +86,26 @@ def test_running_and_nonlocal_fleet_writes_are_rejected_and_stack_blocks_start(t
             assert app.store.run['state'] == 'IDLE'
             assert app.store.events[-1]['text'].startswith('cmd:' + command + ' rejected')
         await app.cleanup(None)
+    asyncio.run(run())
+
+
+def test_mock_stop_persists_through_aggregation_and_can_start_again(tmp_path):
+    async def run():
+        app = make_dashboard(tmp_path)
+        response = await app.fleet_action(request('stop'))
+        assert response.status == 200
+        aggregate = asyncio.create_task(app.aggregate())
+        try:
+            await asyncio.sleep(.12)
+            stack = app.store.stack
+            assert stack['crazyflie_server'] == stack['aideck'] == 'down'
+            assert stack['applied_hash'] is None
+            assert (await app.fleet_action(request('start'))).status == 200
+            await asyncio.sleep(.12)
+            assert stack['crazyflie_server'] == stack['aideck'] == 'up'
+            assert stack['applied_hash'] == app.fleet.generated.roster_hash
+        finally:
+            aggregate.cancel()
+            await asyncio.gather(aggregate, return_exceptions=True)
+            await app.cleanup(None)
     asyncio.run(run())

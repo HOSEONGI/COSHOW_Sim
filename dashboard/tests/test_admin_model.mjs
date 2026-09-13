@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buttons,commandReply,landingText} from '../static/js/admin-model.js';
+import * as model from '../static/js/admin-model.js';
+test('checklist exposes only spare warnings while role and global checks retain their order',()=>{
+  const checklist=[
+    {id:'global.stack',group:'global',status:'fail'},
+    {id:'reader.pose',group:'reader',status:'pass'},
+    {id:'spare.battery',group:'spare',status:'warning'},
+    {id:'spare.link',group:'spare',status:'warning'},
+    {id:'spare.ping',group:'spare',status:'warning'},
+    {id:'spare.pose',group:'spare',status:'skipped'},
+    {id:'spare.healthy',group:'spare',status:'pass'}];
+  const {rows,spareWarnings}=model.checklistRows({checklist,robots:{reader:{role:'reader'},spare:{role:null}}});
+  assert.deepEqual(rows,checklist.slice(0,2));
+  assert.deepEqual(spareWarnings,checklist.slice(2,5));
+});
 test('every run state follows command table and LANDING defeats retry timeout',()=>{
   const matrix={IDLE:['preflight','reset'],CHECKING:['estop','reset'],READY:['start','estop','reset'],RUNNING:['estop','reset'],LANDING:[],DONE:['estop','reset'],ABORTED:['reset']};
   for(const [state,expected] of Object.entries(matrix))assert.deepEqual(Object.keys(buttons({run:{state},checklist:[]},true,null)).filter(k=>buttons({run:{state},checklist:[]},true,null)[k]),expected);

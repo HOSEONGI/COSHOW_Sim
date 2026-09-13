@@ -1,0 +1,54 @@
+FIXTURE CONFIG: /ws/dashboard/run/m6_fleet_fixture/dashboard.yaml (14 robots, 3 radios, role roster, loopback IPs)
+PASS owned startup: 2 new sessions, merged ROS/PATH environment, RLIMIT_CORE=(0,0), logs/pids
+PASS restart ownership recovery: two verified identities, applied hash restored, zero startup signals
+PASS role swap: persisted, 14 metadata rows refreshed, file hash mismatch blocks old stack
+PASS restart: one SIGINT each, ignoring child SIGKILL after 10.108s, new PIDs and new applied hash
+PASS backend close: two stack children alive, zero signals, PID/identity/applied receipts unchanged
+PASS explicit stop after re-adoption: owned children stopped, PID files removed, applied hash null
+PASS partial camera spawn failure: owned server remains alive/up, applied hash null, no automatic signal
+PASS /aideck/aideck_aruco_node external detection + global.aideck PASS, restart rejected, process remains alive
+{
+  "old_hash": "336e493083a6b392b10ea5f368f4d1545aaca2489243f6ee15ed31e424e8d613",
+  "new_hash": "0903a9267ead43228497936cf1cc27a94be9e7ebe38136339dc9e4df82b7fd6d",
+  "restart_s": 10.108,
+  "old_pids": {
+    "crazyflie_server": 5746,
+    "aideck": 5748
+  },
+  "processes": [
+    {
+      "event": "READY",
+      "pid": 5746,
+      "pgid": 5746,
+      "core": [
+        0,
+        0
+      ],
+      "marker": "merged",
+      "path": true,
+      "cwd": "/ws",
+      "node": "crazyflie_server"
+    },
+    {
+      "event": "READY",
+      "pid": 5748,
+      "pgid": 5748,
+      "core": [
+        0,
+        0
+      ],
+      "marker": "merged",
+      "path": true,
+      "cwd": "/ws",
+      "node": "/aideck/aideck_aruco_node"
+    }
+  ],
+  "inventory_rows": 14,
+  "generated_files": [
+    "crazyflies.generated.yaml",
+    "drones.generated.yaml",
+    "preflight.generated.yaml"
+  ],
+  "protected_templates_unchanged": true
+}
+PASS M6 dummy Docker verification; no hardware or camera/radio connection

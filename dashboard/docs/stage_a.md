@@ -40,6 +40,19 @@ python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/stage_a.j
 | 발견 위치·finder·발광 표시 일치 | 발견 후 `stage_a_capture.png` |
 | 30분 뒤 브라우저/GPU 메모리 정체 | Chrome 작업 관리자 시작/30분 값과 캡처 |
 
+Chrome 작업 관리자(`Shift+Esc`)에서 GPU 메모리 열을 켜고 같은 브라우저
+프로세스의 시작/30분 값을 기록한다. Mac의 heap·DOM·렌더러 자원 개수 결과는
+GPU 메모리 바이트 측정을 대신하지 않는다.
+
+| GPU 메모리 기록 | 값·스크린샷 |
+|---|---|
+| 행사 머신·브라우저 버전·GPU | ______ |
+| 시작 시각·GPU 메모리 | ______ / ______ bytes |
+| 시작 스크린샷 | `dashboard/REPORTS/img/stage_a_gpu_start.png` |
+| 30분 시각·GPU 메모리 | ______ / ______ bytes |
+| 30분 스크린샷 | `dashboard/REPORTS/img/stage_a_gpu_30min.png` |
+| 변화·정체 여부·관측 한계 | ______ |
+
 스크린샷은 `dashboard/REPORTS/img/stage_a_*.png`, 서버 로그와 관리자 이벤트는 `dashboard/logs/`에 보관한다. 좌표 차이·누락은 토픽 이름, 타입, QoS, pose/frame age로 기록한다. 시뮬에서 estop이나 실제 착륙 안전을 통과했다고 기록하지 않는다.
 
 사후 요약 한 줄:
@@ -47,5 +60,9 @@ python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/stage_a.j
 ```bash
 python3 dashboard/tests/analyze_stage.py dashboard/logs/stage_a.jsonl > dashboard/logs/stage_a_analysis.txt
 ```
+
+이미 기록 파일이 있으면 프로브가 타임스탬프 이름으로 전환한다. 위 분석 명령의
+JSONL 경로를 이번 실행의 `OUTPUT` 경로로 바꾼다. JSONL·CSV 중 한 경로가
+잘못되면 새로 만든 빈 파일은 남기지 않는다.
 
 판정: 날짜 ______ 운영자 ______ 필수 항목 PASS/FAIL ______ 남은 예외 ______

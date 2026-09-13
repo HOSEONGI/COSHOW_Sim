@@ -17,6 +17,11 @@ Ubuntu 22.04 · ROS 2 Humble · Python 3.10용 운영 화면이다. 참관자 �
    `hoseon` 원격이 이미 있으면 추가 명령은 생략한다. 갱신도 fetch → merge →
    설치 재실행 순서다. 대시보드는 협업자 설정 YAML을 덮어쓰지 않는다.
 
+   **클론은 반드시 `~/COSHOW`에서 접근할 수 있어야 한다.** 기존 `setup_env.sh`가
+   이 경로를 사용하므로 설치기는 다른 클론 경로를 변경 작업 전에 차단하고 안내한다.
+   로컬 변경이 있으면 먼저 커밋하거나 `git stash push -u`로 보관하고, 병합 뒤
+   `git stash pop`의 충돌을 검토한다. 설치를 위해 `setup_env.sh`를 고치지 않는다.
+
    ```bash
    cd ~/COSHOW
    git status --short
@@ -39,7 +44,14 @@ Ubuntu 22.04 · ROS 2 Humble · Python 3.10용 운영 화면이다. 참관자 �
    BT YAML의 `preflight.required: true`, `emergency_land_on_exit: true`,
    `bt_visualiser.enabled: false`는 운영자가 검토해 설정한다. 대시보드가 원본
    BT YAML을 자동 수정하지 않는다. 추가 기체 URI/IP의 null은 실제 값 확인 후
-   채운다. 10대 생성에는 중복 없는 URI와 라디오당 5대 이하 배분이 필요하다.
+   채운다. 역할 기체의 URI/IP는 필수다. URI 없는 스페어는 생성에서 제외하고
+   경고하며, 생성하는 기체는 URI가 중복되지 않고 라디오당 5대 이하여야 한다.
+
+   `aideck_template`은 `../ros2_ws/src/aideck_aruco_ros/config/drones.yaml`로
+   명시한다. 역할 타입은 원본 `robots[역할].type`을 보존하며, 없거나 스페어면
+   `fleet.robot_type`(동봉값 `cf21`)을 사용한다. 선택 타입은 원본 `robot_types`에
+   있어야 한다. 최상위 `robot_type`은 호환용 별칭이며 두 값이 다르면 경고하고
+   `fleet.robot_type`을 우선한다.
 
 4. **mock으로 두 화면을 먼저 확인한다.** 이 모드는 ROS·실기체를 제어하지 않으며
    로스터와 생성 파일도 `dashboard/run/mock/`에 따로 저장한다.
@@ -59,8 +71,19 @@ Ubuntu 22.04 · ROS 2 Humble · Python 3.10용 운영 화면이다. 참관자 �
 5. **ROS와 대시보드를 같은 환경에서 실행한다.** 기존 방식으로 드론 서버·카메라·
    LIMO를 기동하거나, 설정이 완비됐다면 IDLE의 관리자 스택 기동을 사용한다.
    외부에서 실행한 스택은 관측할 수 있지만 대시보드가 종료·재기동하지 않는다.
-   외부 스택의 적용 로스터는 증명되지 않으므로 실행 점검이 차단될 수 있다.
+   외부 스택의 로스터 일치 점검은 건너뛰고 **확인 불가**로 표시한다.
    BT와 preflight는 직접 실행하지 않고 관리자 버튼으로 시작한다.
+
+   대시보드가 종료돼도 드론 서버와 카메라 스택은 계속 실행된다. 정상 서버 종료는
+   BT·preflight의 착륙 시퀀스를 먼저 마치고 스택에는 종료 신호를 보내지 않는다.
+   다음 대시보드는 남아 있는 PID·명령행·시작 신원을 확인해 자기 스택을 다시
+   관리한다. `dashboard/run/`의 스택 PID와 소유권·적용 기록을 지우지 않는다.
+
+   키오스크를 열기 전에 로그아웃하고 로그인 화면의 톱니바퀴 메뉴에서
+   **Ubuntu on Xorg**를 선택해 다시 로그인한다. `echo "$XDG_SESSION_TYPE"`가
+   `x11`인지 확인한다. 실제 키오스크는 Wayland나 접근 불가능한 X 서버에서
+   종료 코드 2로 중단한다. `bash dashboard/kiosk.sh --dry-run`은 X 검사 없이
+   생성될 명령만 표시하므로 원격 터미널에서도 설정을 검토할 수 있다.
 
    ```bash
    bash dashboard/run.sh
@@ -77,6 +100,8 @@ Ubuntu 22.04 · ROS 2 Humble · Python 3.10용 운영 화면이다. 참관자 �
    0.6초 길게 누른다. 비상 착륙은 즉시 동작한다. LANDING에는 모든 제어가 잠긴다.
    착륙 완료 후 ABORTED에서 리셋한다. 정상 DONE도 리셋 전까지 화면을 유지한다.
    관리자는 마지막 상태 수신 1.5초 이후 또는 소켓 종료 즉시 제어를 잠근다.
+   모니터 배치가 바뀌었으면 5단계의 Ubuntu on Xorg 로그인과 창 위치를 다시
+   확인한 뒤 운영한다.
 
 7. **문제와 복구 증거를 남긴다.** `dashboard/logs/dashboard.log`, `bt.log`,
    `preflight.log`와 [단계별 프로브](tests/stage_probe.py)를 사용한다.
@@ -109,6 +134,24 @@ Ubuntu 22.04 · ROS 2 Humble · Python 3.10용 운영 화면이다. 참관자 �
 첫 파일은 원본 템플릿의 `robots`만 바꾸며 `robot_types`, `all` 등을 보존한다.
 스택 프로세스는 데모 실행과 독립적으로 관리한다. 외부 프로세스는 소유하지 않는다.
 
+기동 중 카메라만 실패해도 먼저 뜬 드론 서버는 계속 실행된다. 실패 사유와
+`applied_hash: null`이 표시되고 **스택 재기동 필요** 상태로 실행이 차단된다.
+설정을 고친 뒤 IDLE에서 **스택 재기동**을 눌러 남아 있는 소유 스택을 정리하고
+두 프로세스를 다시 기동한다. 일부 기동 실패나 대시보드 종료만으로 스택을
+자동 정지시키지 않는다.
+
+하루 운영을 마치고 스택도 끄려면 데모를 종료하고 리셋해 IDLE로 돌아온 뒤
+**스택 정지**를 누른다. 명시적인 정지·재기동만 소유 스택에 병렬로 SIGINT를
+보내며, 10초 동안 종료하지 않는 프로세스에는 SIGKILL을 보낸다. 리셋은 스택을
+정지하지 않는다. 외부 스택은 해당 스택을 실행한 터미널에서 종료한다.
+
+대시보드 재시작 후에는 스택 상태와 로스터 일치를 확인한다.
+`run/crazyflie_server.pid`, `run/aideck.pid`, `run/*.process.json`,
+`run/stack.applied.json`은 `dashboard/` 아래에 보존된다. 명령행·신원이 일치하면
+재입양하고, 적용 기록까지 유효하면 해시를 복원한다. 적용 기록을 확인할 수 없으면
+IDLE에서 스택을 재기동한다. 신원을 확인할 수 없는 살아 있는 PID는 외부 스택으로
+취급하므로 파일을 지우고 중복 기동하지 않는다.
+
 LIMO는 해당 Jetson에서 역할 namespace로 재기동하고 dashboard의 fleet namespace와
 IP를 맞춘다. 대시보드가 원격 Jetson이나 LIMO 프로세스를 직접 바꾸지 않는다.
 
@@ -132,10 +175,16 @@ python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/session.j
 python3 dashboard/tests/analyze_stage.py dashboard/logs/session.jsonl
 ```
 
+기록 경로에 이전 파일이 있으면 원본을 보존하고 타임스탬프가 붙은 새 이름을
+사용한다. 기록기는 JSONL·CSV를 모두 연 뒤 실제 경로를 `OUTPUT`으로 표시한다.
+한 경로를 열지 못하면 이번에 만든 다른 빈 파일도 제거한다. 분석에는
+`OUTPUT`에 표시된 이번 JSONL 경로를 사용한다. `--record --dump-poses`처럼
+경로를 생략하면 `dashboard/logs/`에 시각을 붙여 자동 저장한다.
+
 `--check-config`는 실제 publisher/service/action server를 검사한다. 자기 구독을
 정상 서버로 세지 않는다. 치명 설정 오류·확인 가능한 필수 인터페이스 FAIL이면
-종료 코드 1이다. 명시적 null 타입은 SKIP, 미기입 스페어 URI/IP는 WARN이지만,
-전체 스택 생성에는 유효한 URI/IP가 필요하므로 생성 오류도 별도로 확인한다.
+종료 코드 1이다. 명시적 null 타입은 SKIP, 미기입 스페어 URI/IP는 WARN이다.
+생성 가능한 기체 설정도 검사하므로 역할 URI/IP·타입·템플릿 오류는 FAIL이다.
 
 ## 검증과 인계
 

@@ -1,0 +1,12 @@
+ORIGINAL_CONTAINER /home/coshow/COSHOW/dashboard/logs/m7_stage_final.jsonl
+LOCAL_GITIGNORED dashboard/logs/M7_stage_full.jsonl
+TRACKED_ARCHIVE dashboard/REPORTS/evidence/M7_stage_full.jsonl.gz
+UNCOMPRESSED_BYTES 33260161 SHA256 f35d640d0e845f9a8da2dc1523c3f7e99161293f86f50ed3fd0e2dc2218d1091
+COMPRESSED_BYTES 621473 SHA256 42508d21509ee132cca37dc96a158f92da7aae82163accecd225028d48a1acee
+ORIGINAL_CONTAINER /home/coshow/COSHOW/dashboard/logs/m7_poses_final.csv
+LOCAL_GITIGNORED dashboard/logs/M7_poses_full.csv
+TRACKED_ARCHIVE dashboard/REPORTS/evidence/M7_poses_full.csv.gz
+UNCOMPRESSED_BYTES 1468508 SHA256 5c1a6428571ebf828538e63f8518351dfa7d77ba7e9c9255e167951117c4b364
+COMPRESSED_BYTES 173974 SHA256 4f6f3718f9d59ddab92d2f79f2a7f7d212ee620d8a06ca5079044301bfdc1e41
+M7_stage_analysis.log used ORIGINAL_CONTAINER m7_stage_final.jsonl; its bytes match the archived M7_stage_full.jsonl.
+M7_stage_sample.jsonl and M7_poses_sample.csv are transition subsets, not full copies.

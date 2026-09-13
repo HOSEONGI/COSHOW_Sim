@@ -1,0 +1,17 @@
+PASS B6 only warning spare checklist rows are visible below failures
+PASS B6 role table remains six rows and full inventory stays collapsed
+PASS C4 disconnect replaces stale ACK retry with unavailable message
+PASS C3 scrolled disconnect banner never covers emergency control
+C3 BOUNDS {"banner":{"top":0,"bottom":44,"left":0,"right":1600},"control":{"top":44,"bottom":163.59375,"left":20,"right":1580},"emergency":{"top":50,"bottom":96,"left":1492.359375,"right":1580},"height":1050,"scroll":468}
+PASS C4 pending ACK timer cannot overwrite disconnect after one second
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at /Users/hoseon_mini/Documents/ChatGPT/'26 CO-SHOW DEMO/COSHOW_Sim/dashboard/tests/verify_m8_frontend.mjs:57:32 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v26.3.0

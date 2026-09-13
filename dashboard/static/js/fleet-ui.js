@@ -3,7 +3,7 @@ const node=(tag,text,className)=>{const value=document.createElement(tag);if(tex
 export function createFleetUI({onSettings}){
   const panel=document.querySelector('#stack-panel');panel.hidden=false;
   const top=node('div',null,'stack-summary'),status=node('p'),buttons=node('div',null,'fleet-buttons');
-  const start=node('button','스택 기동'),restart=node('button','스택 재기동');buttons.append(start,restart);top.append(status,buttons);
+  const start=node('button','스택 기동'),restart=node('button','스택 재기동'),stop=node('button','스택 정지');buttons.append(start,restart,stop);top.append(status,buttons);
   const editor=node('details'),summary=node('summary','기체 교체 설정');editor.id='fleet-editor';
   const hint=node('p','기본 화면에는 역할 기체만 표시합니다. 교체할 때만 인벤토리를 펼쳐 배정하세요.','label');
   const table=node('table'),head=node('thead'),header=node('tr');
@@ -18,6 +18,7 @@ export function createFleetUI({onSettings}){
   let settings=null,hello=null,state=null,connected=false,busy=false,draft={},rows=new Map(),signature='';
   let settingsFresh=false,loadGeneration=0;
   const canEdit=()=>Boolean(settingsFresh&&settings&&hello&&connected&&state?.run?.state==='IDLE'&&!busy&&!state.stack?.busy);
+  const canStop=()=>canEdit()&&![state?.stack?.crazyflie_server,state?.stack?.aideck].includes('external');
   const completeDraft=()=>Boolean(hello?.drones.every(role=>draft[role]));
   async function request(action,method='POST',payload){
     if(!canEdit())return null;
@@ -29,6 +30,7 @@ export function createFleetUI({onSettings}){
     finally{busy=false;render();}
   }
   start.addEventListener('click',()=>request('start'));restart.addEventListener('click',()=>request('restart'));
+  stop.addEventListener('click',()=>canStop()?request('stop'):null);
   recommend.addEventListener('click',async()=>{
     const generation=loadGeneration,result=await request('recommend','GET');
     if(result&&generation===loadGeneration){draft=result;refreshSelectors();response.textContent='추천 배정입니다. 검토 후 저장하세요.';}
@@ -69,6 +71,7 @@ export function createFleetUI({onSettings}){
     const stack=state?.stack||{},allowed=canEdit();
     start.disabled=!allowed||[stack.crazyflie_server,stack.aideck].some(value=>value!=='down');
     restart.disabled=!allowed||[stack.crazyflie_server,stack.aideck].includes('external');
+    stop.disabled=!canStop();
     recommend.disabled=!allowed;save.disabled=!allowed||!completeDraft();confirm.disabled=!allowed||!completeDraft();
     if(!allowed)dialog.close();
     for(const row of rows.values())if(row.select)row.select.disabled=!allowed;

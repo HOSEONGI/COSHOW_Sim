@@ -1,0 +1,74 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+___ test_recording_collision_selects_new_names_and_preserves_existing_bytes ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recording_collision_selec0')
+
+    def test_recording_collision_selects_new_names_and_preserves_existing_bytes(tmp_path):
+        tool = module('stage_probe')
+        record, poses = tmp_path / 'stage.jsonl', tmp_path / 'poses.csv'
+        record.write_text('previous JSONL evidence')
+        poses.write_text('previous CSV evidence')
+        output = []
+>       with tool.open_recordings(str(record), str(poses), emit=output.append) as streams:
+E       AttributeError: module 'dashboard.tests.stage_probe' has no attribute 'open_recordings'
+
+dashboard/tests/test_stage_tools.py:140: AttributeError
+____ test_recording_second_output_failure_rolls_back_only_new_first_output _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recording_second_output_f0')
+
+    def test_recording_second_output_failure_rolls_back_only_new_first_output(tmp_path):
+        tool = module('stage_probe')
+        record = tmp_path / 'stage.jsonl'
+        invalid_parent = tmp_path / 'operator-evidence'
+        invalid_parent.write_text('keep this evidence')
+        output = []
+        with pytest.raises(OSError):
+>           with tool.open_recordings(str(record), str(invalid_parent / 'poses.csv'), emit=output.append):
+E           AttributeError: module 'dashboard.tests.stage_probe' has no attribute 'open_recordings'
+
+dashboard/tests/test_stage_tools.py:157: AttributeError
+_____ test_recording_cli_output_error_is_concise_and_leaves_no_empty_jsonl _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_recording_cli_output_erro0')
+
+    def test_recording_cli_output_error_is_concise_and_leaves_no_empty_jsonl(tmp_path):
+        invalid_parent = tmp_path / 'not-directory'
+        invalid_parent.write_text('operator file')
+        record = tmp_path / 'stage.jsonl'
+        result = subprocess.run([sys.executable, str(ROOT / 'dashboard/tests/stage_probe.py'),
+            '--record', str(record), '--dump-poses', str(invalid_parent / 'poses.csv'), '--seconds', '.01'],
+            text=True, capture_output=True)
+>       assert result.returncode == 2 and 'Traceback' not in result.stderr
+E       AssertionError: assert (1 == 2)
+E        +  where 1 = CompletedProcess(args=['/usr/bin/python3', '/ws/dashboard/tests/stage_probe.py', '--record', '/tmp/pytest-of-root/pyte...ExistsError: [Errno 17] File exists: \'/tmp/pytest-of-root/pytest-0/test_recording_cli_output_erro0/not-directory\'\n').returncode
+
+dashboard/tests/test_stage_tools.py:171: AssertionError
+_______ test_kiosk_dry_run_needs_no_x_server_and_does_not_execute_xrandr _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_kiosk_dry_run_needs_no_x_0')
+
+    def test_kiosk_dry_run_needs_no_x_server_and_does_not_execute_xrandr(tmp_path):
+        marker = tmp_path / 'xrandr-was-run'
+        for name, body in [('google-chrome', '#!/bin/sh\nexit 0\n'),
+                           ('xrandr', '#!/bin/sh\ntouch ' + shlex.quote(str(marker)) + '\nexit 99\n')]:
+            path = tmp_path / name
+            path.write_text(body)
+            path.chmod(0o755)
+        result = subprocess.run(['bash', str(ROOT / 'dashboard/kiosk.sh'), '--dry-run'], text=True,
+            capture_output=True, env=dict(os.environ, PATH=str(tmp_path) + os.pathsep + os.environ['PATH'],
+                                         XDG_SESSION_TYPE='wayland', DISPLAY=''))
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: X11 required: 로그인 화면에서 'Ubuntu on Xorg'로 재로그인하세요.
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['bash', '/ws/dashboard/kiosk.sh', '--dry-run'], returncode=2, stdout='', stderr="X11 required: 로그인 화면에서 'Ubuntu on Xorg'로 재로그인하세요.\n").returncode
+
+dashboard/tests/test_stage_tools.py:210: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_stage_tools.py::test_recording_collision_selects_new_names_and_preserves_existing_bytes
+FAILED dashboard/tests/test_stage_tools.py::test_recording_second_output_failure_rolls_back_only_new_first_output
+FAILED dashboard/tests/test_stage_tools.py::test_recording_cli_output_error_is_concise_and_leaves_no_empty_jsonl
+FAILED dashboard/tests/test_stage_tools.py::test_kiosk_dry_run_needs_no_x_server_and_does_not_execute_xrandr
+4 failed, 15 deselected in 0.12s

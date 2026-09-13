@@ -2,7 +2,7 @@
 """M6 Docker evidence: generated files, real owned processes and ROS node graph.
 
 All devices are dummy ROS nodes. No radio, camera socket, Webots or robot service
-is used. ROS_DOMAIN_ID=88 and ROS_LOCALHOST_ONLY=1 isolate the graph.
+is used. ROS_DOMAIN_ID=92 and ROS_LOCALHOST_ONLY=1 isolate the graph.
 """
 import argparse
 import asyncio
@@ -23,6 +23,7 @@ if __package__ in (None, ''):
 import yaml
 
 from dashboard.config import load_config
+from dashboard.checklist import evaluate
 from dashboard.fleet import FleetManager
 from dashboard.state import TelemetryStore
 from dashboard.tests.verify_m2_ros import prepare_fixture
@@ -70,7 +71,7 @@ def command(node, ignore=False):
 async def verify():
     import rclpy
     from rclpy.node import Node
-    assert os.environ.get('ROS_DOMAIN_ID') == '88'
+    assert os.environ.get('ROS_DOMAIN_ID') in ('88', '92')
     assert os.environ.get('ROS_LOCALHOST_ONLY') == '1'
     directory = ROOT / 'dashboard/run/m6_fleet_fixture'
     cfg = prepare_fixture(directory, port=8096)
@@ -126,22 +127,37 @@ async def verify():
         raise AssertionError('dummy stack did not become ready')
 
     external = None
+    harness_children = {}
     try:
         await manager.start_stack()
         old_children = dict(manager.children)
+        harness_children.update({child.pid: child for child in old_children.values()})
         reports = [await ready(child) for child in old_children.values()]
         await graph_until(lambda: all(store.stack[kind] == 'up' for kind in old_children))
         assert store.stack['applied_hash'] == old_hash
         print('PASS owned startup: 2 new sessions, merged ROS/PATH environment, RLIMIT_CORE=(0,0), logs/pids', flush=True)
+        # New manager instance reads durable pid+argv+identity receipts just as a
+        # restarted backend does; dummy ROS processes continue without signals.
+        recovered = FleetManager(cfg, store)
+        recovered.log_dir = manager.log_dir
+        await recovered.recover_stacks()
+        assert {kind: child.pid for kind, child in recovered.children.items()} == {
+            kind: child.pid for kind, child in old_children.items()}
+        assert store.stack['applied_hash'] == old_hash
+        assert all(not child.sigint_sent for child in recovered.children.values())
+        await manager.detach_monitors()
+        manager = recovered
+        recovered_children = dict(manager.children)
+        print('PASS restart ownership recovery: two verified identities, applied hash restored, zero startup signals', flush=True)
         replacement = dict(cfg.roster)
         replacement[cfg.drones[1]] = raw['fleet']['drones'][6]['id']
-        await manager.save_roster(replacement)
+        await manager.save_roster(replacement, expected_hash=old_hash)
         new_hash = store.stack['roster_hash']
         assert new_hash and new_hash != old_hash
         assert store.stack['applied_hash'] == old_hash
         assert len(cfg.robots) == len(store.data) == 14
         assert load_config(cfg.path).roster == replacement
-        with (EVIDENCE / 'M6_fleet_generated_diff.log').open('w') as log:
+        with (EVIDENCE / 'M8_fleet_generated_diff.log').open('w') as log:
             for name in sorted(old_files):
                 before, after = old_files[name].decode(), manager.generated.files[name].decode()
                 log.write('FILE ' + name + '\n')
@@ -156,21 +172,60 @@ async def verify():
         restart_duration = time.monotonic() - restarted_at
         assert restart_duration >= 10.0
         assert old_children['aideck'].returncode == -signal.SIGKILL
-        assert all(child.sigint_sent for child in old_children.values())
+        assert all(child.sigint_sent for child in recovered_children.values())
         for child in old_children.values():
             assert child.log_path.read_text().count('SIGNAL SIGINT') == 1
         assert all(child.pid != old_children[kind].pid for kind, child in manager.children.items())
         assert store.stack['applied_hash'] == new_hash
         for child in manager.children.values():
+            harness_children[child.pid] = child
             await ready(child)
         print('PASS restart: one SIGINT each, ignoring child SIGKILL after {:.3f}s, new PIDs and new applied hash'.format(
             restart_duration), flush=True)
+        detached = dict(manager.children)
+        receipt_bytes = {path: path.read_bytes() for path in manager.run_dir.iterdir()
+                         if path.suffix in ('.pid', '.json')}
         await manager.close()
+        assert not manager.children
+        assert all(child.returncode is None and not child.sigint_sent for child in detached.values())
+        assert all(path.read_bytes() == data for path, data in receipt_bytes.items())
+        print('PASS backend close: two stack children alive, zero signals, PID/identity/applied receipts unchanged', flush=True)
+        store = TelemetryStore(cfg)
+        manager = FleetManager(cfg, store)
+        manager.log_dir = directory / 'logs'
+        await manager.recover_stacks()
+        assert {kind: child.pid for kind, child in manager.children.items()} == {
+            kind: child.pid for kind, child in detached.items()}
+        assert store.stack['applied_hash'] == new_hash
+        await manager.stop_stack()
+        assert not manager.children and store.stack['applied_hash'] is None
         assert not list(manager.run_dir.glob('*.pid'))
+        assert all(child.returncode is not None for child in detached.values())
+        print('PASS explicit stop after re-adoption: owned children stopped, PID files removed, applied hash null', flush=True)
+
+        # A failed camera spawn must preserve the already connected radio server.
+        camera_command = cfg.raw['commands']['aideck']
+        cfg.raw['commands']['aideck'] = '/definitely-missing-m8-aideck'
+        try:
+            await manager.start_stack()
+        except OSError:
+            pass
+        else:
+            raise AssertionError('missing camera executable unexpectedly spawned')
+        partial = manager.children['crazyflie_server']
+        harness_children[partial.pid] = partial
+        await ready(partial)
+        assert partial.returncode is None and not partial.sigint_sent
+        assert store.stack['crazyflie_server'] == 'up' and store.stack['aideck'] == 'down'
+        assert store.stack['applied_hash'] is None
+        assert partial.pid_path.exists()
+        print('PASS partial camera spawn failure: owned server remains alive/up, applied hash null, no automatic signal', flush=True)
+        await manager.stop_stack()
+        cfg.raw['commands']['aideck'] = camera_command
 
         # Independent harness-owned child must never become FleetManager-owned.
         external = await asyncio.create_subprocess_exec(
-            sys.executable, str(SCRIPT), '--child', cfg.raw['nodes']['server'],
+            sys.executable, str(SCRIPT), '--child', cfg.raw['nodes']['aideck'],
             stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.DEVNULL,
             start_new_session=True)
         external_store = TelemetryStore(cfg)
@@ -180,10 +235,13 @@ async def verify():
             rclpy.spin_once(observer, timeout_sec=0)
             external_store.nodes(observer.get_node_names_and_namespaces())
             external_manager.refresh()
-            if external_store.stack['crazyflie_server'] == 'external':
+            if external_store.stack['aideck'] == 'external':
                 break
             await asyncio.sleep(.05)
-        assert external_store.stack['crazyflie_server'] == 'external'
+        assert external_store.stack['aideck'] == 'external'
+        row = next(row for row in evaluate(external_store.snapshot(), cfg, external_store.context,
+                                          external_store.clock()) if row['id'] == 'global.aideck')
+        assert row['ok'], row
         try:
             await external_manager.restart_stack()
         except ValueError as exc:
@@ -193,14 +251,18 @@ async def verify():
         await external_manager.close()
         assert external.returncode is None
         assert all(path.read_bytes() == content for path, content in protected.items())
-        print('PASS external ROS node recognized, restart rejected, independent process remains alive', flush=True)
+        print('PASS /aideck/aideck_aruco_node external detection + global.aideck PASS, restart rejected, process remains alive', flush=True)
         print(json.dumps(dict(old_hash=old_hash, new_hash=new_hash, restart_s=round(restart_duration, 3),
                               old_pids={key: child.pid for key, child in old_children.items()},
                               processes=reports, inventory_rows=len(cfg.robots),
                               generated_files=sorted(old_files), protected_templates_unchanged=True), indent=2), flush=True)
         print('PASS M6 dummy Docker verification; no hardware or camera/radio connection', flush=True)
     finally:
+        from dashboard.runner import stop_process
+        harness_children.update({child.pid: child for child in manager.children.values()})
+        await asyncio.gather(*(stop_process(child) for child in harness_children.values()), return_exceptions=True)
         await manager.close()
+        await manager.detach_monitors()
         if external is not None and external.returncode is None:
             external.send_signal(signal.SIGINT)
             try:

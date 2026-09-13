@@ -1,0 +1,43 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____________ test_check_config_generation_failure_sets_exit_status _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xefb3f1df6320>
+capsys = <_pytest.capture.CaptureFixture object at 0xefb3f1df6470>
+
+    def test_check_config_generation_failure_sets_exit_status(monkeypatch, capsys):
+        cfg = load_config(mock=True)
+        cfg.raw['crazyflies_template'] = '/nonexistent/coshow-template.yaml'
+        monkeypatch.setattr(server, 'load_config', lambda *a, **kw: cfg)
+        monkeypatch.setattr(ros_io, 'check_config', lambda *a: [])
+        monkeypatch.setattr(sys, 'argv', ['server.py', '--check-config'])
+>       assert server.main() == 1
+E       assert 0 == 1
+E        +  where 0 = <function main at 0xefb3f245bac0>()
+E        +    where <function main at 0xefb3f245bac0> = server.main
+
+dashboard/tests/test_m8_config_check.py:14: AssertionError
+----------------------------- Captured stdout call -----------------------------
+ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False
+_______________ test_check_config_reports_successful_generation ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xefb3f1e46950>
+capsys = <_pytest.capture.CaptureFixture object at 0xefb3f1e46e90>
+
+    def test_check_config_reports_successful_generation(monkeypatch, capsys):
+        cfg = load_config(mock=True)
+        monkeypatch.setattr(server, 'load_config', lambda *a, **kw: cfg)
+        monkeypatch.setattr(ros_io, 'check_config', lambda *a: [])
+        monkeypatch.setattr(sys, 'argv', ['server.py', '--check-config'])
+        assert server.main() == 0
+>       assert 'PASS\tgeneration' in capsys.readouterr().out
+E       AssertionError: assert 'PASS\tgeneration' in 'ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False\n'
+E        +  where 'ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False\n' = CaptureResult(out='ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False\n', err='').out
+E        +    where CaptureResult(out='ROS_DOMAIN_ID=85 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False\n', err='') = <bound method CaptureFixture.readouterr of <_pytest.capture.CaptureFixture object at 0xefb3f1e46e90>>()
+E        +      where <bound method CaptureFixture.readouterr of <_pytest.capture.CaptureFixture object at 0xefb3f1e46e90>> = <_pytest.capture.CaptureFixture object at 0xefb3f1e46e90>.readouterr
+
+dashboard/tests/test_m8_config_check.py:24: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m8_config_check.py::test_check_config_generation_failure_sets_exit_status
+FAILED dashboard/tests/test_m8_config_check.py::test_check_config_reports_successful_generation
+2 failed in 0.07s

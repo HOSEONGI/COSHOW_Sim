@@ -69,7 +69,7 @@ class OwnedProcess:
         return self.proc.returncode
 
 
-async def spawn_process(argv, cwd, env, log_path, pid_path):
+async def spawn_process(argv, cwd, env, log_path, pid_path, preserve_on_error=False):
     """Shared M5/M6 spawn boundary; callers supply argv, never a shell command."""
     log_path, pid_path = Path(log_path), Path(pid_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -82,8 +82,13 @@ async def spawn_process(argv, cwd, env, log_path, pid_path):
                          identity=await _process_identity(process.pid))
     try:
         pid_path.write_text(str(child.pid) + '\n', encoding='utf-8')
-    except OSError:
-        await stop_process(child)
+    except OSError as exc:
+        if preserve_on_error:
+            # A live radio stack must survive even a storage failure. Its
+            # caller retains this handle and reports the missing PID receipt.
+            exc.child = child
+        else:
+            await stop_process(child)
         raise
     return child
 
@@ -258,13 +263,17 @@ class Runner:
         self.landed_z = value(self.cfg.bt, 'coshow', 'tolerances', 'landed_z')
         self.pose_freshness = value(self.cfg.raw, 'freshness_s', 'pose')
 
-    def reconfigure(self):
-        """Reload safety settings from the current Config only while safely idle."""
+    def _require_idle(self):
+        """Reject mutations before any live control adapter or process is touched."""
         if (self.store.run['state'] != 'IDLE' or self._closing
                 or any(self._alive(name) for name in self.children)
                 or any(not task.done() for task in self._launches)
                 or (self._landing_task is not None and not self._landing_task.done())):
             raise ValueError('실행기 설정은 프로세스가 없는 IDLE 상태에서만 변경할 수 있습니다')
+
+    def reconfigure(self):
+        """Reload safety settings from the current Config only while safely idle."""
+        self._require_idle()
         self._read_settings()
 
     def _alive(self, name):
@@ -408,7 +417,7 @@ class Runner:
             self.store.event('warning', reason)
             self._log_tail(child)
             self._begin_stop(False, short=True)
-        elif name == 'preflight' and current in ('CHECKING', 'READY', 'RUNNING'):
+        elif name == 'preflight' and current in ('CHECKING', 'READY', 'RUNNING', 'DONE'):
             reason = 'preflight 프로세스 사망'
             self.store.set_run(last_error=reason)
             self.store.event('warning', reason)
@@ -481,9 +490,11 @@ class Runner:
             function = getattr(self.io, method, None)
             if function is None:
                 raise RuntimeError('서비스 없음')
-            return await asyncio.wait_for(function(name, *args), 1)
+            # ROSIO owns the one-second service boundary. Allow its response and
+            # accounting to finish before this defensive adapter ceiling.
+            return await asyncio.wait_for(function(name, *args), 1.5)
         except (Exception, asyncio.TimeoutError) as exc:
-            self.store.event('warning', '{} {} 미확인: {}'.format(name, method, exc))
+            self.store.event('warning', '{} {} 미확인: {!r}'.format(name, method, exc))
             return None
 
     async def _land_and_cancel(self):

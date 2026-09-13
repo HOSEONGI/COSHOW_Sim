@@ -6,6 +6,7 @@ import contextlib
 import json
 import os
 from pathlib import Path
+import signal
 import sys
 import time
 
@@ -62,6 +63,7 @@ class Dashboard:
         self.ping_task = None
         self.mock_fail = mock_fail
         self.mock_applied_hash = None
+        self.mock_stack_running = True
         if mock:
             from dashboard.mock import MockWorld
             self.world = MockWorld(cfg, self.store, mock_fail)
@@ -85,7 +87,9 @@ class Dashboard:
                 if self.fleet:
                     if self.mock:
                         self.store.set_stack(roster_hash=self.fleet.generated.roster_hash if self.fleet.generated else None,
-                                             applied_hash=self.mock_applied_hash)
+                                             applied_hash=self.mock_applied_hash,
+                                             crazyflie_server='up' if self.mock_stack_running else 'down',
+                                             aideck='up' if self.mock_stack_running else 'down')
                     else:
                         self.fleet.refresh()
                 state = json.dumps(self.state(), ensure_ascii=False, allow_nan=False)
@@ -170,12 +174,21 @@ class Dashboard:
             self.runner = Runner(self.cfg, self.store, self.io, self.state)
             await self.runner.start()
         from dashboard.fleet import FleetManager
-        self.fleet = FleetManager(self.cfg, self.store, self.reconfigure)
+        self.fleet = FleetManager(self.cfg, self.store, self.reconfigure,
+                                  operation_guard=self.runner._require_idle if self.runner else None)
+        if not self.mock:
+            await self.fleet.recover_stacks()
         if self.mock and self.fleet.generated:
             self.mock_applied_hash = self.fleet.generated.roster_hash
         self.tasks.append(asyncio.create_task(self.aggregate()))
 
     async def shutdown(self, app):
+        # aiohttp's default second signal raises GracefulExit. Once shutdown has
+        # begun, only the server-owned safety task may decide when to finish.
+        loop = asyncio.get_running_loop()
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            loop.add_signal_handler(sig, self.store.event, 'warning',
+                '서버 종료 중 {} 무시 — 착륙 시퀀스 계속'.format(sig.name))
         # on_shutdown runs before aiohttp waits for open WebSocket handlers.
         # Keep ROS, receipt aging and telemetry alive throughout the sequence.
         if self.runner:
@@ -210,13 +223,51 @@ class Dashboard:
             roster_hash=self.fleet.generated.roster_hash if self.fleet and self.fleet.generated else None))
 
     async def reconfigure(self, cfg):
+        if self.runner:
+            self.runner._require_idle()
+        # Once Fleet has staged its files, finish or roll back as one operation.
+        # A cancelled request must not restore old files after the adapter swap.
+        transaction = asyncio.create_task(self._reconfigure(cfg))
+        while True:
+            try:
+                return await asyncio.shield(transaction)
+            except asyncio.CancelledError:
+                # Repeated caller cancellation must not reach an adapter that
+                # has already replaced the old one. Preserve the actual outcome.
+                if transaction.done():
+                    return transaction.result()
+
+    async def _reconfigure(self, cfg):
+        old_io, candidate = self.io, None
+        if not self.mock:
+            from dashboard.ros_io import ROSIO
+            candidate = ROSIO(cfg, self.store)
+            try:
+                await candidate.start()
+                # A shutdown may have started while ROS initialization awaited.
+                self.runner.reconfigure()
+            except BaseException:
+                with contextlib.suppress(Exception):
+                    await candidate.close()
+                self.runner.io = self.io
+                raise
+            # No await between publishing the new adapter and the Runner's
+            # reference. Even failure while closing the old one keeps control.
+            self.io = candidate
+            self.runner.io = self.io
         if self.ping_task:
             self.ping_task.cancel()
             await asyncio.gather(self.ping_task, return_exceptions=True)
             if self.ping_task in self.tasks:
                 self.tasks.remove(self.ping_task)
-        if self.io:
-            await self.io.close()
+        try:
+            if old_io:
+                await old_io.close()
+        except Exception as exc:
+            self.store.event('warning', '이전 ROS 어댑터 정리 미확인: {!r}'.format(exc))
+        finally:
+            if self.runner:
+                self.runner.io = self.io
         # Old executor/ping callbacks can finish during shutdown; clear those
         # receipts after both are stopped so a replacement never inherits them.
         with self.store.lock:
@@ -228,15 +279,7 @@ class Dashboard:
             from dashboard.mock import MockWorld
             self.world = MockWorld(cfg, self.store, self.mock_fail)
         else:
-            from dashboard.ros_io import ROSIO
             from dashboard.pinger import Pinger
-            self.io = ROSIO(cfg, self.store)
-            try:
-                await self.io.start()
-            except Exception as exc:
-                self.store.unavailable(None, 'ros', 'ROS 재설정 실패: {}'.format(exc))
-            self.runner.reconfigure()
-            self.runner.io = self.io
             self.ping_task = asyncio.create_task(Pinger(cfg, self.store).run())
             self.tasks.append(self.ping_task)
         # Reconnect gives each sender a new camera-index count and hello.
@@ -252,19 +295,30 @@ class Dashboard:
                 result = self.fleet.recommend_roster()
             elif action == 'roster':
                 payload = await request.json()
+                if not isinstance(payload, dict) or 'expected_hash' not in payload:
+                    raise ValueError('expected_hash가 필요합니다. 최신 배정을 다시 검토하세요')
                 result = await self.fleet.save_roster(payload.get('roster'), payload.get('expected_hash'))
-            elif action in ('start', 'restart'):
+            elif action in ('start', 'restart', 'stop'):
                 if self.mock:
                     async with self.fleet._operation():
-                        generated = self.fleet.regenerate()
-                        if generated is None:
-                            raise ValueError(self.store.stack.get('generation_error'))
-                        self.mock_applied_hash = generated.roster_hash
-                        self.store.set_stack(applied_hash=self.mock_applied_hash)
+                        if action == 'stop':
+                            self.mock_stack_running = False
+                            self.mock_applied_hash = None
+                        else:
+                            generated = self.fleet.regenerate()
+                            if generated is None:
+                                raise ValueError(self.store.stack.get('generation_error'))
+                            self.mock_stack_running = True
+                            self.mock_applied_hash = generated.roster_hash
+                        self.store.set_stack(applied_hash=self.mock_applied_hash,
+                            crazyflie_server='up' if self.mock_stack_running else 'down',
+                            aideck='up' if self.mock_stack_running else 'down')
                         self.store.event('info', 'MOCK 스택 {} 완료'.format(action))
                         result = self.store.snapshot()['stack']
                 else:
-                    result = await (self.fleet.start_stack() if action == 'start' else self.fleet.restart_stack())
+                    operation = {'start': self.fleet.start_stack, 'restart': self.fleet.restart_stack,
+                                 'stop': self.fleet.stop_stack}[action]
+                    result = await operation()
             else:
                 raise web.HTTPNotFound()
         except (ValueError, TypeError, AttributeError, OSError) as exc:
@@ -285,9 +339,9 @@ class Dashboard:
         app.router.add_get('/api/admin', self.admin_settings)
         app.router.add_get('/api/fleet/{action:recommend}', self.fleet_action)
         app.router.add_put('/api/fleet/{action:roster}', self.fleet_action)
-        app.router.add_post('/api/fleet/{action:start|restart}', self.fleet_action)
+        app.router.add_post('/api/fleet/{action:start|restart|stop}', self.fleet_action)
         async def health(request):
-            return web.json_response(dict(milestone='M7', mock=self.mock, websocket='/ws', visitor='/visitor.html',
+            return web.json_response(dict(milestone='M8', mock=self.mock, websocket='/ws', visitor='/visitor.html',
                                            admin='/admin.html', mode='mock' if self.mock else 'operations'))
         app.router.add_get('/', health)
         app.router.add_static('/static/', Path(__file__).resolve().parent / 'static', show_index=False)
@@ -316,6 +370,17 @@ def main():
         host, port, args.mock), flush=True)
     if args.check_config:
         from dashboard.ros_io import check_config
+        from dashboard.fleet import generate_config
+        generation_failed = False
+        try:
+            generated = generate_config(cfg)
+            print('PASS\tgeneration\t{}\t{} files'.format(generated.roster_hash, len(generated.files)))
+            for warning in generated.warnings:
+                if warning not in cfg.warnings:
+                    cfg.warnings.append(warning)
+        except Exception as exc:
+            generation_failed = True
+            print('FAIL\tgeneration\t{!r}'.format(exc))
         rows = check_config(cfg, args.check_timeout)
         for row in rows:
             print('{}\t{}\t{}\t{}\t{}'.format(row.get('status', 'pass' if row['ok'] else 'fail').upper(), row['kind'],
@@ -324,7 +389,7 @@ def main():
             print('FAIL\tconfiguration\t' + error)
         for warning in cfg.warnings:
             print('WARN\tconfiguration\t' + warning)
-        return 1 if cfg.errors or any(not r['ok'] and r.get('status') != 'skip' for r in rows) else 0
+        return 1 if generation_failed or cfg.errors or any(not r['ok'] and r.get('status') != 'skip' for r in rows) else 0
     web.run_app(Dashboard(cfg, args.mock, args.mock_fail).app(), host=host, port=port)
     return 0
 

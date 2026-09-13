@@ -33,6 +33,9 @@ from dashboard.config import load_config
 SCRIPT = Path(__file__).resolve()
 LAND_DURATION = .25
 EXIT_BOUND = 6
+SCENARIOS = ('stubborn', 'early-exit', 'reset-race', 'stubborn-repeat-int',
+             'stubborn-repeat-term', 'bt-crash', 'stack-children')
+STACK_KINDS = ('crazyflie_server', 'aideck')
 
 
 def append(path, kind, **data):
@@ -63,7 +66,7 @@ def fixture_config(root, prefix, scenario):
     cfg.bt_cwd.mkdir(parents=True, exist_ok=True)
     for metadata in cfg.robots.values():
         metadata['ip'] = '127.0.0.1'
-    for kind in ('bt', 'preflight'):
+    for kind in ('bt', 'preflight') + (STACK_KINDS if scenario == 'stack-children' else ()):
         cfg.raw['commands'][kind] = shlex.join([
             sys.executable, str(SCRIPT), '--child', kind, '--root', str(root),
             '--scenario', scenario, '--config', str(cfg.bt_path)])
@@ -82,7 +85,12 @@ def safe_child(args):
     append(args.root / 'children.jsonl', 'started', child=args.child,
            pid=os.getpid(), sid=os.getsid(0), core_limit=list(resource.getrlimit(resource.RLIMIT_CORE)))
     while True:
-        time.sleep(.1)
+        if args.scenario == 'bt-crash':
+            trigger = 'crash.go' if args.child == 'bt' else 'finish-preflight.go'
+            if (args.root / trigger).exists():
+                append(args.root / 'children.jsonl', 'spontaneous_exit', child=args.child)
+                os._exit(1 if args.child == 'bt' else 0)
+        time.sleep(.02)
 
 
 def server_child(args):
@@ -104,6 +112,16 @@ def server_child(args):
             assert time.monotonic() < deadline, 'Local service discovery timed out'
             await asyncio.sleep(.02)
         assert len(dashboard.io.service_clients) == len(cfg.drones) * 2 + len(cfg.limos)
+        if args.scenario == 'stack-children':
+            await dashboard.fleet.start_stack()
+            await until(lambda: len([row for row in read_records(args.root / 'children.jsonl')
+                                    if row['kind'] == 'started']) == 2)
+            append(args.root / 'server.jsonl', 'stack_started',
+                children={kind: dict(pid=child.pid, identity=child.identity, argv=child.argv)
+                          for kind, child in dashboard.fleet.children.items()},
+                receipts={path.name: path.read_text() for path in dashboard.fleet.run_dir.iterdir()
+                          if path.name == 'stack.applied.json' or path.suffix == '.pid'
+                          or path.name.endswith('.process.json')})
         print('FIXTURE: readiness checklist only; mock=False; production Dashboard/Runner/ROSIO', flush=True)
 
     async def shutdown_observed(application):
@@ -281,20 +299,39 @@ async def scenario(name, regression=False):
                         await ws.send_json(dict(cmd='start'))
                         await until(lambda: states and states[-1][1]['run']['state'] == 'RUNNING'
                                     and states[-1][1]['run']['bt_pid'] is not None
-                                    and len([r for r in read_records(root / 'children.jsonl') if r['kind'] == 'started']) == 2)
+                                    and len([r for r in read_records(root / 'children.jsonl') if r['kind'] == 'started'])
+                                    == (4 if name == 'stack-children' else 2))
                         assert all(states[-1][1]['robots'][role]['pose_age'] < .2 for role in cfg.drones)
                         assert states[-1][1]['mission']['phase'] == 'capture'
                         if name == 'reset-race':
                             await ws.send_json(dict(cmd='reset'))
                             await until(lambda: states[-1][1]['run']['state'] == 'LANDING')
                         assert not ws.closed, 'Admin WebSocket must remain open at server SIGINT'
+                        crash_at = None
+                        if name == 'bt-crash':
+                            crash_at = time.monotonic()
+                            (root / 'crash.go').touch()
+                            await until(lambda: states[-1][1]['run']['state'] == 'ABORTED')
+                            assert states[-1][1]['run']['last_error'] == 'BT exited rc=1'
+                            assert not [r for r in ros.requests if r['channel'] == 'arm']
+                            # End the dummy monitor naturally after recording the
+                            # crash sequence, so shutdown cannot initiate another run.
+                            (root / 'finish-preflight.go').touch()
+                            await until(lambda: states[-1][1]['run']['preflight_pid'] is None)
                         requested = time.monotonic()
                         process.send_signal(signal.SIGINT)
+                        repeated_at = None
+                        if name.startswith('stubborn-repeat-'):
+                            await asyncio.sleep(1)
+                            repeated_at = time.monotonic()
+                            process.send_signal(signal.SIGINT if name.endswith('int') else signal.SIGTERM)
                         try:
-                            await asyncio.wait_for(process.wait(), EXIT_BOUND)
+                            remaining = max(0, EXIT_BOUND - (time.monotonic() - requested))
+                            await asyncio.wait_for(process.wait(), remaining)
                         except asyncio.TimeoutError as exc:
                             raise AssertionError('SERVER SHUTDOWN STALL: still alive after {}s with open admin WS'.format(EXIT_BOUND)) from exc
                         elapsed = time.monotonic() - requested
+                        assert elapsed <= EXIT_BOUND, 'Total shutdown exceeded the six-second bound'
                         await asyncio.wait_for(reader, 1)
                         assert ws.closed, 'Server did not close the admin WebSocket'
                         socket_code = ws.close_code
@@ -307,14 +344,34 @@ async def scenario(name, regression=False):
                 assert final['ros_alive'] and final['open_sockets'] == 0
                 assert cleanup['ros_closed'] and cleanup['tasks_done']
                 assert final['at'] <= cleanup['at']
-                assert all(child['returncode'] is not None and child['sigint_sent'] for child in final['children'].values())
-                assert not list((root / 'dashboard/run').glob('*.pid'))
+                assert all(child['returncode'] is not None for child in final['children'].values())
+                assert all(child['sigint_sent'] == (name != 'bt-crash') for child in final['children'].values())
+                stack_survivors = {}
+                if name == 'stack-children':
+                    from dashboard.fleet import FleetManager
+                    from dashboard.runner import _process_argv, _process_identity
+                    initial = next(item for item in records if item['kind'] == 'stack_started')
+                    assert set(path.stem for path in (root / 'dashboard/run').glob('*.pid')) == set(STACK_KINDS)
+                    for kind, owned in initial['children'].items():
+                        pid = owned['pid']
+                        assert FleetManager._pid_alive(pid), 'Stack was terminated on server shutdown'
+                        assert await _process_identity(pid) == owned['identity']
+                        assert await _process_argv(pid) == owned['argv']
+                        assert int((root / 'dashboard/run' / (kind + '.pid')).read_text()) == pid
+                        stack_survivors[kind] = dict(pid=pid, alive=True, identity_preserved=True)
+                    for filename, content in initial['receipts'].items():
+                        assert (root / 'dashboard/run' / filename).read_text() == content
+                    assert any('스택은 계속 실행 중' in row['text'] for row in final['state']['events'])
+                else:
+                    assert not list((root / 'dashboard/run').glob('*.pid'))
                 for event in children:
                     if event['kind'] == 'started':
                         assert event['pid'] == event['sid'] and event['core_limit'] == [0, 0]
-                        assert not Path('/proc/{}'.format(event['pid'])).exists(), event
+                        if event['child'] not in STACK_KINDS:
+                            assert not Path('/proc/{}'.format(event['pid'])).exists(), event
                 signals = [event for event in children if event['kind'] == 'signal']
-                assert [(event['child'], event['signal']) for event in signals] == [('bt', signal.SIGINT), ('preflight', signal.SIGINT)]
+                expected_signals = [] if name == 'bt-crash' else [('bt', signal.SIGINT), ('preflight', signal.SIGINT)]
+                assert [(event['child'], event['signal']) for event in signals] == expected_signals
                 with ros.lock:
                     requests = list(ros.requests)
                 lands = [event for event in requests if event['channel'] == 'land']
@@ -324,11 +381,17 @@ async def scenario(name, regression=False):
                 assert sorted(event['robot'] for event in cancels) == sorted(cfg.limos)
                 assert all(event['wire'] == dict(height=0.0, group_mask=0, sec=0, nanosec=250000000) for event in lands)
                 assert all(event['wire'] == dict(uuid=[0] * 16, sec=0, nanosec=0) for event in cancels)
-                assert min(event['at'] for event in lands) - signals[0]['at'] >= .48
-                assert all(event['at'] < signals[1]['at'] for event in lands + cancels)
-                assert all(event['wire'] == dict(arm=False) and event['at'] > signals[1]['at'] for event in arms)
+                if name != 'bt-crash':
+                    assert min(event['at'] for event in lands) - signals[0]['at'] >= .48
+                    assert all(event['at'] < signals[1]['at'] for event in lands + cancels)
+                    assert all(event['wire'] == dict(arm=False) and event['at'] > signals[1]['at'] for event in arms)
                 warnings = [event['text'] for event in final['state']['events'] if event['level'] == 'warning']
-                if name == 'early-exit':
+                if name == 'bt-crash':
+                    assert not arms and not signals
+                    assert final['state']['run']['last_error'] == 'BT exited rc=1'
+                    assert final['children']['bt']['returncode'] == 1
+                    assert min(event['at'] for event in lands) >= crash_at
+                elif name == 'early-exit':
                     assert not arms, 'Airborne fresh pose must never be disarmed merely because BT exited'
                     assert all(any(role + ' 착륙 미확인' in warning for warning in warnings) for role in cfg.drones)
                     assert final['children']['bt']['returncode'] == 0
@@ -338,6 +401,8 @@ async def scenario(name, regression=False):
                         poses={role: final['state']['robots'][role] for role in cfg.drones})
                     assert signals[1]['at'] - min(event['at'] for event in lands) >= LAND_DURATION + 1.9
                     assert final['children']['bt']['returncode'] == -signal.SIGKILL
+                if repeated_at is not None:
+                    assert any('종료 중 SIG' in warning and '무시' in warning for warning in warnings)
                 if name == 'reset-race':
                     assert final['state']['mission'] is None and final['state']['preflight'] is None
                     assert all(row['led'] == 'off' and row['cmd'] is None and row['detections'] == []
@@ -350,7 +415,9 @@ async def scenario(name, regression=False):
                     event['relative_s'] = round(event.pop('at') - requested, 4)
                 print('SCENARIO', json.dumps(dict(name=name, exit_seconds=round(elapsed, 4),
                     websocket_close_code=socket_code, final_state=expected_state,
-                    production_mock=False, readiness_fixture_only=True,
+                    production_mock=False, readiness_fixture_only=True, exit_bound_s=EXIT_BOUND,
+                    repeated_signal_at=repeated_at, crash_at=crash_at,
+                    stack_survivors=stack_survivors,
                     children=final['children'], timeline=timeline, warnings=warnings), ensure_ascii=False), flush=True)
         finally:
             if process is not None and process.returncode is None:
@@ -376,22 +443,22 @@ async def scenario(name, regression=False):
 async def probe(args):
     assert os.environ.get('ROS_DOMAIN_ID') == '90', 'Use isolated ROS_DOMAIN_ID=90'
     assert os.environ.get('ROS_LOCALHOST_ONLY') == '1', 'Use ROS_LOCALHOST_ONLY=1'
-    names = [args.scenario] if args.scenario else ['stubborn', 'early-exit', 'reset-race']
+    names = [args.scenario] if args.scenario else SCENARIOS
     print('SCOPE: production aiohttp web.run_app, Dashboard, Runner and ROSIO; actual local DDS; '
           'safe child commands; readiness checklist fixture; open admin WS; no hardware', flush=True)
     for name in names:
         await scenario(name, args.regression_late_cleanup)
     print('PASS: selected scenarios {}; server SIGINT closes open admin WS within {}s; '
           'DDS wire requests, signal order, pose-based disarm decision, expected final state, '
-          'ROS cleanup order and child/pidfile cleanup assertions passed'.format(', '.join(names), EXIT_BOUND), flush=True)
+          'ROS cleanup, BT/preflight cleanup and stack-child/receipt preservation assertions passed'.format(', '.join(names), EXIT_BOUND), flush=True)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--scenario', choices=('stubborn', 'early-exit', 'reset-race'))
+    parser.add_argument('--scenario', choices=SCENARIOS)
     parser.add_argument('--regression-late-cleanup', action='store_true')
     parser.add_argument('--server-child', action='store_true')
-    parser.add_argument('--child', choices=('bt', 'preflight'))
+    parser.add_argument('--child', choices=('bt', 'preflight') + STACK_KINDS)
     parser.add_argument('--root', type=Path)
     parser.add_argument('--prefix')
     parser.add_argument('--port', type=int)

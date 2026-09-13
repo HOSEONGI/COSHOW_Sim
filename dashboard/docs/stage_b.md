@@ -28,6 +28,9 @@ python3 dashboard/server.py --check-config 2>&1 | tee dashboard/logs/stage_b_che
 python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/stage_b.jsonl
 ```
 
+기존 기록이 있으면 타임스탬프 이름으로 전환하며 실제 저장 경로를 `OUTPUT`으로
+표시한다. 사후 분석에는 이번 실행의 `OUTPUT` JSONL 경로를 사용한다.
+
 4. 배터리 하나를 이미 낮은 전압인 기체로 교체해 임계값 경고/차단을 확인한다. 시험을 위해 배터리를 과방전시키지 않는다.
 5. 아래 로스터 교체를 한 번 수행한다. 원래 YAML을 손으로 덮어쓰지 않는다.
 
@@ -39,6 +42,12 @@ python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/stage_b.j
 | 스택 재기동 | generated 파일 적용, applied_hash 일치 |
 | 새 기체가 해당 역할의 status·카메라를 발행 | 새 기체 값 확인 |
 | 이전 기체는 스페어 행으로 이동 | status만 표시, 스페어 무장 경고 없음 |
+
+기동이 일부만 성공하면 먼저 뜬 스택은 유지되고 적용 해시는 null이 된다.
+실패 사유를 해결한 뒤 IDLE의 **스택 재기동**으로 복구한다. 대시보드만 종료해도
+스택과 `dashboard/run/`의 PID·소유권·적용 기록은 남는다. 다시 실행하면 신원이
+일치하는 스택을 재입양하므로 중복 기동하지 않는다. 벤치 작업을 끝내고 스택까지
+끄려면 IDLE에서 **스택 정지**를 누른다. 리셋은 스택 정지 명령이 아니다.
 
 Stage B의 필수 수용은 수신·표시·로스터 교체다. preflight는 stage 3 통과 직후 자동으로 stage 4에서 무장하므로, **버튼을 누른 뒤 사람이 stage 4 직전에 맞춰 중단하는 방법은 사용하지 않는다.** 기존의 검증된 차단 조건이 stage 4 진입을 막는 환경에서만 단계 1–3을 관찰할 수 있다. 그런 조건이 없다면 preflight/무장 확인은 Stage D로 넘긴다. Lighthouse가 없어 stage 1에서 실패한 경우는 그 사유를 기록한다.
 

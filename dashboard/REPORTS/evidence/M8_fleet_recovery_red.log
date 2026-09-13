@@ -1,0 +1,374 @@
+...............................................FFFFFFFF                  [100%]
+=================================== FAILURES ===================================
+________ test_fleet_operation_runner_guard_precedes_busy_and_disk_write ________
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3203271f0>
+
+    def test_fleet_operation_runner_guard_precedes_busy_and_disk_write(fleet_cfg):
+        store = TelemetryStore(fleet_cfg)
+        observed = []
+        def guard():
+            observed.append(store.stack.get('busy'))
+            raise ValueError('live preflight child')
+        manager = fleet_module().FleetManager(fleet_cfg, store, operation_guard=guard)
+        before = manager.roster_path.read_bytes()
+        with pytest.raises(ValueError, match='live preflight'):
+            asyncio.run(manager.save_roster(fleet_cfg.roster, expected_hash=manager.generated.roster_hash))
+>       assert observed == [False]
+E       assert [None] == [False]
+E         At index 0 diff: None != False
+E         Full diff:
+E         - [False]
+E         + [None]
+
+dashboard/tests/test_fleet.py:574: AssertionError
+___ test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy ___
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3202c6830>
+
+    def test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy(fleet_cfg):
+        cfg = load_config(mock=True)
+        assert cfg.raw['nodes']['aideck'] == '/aideck/aideck_aruco_node'
+        store = TelemetryStore(fleet_cfg)
+        manager = fleet_module().FleetManager(fleet_cfg, store)
+        store.nodes([('aideck_aruco_node', '/aideck')])
+        manager.refresh()
+        assert store.stack['aideck'] == 'external'
+>       row = next(row for row in store.snapshot()['checklist'] if row['id'] == 'global.aideck')
+E       StopIteration
+
+dashboard/tests/test_fleet.py:586: StopIteration
+__ test_reconfiguration_failure_rolls_back_roster_config_and_generated_files ___
+
+fleet_cfg = <dashboard.config.Config object at 0xffd320541de0>
+
+    def test_reconfiguration_failure_rolls_back_roster_config_and_generated_files(fleet_cfg):
+        store = TelemetryStore(fleet_cfg)
+        original_roster = dict(fleet_cfg.roster)
+        async def fail(cfg):
+            assert cfg.roster != original_roster
+            raise RuntimeError('new ROS adapter startup failed')
+        manager = fleet_module().FleetManager(fleet_cfg, store, on_reconfigure=fail)
+        before = {path: path.read_bytes() for path in manager.run_dir.iterdir() if path.is_file()}
+        old_cfg = copy.deepcopy(fleet_cfg.__dict__)
+        store.receive(fleet_cfg.drones[0], 'pose', [1, 2, 3])
+        old_data = copy.deepcopy(store.data)
+        original_hash = manager.generated.roster_hash
+        replacement = dict(original_roster)
+        replacement[fleet_cfg.drones[0]] = fleet_cfg.raw['fleet']['drones'][6]['id']
+        with pytest.raises(RuntimeError, match='adapter startup'):
+            asyncio.run(manager.save_roster(replacement, expected_hash=original_hash))
+>       assert fleet_cfg.__dict__ == old_cfg
+E       AssertionError: assert {'bt': {'agen...k': True, ...} == {'bt': {'agen...k': True, ...}
+E         Omitting 15 identical items, use -vv to show
+E         Differing items:
+E         {'robots': {'cf230': {'fleet_id': 'CF07', 'ip': '127.0.0.1', 'kind': 'drone', 'role': 'cf230', ...}, 'cf231': {'fleet_...role': 'cf232', ...}, 'cf233': {'fleet_id': 'CF04', 'ip': '192.168.1.14', 'kind': 'drone', 'role': 'cf233', ...}, ...}} != {'robots': {'cf230': {'fleet_id': 'CF01', 'ip': '192.168.1.211', 'kind': 'drone', 'role': 'cf230', ...}, 'cf231': {'fl...role': 'cf232', ...}, 'cf233': {'fleet_id': 'CF04', 'ip': '192.168.1.14', 'kind': 'drone', 'role': 'cf233', ...}, ...}}
+E         {'roster': {'cf230': 'CF07', 'cf...
+E         
+E         ...Full output truncated (305 lines hidden), use '-vv' to show
+
+dashboard/tests/test_fleet.py:609: AssertionError
+_ test_stack_recovery_restores_owned_identity_and_applied_hash_without_signals _
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3202f1de0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-27/test_stack_recovery_restores_o0')
+
+    def test_stack_recovery_restores_owned_identity_and_applied_hash_without_signals(fleet_cfg, tmp_path):
+        import json
+        from dashboard.runner import stop_process
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        async def exercise():
+            first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            second = None
+            try:
+                await first.start_stack()
+                receipt = json.loads((first.run_dir / 'stack.applied.json').read_text())
+                assert receipt['applied_hash'] == first.generated.roster_hash
+                second = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await second.recover_stacks()
+                assert {key: child.pid for key, child in second.children.items()} == {
+                    key: child.pid for key, child in first.children.items()}
+                assert second.store.stack['applied_hash'] == first.generated.roster_hash
+                assert second.store.stack['aideck'] == second.store.stack['crazyflie_server'] == 'up'
+                row = next(row for row in second.store.snapshot()['checklist'] if row['id'] == 'global.orphans')
+                assert row['ok']
+                with pytest.raises(ValueError):
+                    await second.start_stack()
+                assert all(not child.sigint_sent for child in second.children.values())
+                # Missing hash receipt must not prevent safe ownership restoration.
+                (first.run_dir / 'stack.applied.json').unlink()
+                third = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await third.recover_stacks()
+                assert len(third.children) == 2
+                assert third.store.stack['applied_hash'] is None
+                await third.detach_monitors()
+            finally:
+                if second:
+                    await second.detach_monitors()
+                for child in first.children.values():
+                    await stop_process(child)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:652: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_fleet.py:627: in exercise
+    receipt = json.loads((first.run_dir / 'stack.applied.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-root/pytest-27/test_stack_recovery_restores_o0/run/stack.applied.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-root/pytest-27/test_stack_recovery_restores_o0/run/stack.applied.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[missing] _
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3202c5750>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma0')
+receipt_problem = 'missing'
+
+    @pytest.mark.parametrize('receipt_problem', ['missing', 'identity', 'argv'])
+    def test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph(fleet_cfg, tmp_path, receipt_problem):
+        import json
+        from dashboard.runner import stop_process
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        async def exercise():
+            first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            recovered = None
+            try:
+                await first.start_stack()
+                receipt_path = first.run_dir / 'aideck.process.json'
+                if receipt_problem == 'missing':
+                    receipt_path.unlink()
+                else:
+                    value = json.loads(receipt_path.read_text())
+                    value[receipt_problem] = 'other-start' if receipt_problem == 'identity' else ['other-program']
+                    receipt_path.write_text(json.dumps(value))
+                recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await recovered.recover_stacks()
+                assert recovered.store.stack['aideck'] == 'external'
+                assert 'aideck' not in recovered.children
+                assert recovered.store.stack['applied_hash'] is None
+                row = next(row for row in recovered.store.snapshot()['checklist'] if row['id'] == 'global.orphans')
+                assert not row['ok'] and row['blocking']
+                before = (first.run_dir / 'aideck.pid').read_bytes()
+                with pytest.raises(ValueError):
+                    await recovered.start_stack()
+                assert (first.run_dir / 'aideck.pid').read_bytes() == before
+                assert first.children['aideck'].returncode is None
+            finally:
+                if recovered:
+                    await recovered.detach_monitors()
+                for child in first.children.values():
+                    await stop_process(child)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:691: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_fleet.py:669: in exercise
+    receipt_path.unlink()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma0/run/aideck.process.json')
+missing_ok = False
+
+    def unlink(self, missing_ok=False):
+        """
+        Remove this file or link.
+        If the path is a directory, use rmdir() instead.
+        """
+        try:
+>           self._accessor.unlink(self)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma0/run/aideck.process.json'
+
+/usr/lib/python3.10/pathlib.py:1206: FileNotFoundError
+_ test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[identity] _
+
+fleet_cfg = <dashboard.config.Config object at 0xffd31ecb2f80>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma1')
+receipt_problem = 'identity'
+
+    @pytest.mark.parametrize('receipt_problem', ['missing', 'identity', 'argv'])
+    def test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph(fleet_cfg, tmp_path, receipt_problem):
+        import json
+        from dashboard.runner import stop_process
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        async def exercise():
+            first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            recovered = None
+            try:
+                await first.start_stack()
+                receipt_path = first.run_dir / 'aideck.process.json'
+                if receipt_problem == 'missing':
+                    receipt_path.unlink()
+                else:
+                    value = json.loads(receipt_path.read_text())
+                    value[receipt_problem] = 'other-start' if receipt_problem == 'identity' else ['other-program']
+                    receipt_path.write_text(json.dumps(value))
+                recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await recovered.recover_stacks()
+                assert recovered.store.stack['aideck'] == 'external'
+                assert 'aideck' not in recovered.children
+                assert recovered.store.stack['applied_hash'] is None
+                row = next(row for row in recovered.store.snapshot()['checklist'] if row['id'] == 'global.orphans')
+                assert not row['ok'] and row['blocking']
+                before = (first.run_dir / 'aideck.pid').read_bytes()
+                with pytest.raises(ValueError):
+                    await recovered.start_stack()
+                assert (first.run_dir / 'aideck.pid').read_bytes() == before
+                assert first.children['aideck'].returncode is None
+            finally:
+                if recovered:
+                    await recovered.detach_monitors()
+                for child in first.children.values():
+                    await stop_process(child)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:691: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_fleet.py:671: in exercise
+    value = json.loads(receipt_path.read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma1/run/aideck.process.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma1/run/aideck.process.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[argv] _
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3202a5390>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma2')
+receipt_problem = 'argv'
+
+    @pytest.mark.parametrize('receipt_problem', ['missing', 'identity', 'argv'])
+    def test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph(fleet_cfg, tmp_path, receipt_problem):
+        import json
+        from dashboard.runner import stop_process
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        async def exercise():
+            first = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            recovered = None
+            try:
+                await first.start_stack()
+                receipt_path = first.run_dir / 'aideck.process.json'
+                if receipt_problem == 'missing':
+                    receipt_path.unlink()
+                else:
+                    value = json.loads(receipt_path.read_text())
+                    value[receipt_problem] = 'other-start' if receipt_problem == 'identity' else ['other-program']
+                    receipt_path.write_text(json.dumps(value))
+                recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await recovered.recover_stacks()
+                assert recovered.store.stack['aideck'] == 'external'
+                assert 'aideck' not in recovered.children
+                assert recovered.store.stack['applied_hash'] is None
+                row = next(row for row in recovered.store.snapshot()['checklist'] if row['id'] == 'global.orphans')
+                assert not row['ok'] and row['blocking']
+                before = (first.run_dir / 'aideck.pid').read_bytes()
+                with pytest.raises(ValueError):
+                    await recovered.start_stack()
+                assert (first.run_dir / 'aideck.pid').read_bytes() == before
+                assert first.children['aideck'].returncode is None
+            finally:
+                if recovered:
+                    await recovered.detach_monitors()
+                for child in first.children.values():
+                    await stop_process(child)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:691: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_fleet.py:671: in exercise
+    value = json.loads(receipt_path.read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma2/run/aideck.process.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-root/pytest-27/test_live_stack_pid_without_ma2/run/aideck.process.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+______________ test_dead_stack_pidfile_is_removed_during_startup _______________
+
+fleet_cfg = <dashboard.config.Config object at 0xffd3203271f0>
+
+    def test_dead_stack_pidfile_is_removed_during_startup(fleet_cfg):
+        manager = fleet_module().FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        path = manager.run_dir / 'aideck.pid'
+        path.write_text('2147483647\n')
+>       asyncio.run(manager.recover_stacks())
+E       AttributeError: 'FleetManager' object has no attribute 'recover_stacks'
+
+dashboard/tests/test_fleet.py:698: AttributeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_fleet_operation_runner_guard_precedes_busy_and_disk_write
+FAILED dashboard/tests/test_fleet.py::test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy
+FAILED dashboard/tests/test_fleet.py::test_reconfiguration_failure_rolls_back_roster_config_and_generated_files
+FAILED dashboard/tests/test_fleet.py::test_stack_recovery_restores_owned_identity_and_applied_hash_without_signals
+FAILED dashboard/tests/test_fleet.py::test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[missing]
+FAILED dashboard/tests/test_fleet.py::test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[identity]
+FAILED dashboard/tests/test_fleet.py::test_live_stack_pid_without_matching_identity_blocks_spawn_even_without_graph[argv]
+FAILED dashboard/tests/test_fleet.py::test_dead_stack_pidfile_is_removed_during_startup
+8 failed, 47 passed in 2.99s

@@ -1,0 +1,198 @@
+.FFF                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_running_and_nonlocal_fleet_writes_are_rejected_and_stack_blocks_start __
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-40/test_running_and_nonlocal_flee0')
+
+    def test_running_and_nonlocal_fleet_writes_are_rejected_and_stack_blocks_start(tmp_path):
+        async def run():
+            app = make_dashboard(tmp_path)
+            before = app.fleet.roster_path.read_bytes()
+            for action in ('roster', 'start', 'restart', 'stop'):
+                with pytest.raises(web.HTTPForbidden):
+                    await app.fleet_action(request(action, {'roster': app.cfg.roster}, remote='10.0.0.2'))
+            app.store.set_run(state='RUNNING')
+            for action in ('roster', 'start', 'restart', 'stop'):
+                response = await app.fleet_action(request(action, {'roster': app.cfg.roster,
+                    'expected_hash': app.fleet.generated.roster_hash}))
+                assert response.status == 409
+                assert 'IDLE' in json.loads(response.body)['error']
+            assert app.fleet.roster_path.read_bytes() == before
+            app.store.set_run(state='IDLE')
+            app.store.set_stack(busy=True)
+            for command in ('preflight', 'start'):
+                await app.command({'cmd': command}, True)
+                assert app.store.run['state'] == 'IDLE'
+                assert app.store.events[-1]['text'].startswith('cmd:' + command + ' rejected')
+            await app.cleanup(None)
+>       asyncio.run(run())
+
+dashboard/tests/test_m6_server.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_m6_server.py:77: in run
+    response = await app.fleet_action(request(action, {'roster': app.cfg.roster,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <dashboard.server.Dashboard object at 0xe0caa4c50640>
+request = namespace(remote='127.0.0.1', headers={}, scheme='http', host='127.0.0.1', match_info={'action': 'stop'}, json=<function request.<locals>.body at 0xe0caa4c56560>)
+
+    async def fleet_action(self, request):
+        self.require_local(request)
+        if not self.fleet:
+            raise web.HTTPServiceUnavailable(text='플릿 제어 초기화 대기')
+        action = request.match_info['action']
+        try:
+            if action == 'recommend':
+                result = self.fleet.recommend_roster()
+            elif action == 'roster':
+                payload = await request.json()
+                if not isinstance(payload, dict) or 'expected_hash' not in payload:
+                    raise ValueError('expected_hash가 필요합니다. 최신 배정을 다시 검토하세요')
+                result = await self.fleet.save_roster(payload.get('roster'), payload.get('expected_hash'))
+            elif action in ('start', 'restart'):
+                if self.mock:
+                    async with self.fleet._operation():
+                        generated = self.fleet.regenerate()
+                        if generated is None:
+                            raise ValueError(self.store.stack.get('generation_error'))
+                        self.mock_applied_hash = generated.roster_hash
+                        self.store.set_stack(applied_hash=self.mock_applied_hash)
+                        self.store.event('info', 'MOCK 스택 {} 완료'.format(action))
+                        result = self.store.snapshot()['stack']
+                else:
+                    result = await (self.fleet.start_stack() if action == 'start' else self.fleet.restart_stack())
+            else:
+>               raise web.HTTPNotFound()
+E               aiohttp.web_exceptions.HTTPNotFound: Not Found
+
+dashboard/server.py:307: HTTPNotFound
+_______ test_mock_stop_persists_through_aggregation_and_can_start_again ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-40/test_mock_stop_persists_throug0')
+
+    def test_mock_stop_persists_through_aggregation_and_can_start_again(tmp_path):
+        async def run():
+            app = make_dashboard(tmp_path)
+            response = await app.fleet_action(request('stop'))
+            assert response.status == 200
+            aggregate = asyncio.create_task(app.aggregate())
+            try:
+                await asyncio.sleep(.12)
+                stack = app.store.stack
+                assert stack['crazyflie_server'] == stack['aideck'] == 'down'
+                assert stack['applied_hash'] is None
+                assert (await app.fleet_action(request('start'))).status == 200
+                await asyncio.sleep(.12)
+                assert stack['crazyflie_server'] == stack['aideck'] == 'up'
+                assert stack['applied_hash'] == app.fleet.generated.roster_hash
+            finally:
+                aggregate.cancel()
+                await asyncio.gather(aggregate, return_exceptions=True)
+                await app.cleanup(None)
+>       asyncio.run(run())
+
+dashboard/tests/test_m6_server.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+dashboard/tests/test_m6_server.py:95: in run
+    response = await app.fleet_action(request('stop'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <dashboard.server.Dashboard object at 0xe0caa4a6abc0>
+request = namespace(remote='127.0.0.1', headers={}, scheme='http', host='127.0.0.1', match_info={'action': 'stop'}, json=<function request.<locals>.body at 0xe0caa4aeff40>)
+
+    async def fleet_action(self, request):
+        self.require_local(request)
+        if not self.fleet:
+            raise web.HTTPServiceUnavailable(text='플릿 제어 초기화 대기')
+        action = request.match_info['action']
+        try:
+            if action == 'recommend':
+                result = self.fleet.recommend_roster()
+            elif action == 'roster':
+                payload = await request.json()
+                if not isinstance(payload, dict) or 'expected_hash' not in payload:
+                    raise ValueError('expected_hash가 필요합니다. 최신 배정을 다시 검토하세요')
+                result = await self.fleet.save_roster(payload.get('roster'), payload.get('expected_hash'))
+            elif action in ('start', 'restart'):
+                if self.mock:
+                    async with self.fleet._operation():
+                        generated = self.fleet.regenerate()
+                        if generated is None:
+                            raise ValueError(self.store.stack.get('generation_error'))
+                        self.mock_applied_hash = generated.roster_hash
+                        self.store.set_stack(applied_hash=self.mock_applied_hash)
+                        self.store.event('info', 'MOCK 스택 {} 완료'.format(action))
+                        result = self.store.snapshot()['stack']
+                else:
+                    result = await (self.fleet.start_stack() if action == 'start' else self.fleet.restart_stack())
+            else:
+>               raise web.HTTPNotFound()
+E               aiohttp.web_exceptions.HTTPNotFound: Not Found
+
+dashboard/server.py:307: HTTPNotFound
+______________ test_stack_pid_write_failure_retains_owned_process ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-40/test_stack_pid_write_failure_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe0caa4c3d420>
+
+    def test_stack_pid_write_failure_retains_owned_process(tmp_path, monkeypatch):
+        async def run():
+            pid_path = tmp_path / 'stack.pid'
+            original = Path.write_text
+            def write(path, *args, **kwargs):
+                if path == pid_path:
+                    raise OSError('fixture pid storage unavailable')
+                return original(path, *args, **kwargs)
+            monkeypatch.setattr(Path, 'write_text', write)
+            child = None
+            try:
+                with pytest.raises(OSError, match='pid storage') as raised:
+                    await spawn_process([sys.executable, '-c', 'import time; time.sleep(60)'],
+                        tmp_path, {}, tmp_path / 'stack.log', pid_path, preserve_on_error=True)
+                child = raised.value.child
+                assert child.returncode is None and not child.sigint_sent
+                os.kill(child.pid, 0)
+            finally:
+                # Test-only cleanup of the exact process this test created.
+                if child is not None and child.returncode is None:
+                    child.proc.kill()
+                    await child.proc.wait()
+>       asyncio.run(run())
+
+dashboard/tests/test_m8_spawn_retention.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        pid_path = tmp_path / 'stack.pid'
+        original = Path.write_text
+        def write(path, *args, **kwargs):
+            if path == pid_path:
+                raise OSError('fixture pid storage unavailable')
+            return original(path, *args, **kwargs)
+        monkeypatch.setattr(Path, 'write_text', write)
+        child = None
+        try:
+            with pytest.raises(OSError, match='pid storage') as raised:
+>               await spawn_process([sys.executable, '-c', 'import time; time.sleep(60)'],
+                    tmp_path, {}, tmp_path / 'stack.log', pid_path, preserve_on_error=True)
+E                   TypeError: spawn_process() got an unexpected keyword argument 'preserve_on_error'
+
+dashboard/tests/test_m8_spawn_retention.py:24: TypeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m6_server.py::test_running_and_nonlocal_fleet_writes_are_rejected_and_stack_blocks_start
+FAILED dashboard/tests/test_m6_server.py::test_mock_stop_persists_through_aggregation_and_can_start_again
+FAILED dashboard/tests/test_m8_spawn_retention.py::test_stack_pid_write_failure_retains_owned_process
+3 failed, 1 passed in 0.18s

@@ -1,0 +1,61 @@
+FILE crazyflies.generated.yaml
+--- before/crazyflies.generated.yaml
++++ after/crazyflies.generated.yaml
+@@ -10,7 +10,7 @@
+     type: cf21
+   cf231:
+     enabled: true
+-    uri: radio://0/80/2M/E7E7E7E701
++    uri: radio://1/80/2M/E7E7E7E706
+     initial_position:
+     - -1.5
+     - 1.5
+@@ -32,25 +32,25 @@
+     - -1.5
+     - 0.0
+     type: cf21
++  spare_CF02:
++    enabled: true
++    uri: radio://0/80/2M/E7E7E7E701
++    initial_position:
++    - -3.0
++    - -2.0
++    - 0.0
++    type: cf21
+   spare_CF05:
+     enabled: true
+     uri: radio://1/80/2M/E7E7E7E704
+     initial_position:
+-    - -3.0
++    - -2.6
+     - -2.0
+     - 0.0
+     type: cf21
+   spare_CF06:
+     enabled: true
+     uri: radio://1/80/2M/E7E7E7E705
+-    initial_position:
+-    - -2.6
+-    - -2.0
+-    - 0.0
+-    type: cf21
+-  spare_CF07:
+-    enabled: true
+-    uri: radio://1/80/2M/E7E7E7E706
+     initial_position:
+     - -2.2
+     - -2.0
+FILE drones.generated.yaml
+--- before/drones.generated.yaml
++++ after/drones.generated.yaml
+@@ -2,7 +2,7 @@
+   ros__parameters:
+     drones:
+     - cf230,127.0.0.11,5001
+-    - cf231,127.0.0.12,5002
++    - cf231,127.0.0.17,5002
+     - cf232,127.0.0.13,5003
+     - cf233,127.0.0.14,5004
+     dictionary: DICT_4X4_50
+FILE preflight.generated.yaml
+UNCHANGED: role names/base coordinates retained

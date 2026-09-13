@@ -23,12 +23,13 @@ except (ValueError, AssertionError):
 if sys.argv[2] not in ('normal', 'low'):
     raise SystemExit('FX must be normal or low')
 PY
-if [[ ${XDG_SESSION_TYPE:-} != x11 || -z ${DISPLAY:-} ]]; then
-  printf "X11 required: 로그인 화면에서 'Ubuntu on Xorg'로 재로그인하세요.\n" >&2
-  exit 2
+if ((!dry_run)); then
+  if [[ ${XDG_SESSION_TYPE:-} != x11 || -z ${DISPLAY:-} ]]; then
+    printf "X11 required: 로그인 화면에서 'Ubuntu on Xorg'로 재로그인하세요.\n" >&2
+    exit 2
+  fi
+  xrandr --listmonitors >/dev/null
 fi
-# DISPLAY must name a real accessible X server, even during a dry run.
-xrandr --listmonitors >/dev/null
 settings="$(python3 - "$config" <<'PY'
 import sys
 import yaml

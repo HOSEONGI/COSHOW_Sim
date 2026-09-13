@@ -1,0 +1,90 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+________ test_caller_cancellation_waits_for_spawn_identity_recording[2] ________
+
+fleet_cfg = <dashboard.config.Config object at 0xf3ac4e6dcac0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-45/test_caller_cancellation_waits1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf3ac4e58a5c0>
+cancellations = 2
+
+    @pytest.mark.parametrize('cancellations', [1, 2])
+    def test_caller_cancellation_waits_for_spawn_identity_recording(fleet_cfg, tmp_path, monkeypatch, cancellations):
+        from dashboard import runner
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        original = runner.spawn_process
+        async def exercise():
+            spawned = asyncio.Event()
+            release = asyncio.Event()
+            harness_children = {}
+            async def slow_spawn(*args, **kwargs):
+                child = await original(*args, **kwargs)
+                harness_children[child.pid] = child
+                spawned.set()
+                await release.wait()
+                return child
+            monkeypatch.setattr(runner, 'spawn_process', slow_spawn)
+            manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            children = {}
+            task = asyncio.create_task(manager.start_stack())
+            try:
+                await asyncio.wait_for(spawned.wait(), 2)
+                for _ in range(cancellations):
+                    task.cancel()
+                    await asyncio.sleep(.02)
+                assert not task.done(), 'cancel must finish recording ownership of the already spawned process'
+                release.set()
+                with pytest.raises(asyncio.CancelledError):
+                    await task
+                children = dict(manager.children)
+                assert set(children) == {'crazyflie_server'}
+                child = children['crazyflie_server']
+                assert child.returncode is None and not child.sigint_sent
+                assert child.pid_path.exists()
+                assert (manager.run_dir / 'crazyflie_server.process.json').exists()
+                assert manager.store.stack['applied_hash'] is None
+            finally:
+                release.set()
+                await asyncio.gather(task, return_exceptions=True)
+                await cleanup_dummy_children(harness_children)
+                await manager.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:947: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        spawned = asyncio.Event()
+        release = asyncio.Event()
+        harness_children = {}
+        async def slow_spawn(*args, **kwargs):
+            child = await original(*args, **kwargs)
+            harness_children[child.pid] = child
+            spawned.set()
+            await release.wait()
+            return child
+        monkeypatch.setattr(runner, 'spawn_process', slow_spawn)
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        children = {}
+        task = asyncio.create_task(manager.start_stack())
+        try:
+            await asyncio.wait_for(spawned.wait(), 2)
+            for _ in range(cancellations):
+                task.cancel()
+                await asyncio.sleep(.02)
+>           assert not task.done(), 'cancel must finish recording ownership of the already spawned process'
+E           AssertionError: cancel must finish recording ownership of the already spawned process
+E           assert not True
+E            +  where True = <built-in method done of _asyncio.Task object at 0xf3ac4e391700>()
+E            +    where <built-in method done of _asyncio.Task object at 0xf3ac4e391700> = <Task cancelled name='Task-11' coro=<FleetManager.start_stack() done, defined at /ws/dashboard/fleet.py:641>>.done
+
+dashboard/tests/test_fleet.py:931: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_caller_cancellation_waits_for_spawn_identity_recording[2]
+1 failed, 1 passed, 65 deselected in 0.26s

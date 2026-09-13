@@ -242,8 +242,12 @@ def evaluate(state, cfg, context, now):
     for kind, label in (('preflight', '외부 preflight 없음'), ('bt', '외부 BT 없음')):
         observation = external_observation(kind, cfg, context, now)
         global_row('external_' + kind, label, not observation['external'], observation['detail'])
-    orphans = context.get('orphans') or []
-    global_row('orphans', '고아 프로세스 없음', not orphans, '{}개 감지'.format(len(orphans)))
+    orphans = list(context.get('orphans') or []) + list(context.get('stack_orphans') or [])
+    recovered = context.get('stack_recovered') or []
+    detail = '{}개 감지 (BT/preflight·스택 포함)'.format(len(orphans))
+    if recovered:
+        detail += ' · 스택 {}개 재입양'.format(len(recovered))
+    global_row('orphans', '고아 프로세스 없음', not orphans, detail)
     global_row('field_config', '필드 설정 로드', cfg.field_ok, '필드 설정 정상' if cfg.field_ok else '설정 없음')
     global_row('dashboard_config', '대시보드 설정 로드', cfg.dashboard_ok,
                '대시보드 설정 정상' if cfg.dashboard_ok else '설정 없음')

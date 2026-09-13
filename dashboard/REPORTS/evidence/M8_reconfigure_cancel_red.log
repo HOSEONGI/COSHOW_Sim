@@ -1,0 +1,178 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction ____
+
+self = <dashboard.server.Dashboard object at 0xf5b40f7e5ba0>
+cfg = <dashboard.config.Config object at 0xf5b40f1bac80>
+
+    async def reconfigure(self, cfg):
+        if self.runner:
+            self.runner._require_idle()
+        old_io, candidate = self.io, None
+        if not self.mock:
+            from dashboard.ros_io import ROSIO
+            candidate = ROSIO(cfg, self.store)
+            try:
+                await candidate.start()
+                # A shutdown may have started while ROS initialization awaited.
+                self.runner.reconfigure()
+            except BaseException:
+                with contextlib.suppress(Exception):
+                    await candidate.close()
+                self.runner.io = self.io
+                raise
+            # No await between publishing the new adapter and the Runner's
+            # reference. Even failure while closing the old one keeps control.
+            self.io = candidate
+            self.runner.io = self.io
+        if self.ping_task:
+            self.ping_task.cancel()
+            await asyncio.gather(self.ping_task, return_exceptions=True)
+            if self.ping_task in self.tasks:
+                self.tasks.remove(self.ping_task)
+        try:
+            if old_io:
+>               await old_io.close()
+
+dashboard/server.py:249: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_m8_safety.test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction.<locals>.run.<locals>.Old object at 0xf5b40f000310>
+
+    async def close(self):
+        closing.set()
+>       await release.wait()
+
+dashboard/tests/test_m8_safety.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0xf5b40f0001f0 [set]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/usr/lib/python3.10/asyncio/locks.py:214: CancelledError
+
+During handling of the above exception, another exception occurred:
+
+    async def run():
+        app = Dashboard(load_config(mock=True))
+        closing, release = asyncio.Event(), asyncio.Event()
+        class Old:
+            async def close(self):
+                closing.set()
+                await release.wait()
+        class New:
+            async def start(self): pass
+            async def close(self): pass
+        app.io = Old()
+        app.runner = Runner(app.cfg, app.store, app.io, app.state)
+        replacement = New()
+        monkeypatch.setattr(ros_io, 'ROSIO', lambda *args: replacement)
+        request = asyncio.create_task(app.reconfigure(app.cfg))
+        await closing.wait()
+        request.cancel()
+        release.set()
+        try:
+>           await request
+E           asyncio.exceptions.CancelledError
+
+dashboard/tests/test_m8_safety.py:104: CancelledError
+
+During handling of the above exception, another exception occurred:
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf5b40f1ba710>
+
+    def test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction(monkeypatch):
+        async def run():
+            app = Dashboard(load_config(mock=True))
+            closing, release = asyncio.Event(), asyncio.Event()
+            class Old:
+                async def close(self):
+                    closing.set()
+                    await release.wait()
+            class New:
+                async def start(self): pass
+                async def close(self): pass
+            app.io = Old()
+            app.runner = Runner(app.cfg, app.store, app.io, app.state)
+            replacement = New()
+            monkeypatch.setattr(ros_io, 'ROSIO', lambda *args: replacement)
+            request = asyncio.create_task(app.reconfigure(app.cfg))
+            await closing.wait()
+            request.cancel()
+            release.set()
+            try:
+                await request
+                assert app.io is app.runner.io is replacement
+                assert app.ping_task is not None
+            finally:
+                for task in app.tasks: task.cancel()
+                await asyncio.gather(*app.tasks, return_exceptions=True)
+>       asyncio.run(run())
+
+dashboard/tests/test_m8_safety.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=True debug=False>
+future = <Task cancelled name='Task-1' coro=<test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction.<locals>.run() done, defined at /ws/dashboard/tests/test_m8_safety.py:85>>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+E       asyncio.exceptions.CancelledError
+
+/usr/lib/python3.10/asyncio/base_events.py:649: CancelledError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m8_safety.py::test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction
+1 failed, 7 deselected in 0.08s

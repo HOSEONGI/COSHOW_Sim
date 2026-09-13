@@ -1,0 +1,256 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_backend_close_detaches_stacks_without_signals_and_preserves_receipts ___
+
+fleet_cfg = <dashboard.config.Config object at 0xf0b43647f7f0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-39/test_backend_close_detaches_st0')
+
+    def test_backend_close_detaches_stacks_without_signals_and_preserves_receipts(fleet_cfg, tmp_path):
+        import json
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        async def exercise():
+            manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            children = {}
+            recovered = None
+            try:
+                await manager.start_stack()
+                children = dict(manager.children)
+                files = {path: path.read_bytes() for path in manager.run_dir.iterdir() if path.suffix in ('.pid', '.json')}
+                receipt = json.loads((manager.run_dir / 'stack.applied.json').read_text())
+                await manager.close()
+                assert not manager.children
+                assert all(child.returncode is None and not child.sigint_sent for child in children.values())
+                assert all(path.read_bytes() == content for path, content in files.items())
+                assert all(receipt['processes'][kind]['argv'] == child.argv for kind, child in children.items())
+                assert any('스택은 계속 실행 중' in row['text'] for row in manager.store.events)
+                recovered = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+                await recovered.recover_stacks()
+                assert len(recovered.children) == 2
+                assert recovered.store.stack['applied_hash'] == manager.generated.roster_hash
+            finally:
+                if recovered:
+                    await recovered.detach_monitors()
+                await cleanup_dummy_children(children)
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:800: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        children = {}
+        recovered = None
+        try:
+            await manager.start_stack()
+            children = dict(manager.children)
+            files = {path: path.read_bytes() for path in manager.run_dir.iterdir() if path.suffix in ('.pid', '.json')}
+            receipt = json.loads((manager.run_dir / 'stack.applied.json').read_text())
+            await manager.close()
+            assert not manager.children
+>           assert all(child.returncode is None and not child.sigint_sent for child in children.values())
+E           assert False
+E            +  where False = all(<generator object test_backend_close_detaches_stacks_without_signals_and_preserves_receipts.<locals>.exercise.<locals>.<genexpr> at 0xf0b43696a730>)
+
+dashboard/tests/test_fleet.py:788: AssertionError
+__ test_partial_spawn_failure_preserves_first_stack_and_unknown_applied_hash ___
+
+fleet_cfg = <dashboard.config.Config object at 0xf0b437642e30>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-39/test_partial_spawn_failure_pre0')
+
+    def test_partial_spawn_failure_preserves_first_stack_and_unknown_applied_hash(fleet_cfg, tmp_path):
+        fleet = fleet_module()
+        fleet_cfg.raw['commands']['crazyflie_server'] = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands']['aideck'] = '/definitely-missing-aideck-executable'
+        async def exercise():
+            manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            children = {}
+            try:
+                with pytest.raises(OSError):
+                    await manager.start_stack()
+                children = dict(manager.children)
+                assert set(children) == {'crazyflie_server'}
+                child = children['crazyflie_server']
+                assert child.returncode is None and not child.sigint_sent
+                assert manager.store.stack['crazyflie_server'] == 'up'
+                assert manager.store.stack['aideck'] == 'down'
+                assert manager.store.stack['applied_hash'] is None
+                assert child.pid_path.exists()
+                assert any('스택 기동 실패' in row['text'] and 'missing-aideck' in row['text'] for row in manager.store.events)
+                with pytest.raises(ValueError):
+                    await manager.start_stack()
+            finally:
+                await cleanup_dummy_children(children)
+                await manager.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:827: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        children = {}
+        try:
+            with pytest.raises(OSError):
+                await manager.start_stack()
+            children = dict(manager.children)
+            assert set(children) == {'crazyflie_server'}
+            child = children['crazyflie_server']
+>           assert child.returncode is None and not child.sigint_sent
+E           AssertionError: assert (1 is None)
+E            +  where 1 = OwnedProcess(proc=<Process 3857>, argv=['/usr/bin/python3', '/tmp/pytest-of-root/pytest-39/test_partial_spawn_failure_.../crazyflie_server.pid'), sigint_sent=True, orphan=False, identity='linux:b065fbee-b6fd-4acd-830e-5109ded439f4:9616358').returncode
+
+dashboard/tests/test_fleet.py:816: AssertionError
+_________ test_cancelled_start_preserves_spawned_stack_without_signals _________
+
+fleet_cfg = <dashboard.config.Config object at 0xf0b436946320>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-39/test_cancelled_start_preserves0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf0b4363775e0>
+
+    def test_cancelled_start_preserves_spawned_stack_without_signals(fleet_cfg, tmp_path, monkeypatch):
+        from dashboard import runner
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        original = runner.spawn_process
+        async def exercise():
+            reached_second = asyncio.Event()
+            async def spawn(*args, **kwargs):
+                if str(args[4]).endswith('aideck.pid'):
+                    reached_second.set()
+                    raise asyncio.CancelledError()
+                return await original(*args, **kwargs)
+            monkeypatch.setattr(runner, 'spawn_process', spawn)
+            manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            children = {}
+            try:
+                with pytest.raises(asyncio.CancelledError):
+                    await manager.start_stack()
+                assert reached_second.is_set()
+                children = dict(manager.children)
+                assert len(children) == 1
+                assert all(child.returncode is None and not child.sigint_sent for child in children.values())
+                assert manager.store.stack['applied_hash'] is None
+            finally:
+                await cleanup_dummy_children(children)
+                await manager.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:857: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        reached_second = asyncio.Event()
+        async def spawn(*args, **kwargs):
+            if str(args[4]).endswith('aideck.pid'):
+                reached_second.set()
+                raise asyncio.CancelledError()
+            return await original(*args, **kwargs)
+        monkeypatch.setattr(runner, 'spawn_process', spawn)
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        children = {}
+        try:
+            with pytest.raises(asyncio.CancelledError):
+                await manager.start_stack()
+            assert reached_second.is_set()
+            children = dict(manager.children)
+            assert len(children) == 1
+>           assert all(child.returncode is None and not child.sigint_sent for child in children.values())
+E           assert False
+E            +  where False = all(<generator object test_cancelled_start_preserves_spawned_stack_without_signals.<locals>.exercise.<locals>.<genexpr> at 0xf0b43634b300>)
+
+dashboard/tests/test_fleet.py:852: AssertionError
+______ test_explicit_stop_stack_uses_parallel_owned_stop_and_is_idle_only ______
+
+fleet_cfg = <dashboard.config.Config object at 0xf0b4362d8250>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-39/test_explicit_stop_stack_uses_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf0b43801c160>
+
+    def test_explicit_stop_stack_uses_parallel_owned_stop_and_is_idle_only(fleet_cfg, tmp_path, monkeypatch):
+        from dashboard import runner
+        fleet = fleet_module()
+        command = shlex.quote(sys.executable) + ' ' + shlex.quote(str(write_dummy(tmp_path)))
+        fleet_cfg.raw['commands'].update(crazyflie_server=command, aideck=command)
+        original = runner.stop_process
+        async def exercise():
+            entered = []
+            both = asyncio.Event()
+            async def stop(child, *args, **kwargs):
+                entered.append(child.pid)
+                if len(entered) == 2:
+                    both.set()
+                await asyncio.wait_for(both.wait(), 1)
+                return await original(child, *args, **kwargs)
+            monkeypatch.setattr(runner, 'stop_process', stop)
+            manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+            children = {}
+            try:
+                await manager.start_stack()
+                children = dict(manager.children)
+                manager.store.set_run(state='RUNNING')
+                with pytest.raises(ValueError, match='IDLE'):
+                    await manager.stop_stack()
+                assert not entered
+                manager.store.set_run(state='IDLE')
+                await manager.stop_stack()
+                assert len(entered) == 2
+                assert all(child.sigint_sent and child.returncode is not None for child in children.values())
+                assert not manager.children and manager.store.stack['applied_hash'] is None
+                assert not list(manager.run_dir.glob('*.pid'))
+            finally:
+                monkeypatch.setattr(runner, 'stop_process', original)
+                await cleanup_dummy_children(children)
+                await manager.close()
+>       asyncio.run(exercise())
+
+dashboard/tests/test_fleet.py:895: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def exercise():
+        entered = []
+        both = asyncio.Event()
+        async def stop(child, *args, **kwargs):
+            entered.append(child.pid)
+            if len(entered) == 2:
+                both.set()
+            await asyncio.wait_for(both.wait(), 1)
+            return await original(child, *args, **kwargs)
+        monkeypatch.setattr(runner, 'stop_process', stop)
+        manager = fleet.FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        children = {}
+        try:
+            await manager.start_stack()
+            children = dict(manager.children)
+            manager.store.set_run(state='RUNNING')
+            with pytest.raises(ValueError, match='IDLE'):
+>               await manager.stop_stack()
+E               AttributeError: 'FleetManager' object has no attribute 'stop_stack'
+
+dashboard/tests/test_fleet.py:883: AttributeError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_backend_close_detaches_stacks_without_signals_and_preserves_receipts
+FAILED dashboard/tests/test_fleet.py::test_partial_spawn_failure_preserves_first_stack_and_unknown_applied_hash
+FAILED dashboard/tests/test_fleet.py::test_cancelled_start_preserves_spawned_stack_without_signals
+FAILED dashboard/tests/test_fleet.py::test_explicit_stop_stack_uses_parallel_owned_stop_and_is_idle_only
+4 failed, 61 deselected in 0.47s

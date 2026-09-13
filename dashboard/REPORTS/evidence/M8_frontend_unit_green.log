@@ -1,0 +1,26 @@
+✔ checklist exposes only spare warnings while role and global checks retain their order (1.126125ms)
+✔ every run state follows command table and LANDING defeats retry timeout (0.241583ms)
+✔ snapshot ack ignores history and matches only the pending command (0.186084ms)
+✔ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.22625ms)
+✔ visitor role selection comes only from hello and never observes spare telemetry (0.082625ms)
+✔ a high refresh rate display cannot request more than sixty rendered frames per second (0.452166ms)
+✔ labels colliding at the same projected pose occupy separate stable rows without moving their anchors (0.326417ms)
+✔ labels near every frame edge remain within the scene above the reserved narrative (0.089458ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.31975ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.814125ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.084875ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.122667ms)
+✔ an invalid or missing pose never erases the last received position (0.0895ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.096833ms)
+✔ waiting for mission data preserves fresh pose opacity and altitude stems independently of connection loss (0.066834ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.075917ms)
+✔ an assigned role with a missing pose remains translucent without an altitude stem (0.045708ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.095042ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.436292

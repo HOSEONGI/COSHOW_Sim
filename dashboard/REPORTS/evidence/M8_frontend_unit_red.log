@@ -1,0 +1,67 @@
+✖ checklist exposes only spare warnings while role and global checks retain their order (0.633791ms)
+✔ every run state follows command table and LANDING defeats retry timeout (0.832042ms)
+✔ snapshot ack ignores history and matches only the pending command (0.1805ms)
+✔ field bounds follow supplied regions, including renamed and expanded deployment coordinates (1.276459ms)
+✔ visitor role selection comes only from hello and never observes spare telemetry (0.0715ms)
+✔ a high refresh rate display cannot request more than sixty rendered frames per second (0.576917ms)
+✔ labels colliding at the same projected pose occupy separate stable rows without moving their anchors (0.322417ms)
+✔ labels near every frame edge remain within the scene above the reserved narrative (0.102042ms)
+✔ diagonal automatic framing includes every floor and altitude corner at portrait and wide aspects (0.321667ms)
+✔ trail memory remains fixed over a simulated 30 minute stream and expires after ten seconds (1.797417ms)
+✔ wrapped trail emits chronological adjacent segments without joining the newest to oldest (0.113792ms)
+✔ pose interpolation starts immediately, reaches the new sample and takes the short yaw arc (0.142125ms)
+✔ an invalid or missing pose never erases the last received position (0.095583ms)
+✔ freshness ages between packets, removes altitude stems, and suppresses stale LED signals (0.104917ms)
+✖ waiting for mission data preserves fresh pose opacity and altitude stems independently of connection loss (1.210666ms)
+✔ run and connection priority ignore mission LEDs while DONE can retain the last mission (0.081959ms)
+✔ an assigned role with a missing pose remains translucent without an altitude stem (0.040042ms)
+✔ discovery ring and return floor wash fire once and reset only for a new run (0.085458ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 16
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71.193459
+
+✖ failing tests:
+
+test at dashboard/tests/test_admin_model.mjs:5:1
+✖ checklist exposes only spare warnings while role and global checks retain their order (0.633791ms)
+  TypeError: model.checklistRows is not a function
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_admin_model.mjs:14:36)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at dashboard/tests/test_twin_model.mjs:97:1
+✖ waiting for mission data preserves fresh pose opacity and altitude stems independently of connection loss (1.210666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   fresh: false,
+  +   opacity: 0.28,
+  -   fresh: true,
+  -   opacity: 1,
+      signal: 'off',
+  +   stem: false
+  -   stem: true
+    }
+  
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_twin_model.mjs:100:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { fresh: false, opacity: 0.28, stem: false, signal: 'off' },
+    expected: { fresh: true, opacity: 1, stem: true, signal: 'off' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

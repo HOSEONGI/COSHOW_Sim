@@ -1,7 +1,7 @@
 # 운영 대시보드 구현 기록
 
-설계 기준: `astra_handoff_2026-09-13_final.zip` v2.5와
-`reviews/M3_review_and_final_directive.md`, `06_staged_test_plan.md`.
+설계 기준: `astra_handoff_2026-09-13_final_review.zip` v2.6와
+`reviews/FINAL_review_and_stageA_go.md`, `06_staged_test_plan.md`.
 [원문 SHA256](REPORTS/evidence/M4_sources.log).
 대화의 사용자 지시를 문서보다 우선한다.
 
@@ -17,13 +17,15 @@
 - [x] M3 첫 커밋: M2 후속 8건 + 독립 리뷰 타입 누락 수정, Docker 224개 회귀 (`ba63352`)
 - [x] M3: 동봉 폰트·three.js, 디자인 토큰, 참관자 레이아웃 FHD·4K·대기 검증, 대수 변경·재접속 검증
 - [x] M4 구현: 역할 6대 3D·임베드 카메라·내러티브·상태별 화면 검증
-- [ ] M4 수용 보류: Mac 잠금 해제 뒤 Chrome 작업 관리자 GPU 메모리 시작/종료 증거
+- [x] M4 GPU 증거 결정: 32분 자원 정체 인정, GPU 바이트 시작/30분은 Stage A 사람이 기록(v2.6)
 - [x] M4 첫 커밋: M3 후속 4건, 명시적 hello 계약·JS 리터럴 검사·우하 연결 표시·4K 헤더 내부 넘침
 - [x] M5: 운영 화면·프로세스 관리·비상착륙·BT/preflight 감시와 Docker 안전 순서 검증
 - [x] M6 구현: 기본 역할 6대·접힌 교체 설정·로스터·생성 설정·스택 기동/재기동
-- [ ] M6 계약 질문: 이전 대시보드의 스택 고아 PID 유지/종료 정책 답변 대기
+- [x] M6 재시작 정책 결정: 스택 신원 확인 후 재입양, applied_hash 복원(v2.6)
 - [x] M7: 설치·실행·키오스크 스크립트, runbook, Stage A–D 킷, Docker 통합 424/Node 46 검증, FINAL 인계
-- [ ] M8: 사용자가 제공하는 Webots·실기체 리허설 피드백 수정/재검증
+- [x] M8 후속 한 커밋: HIGH 3건·MEDIUM·스택 고아 정책, 항목별 회귀·DDS·HEAD 화면·최신 clean 설치 증거
+- [x] M8 계약 결정(2026-09-14): §5.8 우선·A3 철회. 서버 종료/부분 기동 실패 시 스택 유지, IDLE 명시적 정지/재기동만 병렬 종료
+- [ ] 리드 재확인 → Stage A–D: 사람이 실행한 결과의 수정/재검증
 
 M4→M7은 승인 대기 없이 연속 진행한다. M7 뒤 `REPORTS/FINAL.md`와 단계별 테스트 킷을 제공한다.
 각 마일스톤은 직접 실행한 증거, `REPORTS/M<n>.md`,

@@ -41,6 +41,47 @@ test('fleet writes stay locked until fresh settings load, including initial stat
   assert.equal(f.nodes.find(node=>node.tag==='details').open,false);
 });
 
+test('explicit stack stop requires fresh settings, IDLE, connection and no active fleet operation',async t=>{
+  const f=fixture(t);f.ui.update(hello,snapshot(),true);
+  assert.equal(f.button('스택 정지').disabled,true);
+  await f.respond(0,settings());
+  assert.equal(f.button('스택 정지').disabled,false);
+  for(const run of ['CHECKING','READY','RUNNING','LANDING','DONE','ABORTED']) {
+    f.ui.update(hello,snapshot('CF1',run),true);
+    assert.equal(f.button('스택 정지').disabled,true,run);
+    await f.button('스택 정지').events.click();
+    assert.equal(f.requests.length,1,'a queued stop event must not bypass the run guard');
+  }
+  f.ui.update(hello,{...snapshot(),stack:{crazyflie_server:'up',aideck:'up',busy:true}},true);
+  assert.equal(f.button('스택 정지').disabled,true);
+  await f.button('스택 정지').events.click();assert.equal(f.requests.length,1);
+  f.ui.update(hello,snapshot(),false);
+  assert.equal(f.button('스택 정지').disabled,true);
+  await f.button('스택 정지').events.click();assert.equal(f.requests.length,1);
+});
+
+test('explicit stack stop posts once, blocks concurrent actions, then allows a new start from received down state',async t=>{
+  const f=fixture(t),up={...snapshot(),stack:{crazyflie_server:'up',aideck:'up'}};
+  f.ui.update(hello,up,true);await f.respond(0,settings());
+  assert.equal(f.button('스택 정지').disabled,false);
+  f.button('스택 정지').click();
+  assert.equal(f.requests[1].url,'/api/fleet/stop');assert.equal(f.requests[1].options.method,'POST');
+  assert.equal(f.button('스택 정지').disabled,true);assert.equal(f.button('스택 재기동').disabled,true);
+  await f.button('스택 정지').events.click();assert.equal(f.requests.length,2);
+  f.ui.update(hello,snapshot(),true);
+  await f.respond(1,{ok:true,result:{crazyflie_server:'down',aideck:'down',applied_hash:null}});
+  assert.equal(f.button('스택 기동').disabled,false);
+  f.button('스택 기동').click();assert.equal(f.requests[2].url,'/api/fleet/start');
+  await f.respond(2,{ok:true,result:up.stack});
+});
+
+test('an external stack cannot be stopped from the UI or a queued click handler',async t=>{
+  const f=fixture(t);f.ui.update(hello,snapshot(),true);await f.respond(0,settings());
+  f.ui.update(hello,{...snapshot(),stack:{crazyflie_server:'up',aideck:'external'}},true);
+  assert.equal(f.button('스택 정지').disabled,true);
+  await f.button('스택 정지').events.click();assert.equal(f.requests.length,1);
+});
+
 test('reconnect reload discards the old roster confirmation and uses the new physical assignment',async t=>{
   const f=fixture(t);f.ui.update(hello,snapshot(),true);await f.respond(0,settings());
   f.button('배정 검토').click();assert.equal(f.dialog.open,true);

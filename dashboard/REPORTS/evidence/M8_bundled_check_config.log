@@ -1,0 +1,82 @@
+FIXTURE: only roster_file redirected to an absent temporary file; bundled hardware fields unchanged
+BOOTSTRAP {'cf230': 'CF01', 'cf231': 'CF02', 'cf232': 'CF03', 'cf233': 'CF04'} GENERATED ['crazyflies.generated.yaml', 'drones.generated.yaml', 'preflight.generated.yaml']
+ROS_DOMAIN_ID=91 RMW_IMPLEMENTATION=(default) bind=127.0.0.1:8080 mock=False
+PASS	generation	16d2b9504c3597151a1662fb06e7ff847766f5d84a8245d2ce08718ed05db113	3 files
+FAIL	topics	/cf230/pose	geometry_msgs/msg/PoseStamped	발행자/서버 없음
+FAIL	topics	/cf231/pose	geometry_msgs/msg/PoseStamped	발행자/서버 없음
+FAIL	topics	/cf232/pose	geometry_msgs/msg/PoseStamped	발행자/서버 없음
+FAIL	topics	/cf233/pose	geometry_msgs/msg/PoseStamped	발행자/서버 없음
+FAIL	topics	/cf230/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/cf231/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/cf232/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/cf233/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF05/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF06/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF07/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF08/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF09/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/spare_CF10/status	crazyflie_interfaces/msg/Status	발행자/서버 없음
+FAIL	topics	/limo_a/odom	nav_msgs/msg/Odometry	발행자/서버 없음
+FAIL	topics	/limo_b/odom	nav_msgs/msg/Odometry	발행자/서버 없음
+FAIL	topics	/limo_c/odom	nav_msgs/msg/Odometry	발행자/서버 없음
+FAIL	topics	/limo_d/odom	nav_msgs/msg/Odometry	발행자/서버 없음
+SKIP	topics	/limo_a/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_b/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_c/limo_status	None	타입 미확인 (null)
+SKIP	topics	/limo_d/limo_status	None	타입 미확인 (null)
+FAIL	topics	/aideck/cf230/image_annotated/compressed	sensor_msgs/msg/CompressedImage	발행자/서버 없음
+FAIL	topics	/aideck/cf231/image_annotated/compressed	sensor_msgs/msg/CompressedImage	발행자/서버 없음
+FAIL	topics	/aideck/cf232/image_annotated/compressed	sensor_msgs/msg/CompressedImage	발행자/서버 없음
+FAIL	topics	/aideck/cf233/image_annotated/compressed	sensor_msgs/msg/CompressedImage	발행자/서버 없음
+FAIL	topics	/aideck/cf230/fps	std_msgs/msg/Float32	발행자/서버 없음
+FAIL	topics	/aideck/cf231/fps	std_msgs/msg/Float32	발행자/서버 없음
+FAIL	topics	/aideck/cf232/fps	std_msgs/msg/Float32	발행자/서버 없음
+FAIL	topics	/aideck/cf233/fps	std_msgs/msg/Float32	발행자/서버 없음
+FAIL	topics	/aideck/cf230/stream_ok	std_msgs/msg/Bool	발행자/서버 없음
+FAIL	topics	/aideck/cf231/stream_ok	std_msgs/msg/Bool	발행자/서버 없음
+FAIL	topics	/aideck/cf232/stream_ok	std_msgs/msg/Bool	발행자/서버 없음
+FAIL	topics	/aideck/cf233/stream_ok	std_msgs/msg/Bool	발행자/서버 없음
+FAIL	topics	/cf230/marker_detections	coshow_interfaces/msg/MarkerDetections	발행자/서버 없음
+FAIL	topics	/cf231/marker_detections	coshow_interfaces/msg/MarkerDetections	발행자/서버 없음
+FAIL	topics	/cf232/marker_detections	coshow_interfaces/msg/MarkerDetections	발행자/서버 없음
+FAIL	topics	/cf233/marker_detections	coshow_interfaces/msg/MarkerDetections	발행자/서버 없음
+FAIL	topics	/coshow/mission_state	std_msgs/msg/String	발행자/서버 없음
+FAIL	topics	/preflight/ready	std_msgs/msg/Bool	발행자/서버 없음
+FAIL	topics	/preflight/status	std_msgs/msg/String	발행자/서버 없음
+FAIL	services	/cf230/land	crazyflie_interfaces/srv/Land	발행자/서버 없음
+FAIL	services	/cf231/land	crazyflie_interfaces/srv/Land	발행자/서버 없음
+FAIL	services	/cf232/land	crazyflie_interfaces/srv/Land	발행자/서버 없음
+FAIL	services	/cf233/land	crazyflie_interfaces/srv/Land	발행자/서버 없음
+FAIL	services	/cf230/arm	crazyflie_interfaces/srv/Arm	발행자/서버 없음
+FAIL	services	/cf231/arm	crazyflie_interfaces/srv/Arm	발행자/서버 없음
+FAIL	services	/cf232/arm	crazyflie_interfaces/srv/Arm	발행자/서버 없음
+FAIL	services	/cf233/arm	crazyflie_interfaces/srv/Arm	발행자/서버 없음
+FAIL	actions	/limo_a/navigate_to_pose	nav2_msgs/action/NavigateToPose	발행자/서버 없음
+FAIL	actions	/limo_b/navigate_to_pose	nav2_msgs/action/NavigateToPose	발행자/서버 없음
+FAIL	nodes	crazyflie_server	None	노드 없음
+FAIL	nodes	/aideck/aideck_aruco_node	None	노드 없음
+FAIL	nodes	preflight	None	노드 없음
+FAIL	nodes	space_bt_bridge	None	노드 없음
+FAIL	configuration	fleet LIMO1 (limo_a): LIMO IP 미설정
+FAIL	configuration	fleet LIMO2 (limo_b): LIMO IP 미설정
+WARN	configuration	fleet CF05: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF05: AI Deck IP 미설정
+WARN	configuration	fleet CF06: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF06: AI Deck IP 미설정
+WARN	configuration	fleet CF07: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF07: AI Deck IP 미설정
+WARN	configuration	fleet CF08: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF08: AI Deck IP 미설정
+WARN	configuration	fleet CF09: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF09: AI Deck IP 미설정
+WARN	configuration	fleet CF10: radio URI 미설정 또는 형식 오류
+WARN	configuration	fleet CF10: AI Deck IP 미설정
+WARN	configuration	fleet LIMO3 (limo_c): LIMO IP 미설정
+WARN	configuration	fleet LIMO4 (limo_d): LIMO IP 미설정
+WARN	configuration	CF05: radio URI 미설정 · 스페어 생성에서 제외
+WARN	configuration	CF06: radio URI 미설정 · 스페어 생성에서 제외
+WARN	configuration	CF07: radio URI 미설정 · 스페어 생성에서 제외
+WARN	configuration	CF08: radio URI 미설정 · 스페어 생성에서 제외
+WARN	configuration	CF09: radio URI 미설정 · 스페어 생성에서 제외
+WARN	configuration	CF10: radio URI 미설정 · 스페어 생성에서 제외
+PASS B2/B3: roles4 generated; URI-less spares6 WARN only. CLI rc1 is expected for absent ROS graph and two unfilled role LIMO IPs.

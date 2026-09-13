@@ -1,6 +1,6 @@
 import {connect} from './ws.js';
 import {createFleetUI} from './fleet-ui.js';
-import {buttons,commandReply,landingText} from './admin-model.js';
+import {buttons,commandReply,landingText,checklistRows} from './admin-model.js';
 import {elapsed,makeNames,fixed,coordinate} from './view-model.js';
 const $=selector=>document.querySelector(selector),actions=[...document.querySelectorAll('[data-cmd]')];
 const statusLabels={pass:'통과',fail:'실패',warning:'주의',pending:'진행 중',skipped:'제외',unavailable:'정보 없음'};
@@ -8,11 +8,14 @@ const cameraSizes=new Map();let cameraEpoch=0;
 let hello,state,connected=false,pending=null,ackTimer=null,holdTimer=null,name=id=>id,settings={};
 const element=(tag,value,className)=>{const node=document.createElement(tag);if(value!=null)node.textContent=value;if(className)node.className=className;return node;};
 const set=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
+function bannerOffset(){document.body.style.setProperty('--connection-banner-height',`${$('#connection-banner').getBoundingClientRect().height}px`);}
+const bannerObserver=new ResizeObserver(bannerOffset);bannerObserver.observe($('#connection-banner'));bannerOffset();
 function controls(){
   const enabled=buttons(state,connected,pending?{elapsed:performance.now()-pending.since}:null);
   for(const button of actions)button.disabled=!enabled[button.dataset.cmd];
   document.body.classList.toggle('landing',state?.run?.state==='LANDING');
-  if(state?.run?.state==='LANDING')set('#command-response',landingText(state));
+  if(!connected)set('#command-response','서버 연결 없음 — 명령을 보낼 수 없습니다');
+  else if(state?.run?.state==='LANDING')set('#command-response',landingText(state));
 }
 function send(cmd){
   if(!buttons(state,connected,pending?{elapsed:performance.now()-pending.since}:null)[cmd])return;
@@ -20,7 +23,7 @@ function send(cmd){
   clearTimeout(ackTimer);
   pending={cmd,since:performance.now(),seen:new Set((state?.events||[]).map(e=>`${e.t}|${e.text}`))};
   set('#command-response','전송 중');controls();
-  ackTimer=setTimeout(()=>{if(pending){set('#command-response','응답 대기 중 · 비상 착륙은 재전송할 수 있습니다');controls();}},1000);
+  ackTimer=setTimeout(()=>{if(connected&&pending){set('#command-response','응답 대기 중 · 비상 착륙은 재전송할 수 있습니다');controls();}},1000);
 }
 for(const button of actions){
   const cmd=button.dataset.cmd;
@@ -38,11 +41,13 @@ function checkRow(row){
 }
 let checklistSignature='';
 function checklist(){
-  const rows=(state.checklist||[]).filter(row=>!state.robots?.[row.group]||state.robots[row.group].role!=null),signature=JSON.stringify(rows.map(({id,status,ok,detail})=>({id,status,ok,detail})));
+  const {rows,spareWarnings}=checklistRows(state),signature=JSON.stringify([rows,spareWarnings].map(group=>group.map(({id,status,ok,detail})=>({id,status,ok,detail}))));
   if(signature===checklistSignature)return;checklistSignature=signature;
   const open=new Set([...$('#checklist').querySelectorAll('details[open]')].map(e=>e.dataset.group));
   const failures=rows.filter(r=>r.blocking&&!r.ok&&r.status!=='pending');
   $('#failures').replaceChildren(...failures.map(checkRow));
+  $('#spare-warnings').hidden=spareWarnings.length===0;
+  $('#spare-warning-rows').replaceChildren(...spareWarnings.map(checkRow));
   const groups=new Map();for(const row of rows){if(failures.includes(row))continue;if(!groups.has(row.group))groups.set(row.group,[]);groups.get(row.group).push(row);}
   const nodes=[];
   for(const [group,items] of groups){const box=element('details');box.dataset.group=group;box.open=open.has(group);
@@ -91,5 +96,9 @@ const connection=connect({role:'admin',onHello(value){hello=value;cameraEpoch++;
     createImageBitmap(new Blob([jpeg],{type:'image/jpeg'})).then(bitmap=>{try{if(epoch===cameraEpoch)cameraSizes.set(id,`${bitmap.width}×${bitmap.height}`);}finally{bitmap.close();}}).catch(()=>{if(epoch===cameraEpoch)cameraSizes.delete(id);});
   },
   onState(value){state=value;set('#last-received',`마지막 수신 ${new Date().toLocaleTimeString()}`);render();},
-  onConnection(value){connected=value;$('#connection-banner').hidden=value;controls();fleetUI.update(hello,state,connected);if(value&&!pending)set('#command-response','서버 연결됨');}});
-window.addEventListener('pagehide',()=>{connection();cameraEpoch++;clearTimeout(ackTimer);clearTimeout(holdTimer);},{once:true});
+  onConnection(value){
+    connected=value;$('#connection-banner').hidden=value;bannerOffset();
+    if(!value){pending=null;clearTimeout(ackTimer);ackTimer=null;clearTimeout(holdTimer);holdTimer=null;for(const button of actions)button.classList.remove('holding');}
+    controls();fleetUI.update(hello,state,connected);if(value&&!pending)set('#command-response','서버 연결됨');
+  }});
+window.addEventListener('pagehide',()=>{connection();cameraEpoch++;clearTimeout(ackTimer);clearTimeout(holdTimer);bannerObserver.disconnect();},{once:true});

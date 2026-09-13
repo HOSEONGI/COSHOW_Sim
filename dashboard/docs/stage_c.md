@@ -32,6 +32,9 @@ ros2 topic list -t
 python3 dashboard/tests/stage_probe.py --fleet --record dashboard/logs/stage_c.jsonl --dump-poses dashboard/logs/stage_c_poses.csv
 ```
 
+기존 기록이 있으면 타임스탬프 이름으로 전환하며 실제 저장 경로를 `OUTPUT`으로
+표시한다. JSONL·CSV 중 한 경로가 잘못되면 새로 만든 빈 파일도 제거한다.
+
 4. 역할 LIMO 2대를 안전한 수동 조작 모드에서 천천히 움직여 3D 위치·방향이 따라오는지 확인한다. 기록기는 Nav2 goal이나 취소 명령을 보내지 않는다.
 5. 스페어 LIMO를 역할로 교체할 때는 Jetson에서 기존 네임스페이스/노드를 정상 종료한 후 새 역할 네임스페이스로 재시작한다. 대시보드 인벤토리 namespace도 실제 값과 맞춘다. 같은 역할 namespace를 두 Jetson이 동시에 사용하지 않도록 확인한다.
 6. `--check-config`를 다시 실행하고 역할 2개의 Nav2 준비 및 4개 odom 신선도가 유지되는지 확인한다.

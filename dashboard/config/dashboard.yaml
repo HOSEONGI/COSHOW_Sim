@@ -21,7 +21,7 @@ topics:
   preflight_status: /preflight/status
 services: {land_template: '/{cf}/land', arm_template: '/{cf}/arm'}
 actions: {nav_template: '/{limo}/navigate_to_pose'}
-nodes: {server: crazyflie_server, aideck: aideck_aruco_node, preflight: preflight, bt: space_bt_bridge}
+nodes: {server: crazyflie_server, aideck: /aideck/aideck_aruco_node, preflight: preflight, bt: space_bt_bridge}
 # v2.3 type extension: keys correspond exactly to topics/services/actions above.
 types:
   topics:
@@ -72,8 +72,10 @@ fleet:
     - {id: LIMO3, ip: null, namespace: limo_c}
     - {id: LIMO4, ip: null, namespace: limo_d}
   max_per_radio: 5
+  robot_type: cf21  # Fallback only; each role preserves its template type.
 roster_file: run/roster.yaml
 crazyflies_template: ../ros2_ws/src/crazyswarm2/crazyflie/config/crazyflies.yaml
+aideck_template: ../ros2_ws/src/aideck_aruco_ros/config/drones.yaml
 spare_prefix: spare_
 commands:
   env: {DISPLAY: ':0'}

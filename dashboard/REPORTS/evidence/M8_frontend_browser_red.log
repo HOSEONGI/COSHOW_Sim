@@ -1,0 +1,116 @@
+FAIL B6 only warning spare checklist rows are visible below failures Expected values to be strictly deep-equal:
++ actual - expected
+
++ []
+- [
+-   'spare_CF02.m8_battery',
+-   'spare_CF02.m8_link',
+-   'spare_CF02.m8_ping'
+- ]
+
+PASS B6 role table remains six rows and full inventory stays collapsed
+FAIL C4 disconnect replaces stale ACK retry with unavailable message Expected values to be strictly equal:
++ actual - expected
+
++ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'
+- '서버 연결 없음 — 명령을 보낼 수 없습니다'
+
+FAIL C3 scrolled disconnect banner never covers emergency control The expression evaluated to a falsy value:
+
+  assert.ok(bounds.control.top>=bounds.banner.bottom)
+
+C3 BOUNDS {"banner":{"top":0,"bottom":44,"left":0,"right":1600},"control":{"top":0,"bottom":119.59375,"left":20,"right":1580},"emergency":{"top":6,"bottom":52,"left":1492.359375,"right":1580},"height":1050,"scroll":468}
+FAIL C4 pending ACK timer cannot overwrite disconnect after one second Expected values to be strictly equal:
++ actual - expected
+
++ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'
+- '서버 연결 없음 — 명령을 보낼 수 없습니다'
+
+PASS C4 reconnect discards pending command and unlocks normal controls
+FAIL C1 low effects retains distinct panel surfaces and opaque narrative Expected values to be strictly equal:
++ actual - expected
+
++ 'rgba(14, 21, 48, 0.78)'
+- 'rgba(255, 255, 255, 0.08)'
+        ^
+
+C1 SURFACES [{"className":"narrative glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"idle-intro glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"mission glass glass-strong","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"},{"className":"robot-panel glass","background":"rgba(14, 21, 48, 0.78)","backdrop":"none"}]
+PASS no external requests or browser errors
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'B6 only warning spare checklist rows are visible below failures: Expected values to be strictly deep-equal:\n' +
++     '+ actual - expected\n' +
++     '\n' +
++     '+ []\n' +
++     '- [\n' +
++     "-   'spare_CF02.m8_battery',\n" +
++     "-   'spare_CF02.m8_link',\n" +
++     "-   'spare_CF02.m8_ping'\n" +
++     '- ]\n',
++   'C4 disconnect replaces stale ACK retry with unavailable message: Expected values to be strictly equal:\n' +
++     '+ actual - expected\n' +
++     '\n' +
++     "+ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'\n" +
++     "- '서버 연결 없음 — 명령을 보낼 수 없습니다'\n",
++   'C3 scrolled disconnect banner never covers emergency control: The expression evaluated to a falsy value:\n' +
++     '\n' +
++     '  assert.ok(bounds.control.top>=bounds.banner.bottom)\n',
++   'C4 pending ACK timer cannot overwrite disconnect after one second: Expected values to be strictly equal:\n' +
++     '+ actual - expected\n' +
++     '\n' +
++     "+ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'\n" +
++     "- '서버 연결 없음 — 명령을 보낼 수 없습니다'\n",
++   'C1 low effects retains distinct panel surfaces and opaque narrative: Expected values to be strictly equal:\n' +
++     '+ actual - expected\n' +
++     '\n' +
++     "+ 'rgba(14, 21, 48, 0.78)'\n" +
++     "- 'rgba(255, 255, 255, 0.08)'\n" +
++     '        ^\n'
++ ]
+- []
+
+    at file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/verify_m8_frontend.mjs:79:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'B6 only warning spare checklist rows are visible below failures: Expected values to be strictly deep-equal:\n' +
+      '+ actual - expected\n' +
+      '\n' +
+      '+ []\n' +
+      '- [\n' +
+      "-   'spare_CF02.m8_battery',\n" +
+      "-   'spare_CF02.m8_link',\n" +
+      "-   'spare_CF02.m8_ping'\n" +
+      '- ]\n',
+    'C4 disconnect replaces stale ACK retry with unavailable message: Expected values to be strictly equal:\n' +
+      '+ actual - expected\n' +
+      '\n' +
+      "+ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'\n" +
+      "- '서버 연결 없음 — 명령을 보낼 수 없습니다'\n",
+    'C3 scrolled disconnect banner never covers emergency control: The expression evaluated to a falsy value:\n' +
+      '\n' +
+      '  assert.ok(bounds.control.top>=bounds.banner.bottom)\n',
+    'C4 pending ACK timer cannot overwrite disconnect after one second: Expected values to be strictly equal:\n' +
+      '+ actual - expected\n' +
+      '\n' +
+      "+ '응답 대기 중 · 비상 착륙은 재전송할 수 있습니다'\n" +
+      "- '서버 연결 없음 — 명령을 보낼 수 없습니다'\n",
+    'C1 low effects retains distinct panel surfaces and opaque narrative: Expected values to be strictly equal:\n' +
+      '+ actual - expected\n' +
+      '\n' +
+      "+ 'rgba(14, 21, 48, 0.78)'\n" +
+      "- 'rgba(255, 255, 255, 0.08)'\n" +
+      '        ^\n'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.3.0

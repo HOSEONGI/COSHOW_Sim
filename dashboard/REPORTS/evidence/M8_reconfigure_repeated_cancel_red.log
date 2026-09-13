@@ -1,0 +1,79 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction[2] __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe70070a1d510>
+cancellations = 2
+
+    @pytest.mark.parametrize('cancellations', [1, 2])
+    def test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction(monkeypatch, cancellations):
+        async def run():
+            app = Dashboard(load_config(mock=True))
+            closing, release = asyncio.Event(), asyncio.Event()
+            class Old:
+                async def close(self):
+                    closing.set()
+                    await release.wait()
+            class New:
+                async def start(self): pass
+                async def close(self): pass
+            app.io = Old()
+            app.runner = Runner(app.cfg, app.store, app.io, app.state)
+            replacement = New()
+            monkeypatch.setattr(ros_io, 'ROSIO', lambda *args: replacement)
+            request = asyncio.create_task(app.reconfigure(app.cfg))
+            await closing.wait()
+            try:
+                for _ in range(cancellations):
+                    request.cancel()
+                    await asyncio.sleep(.01)
+                assert not request.done(), 'adapter replacement must finish before request cancellation returns'
+                release.set()
+                await request
+                assert app.io is app.runner.io is replacement
+                assert app.ping_task is not None
+            finally:
+                release.set()
+                await asyncio.gather(request, return_exceptions=True)
+                for task in app.tasks: task.cancel()
+                await asyncio.gather(*app.tasks, return_exceptions=True)
+>       asyncio.run(run())
+
+dashboard/tests/test_m8_safety.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        app = Dashboard(load_config(mock=True))
+        closing, release = asyncio.Event(), asyncio.Event()
+        class Old:
+            async def close(self):
+                closing.set()
+                await release.wait()
+        class New:
+            async def start(self): pass
+            async def close(self): pass
+        app.io = Old()
+        app.runner = Runner(app.cfg, app.store, app.io, app.state)
+        replacement = New()
+        monkeypatch.setattr(ros_io, 'ROSIO', lambda *args: replacement)
+        request = asyncio.create_task(app.reconfigure(app.cfg))
+        await closing.wait()
+        try:
+            for _ in range(cancellations):
+                request.cancel()
+                await asyncio.sleep(.01)
+>           assert not request.done(), 'adapter replacement must finish before request cancellation returns'
+E           AssertionError: adapter replacement must finish before request cancellation returns
+E           assert not True
+E            +  where True = <built-in method done of _asyncio.Task object at 0xe70070efb850>()
+E            +    where <built-in method done of _asyncio.Task object at 0xe70070efb850> = <Task cancelled name='Task-36' coro=<Dashboard.reconfigure() done, defined at /ws/dashboard/server.py:225>>.done
+
+dashboard/tests/test_m8_safety.py:106: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_m8_safety.py::test_reconfigure_cancellation_after_swap_finishes_the_owned_transaction[2]
+1 failed, 1 passed, 7 deselected in 0.13s

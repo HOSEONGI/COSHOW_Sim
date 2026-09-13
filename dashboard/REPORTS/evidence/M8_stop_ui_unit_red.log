@@ -1,0 +1,44 @@
+✔ fleet writes stay locked until fresh settings load, including initial state delivery (2.853667ms)
+✖ explicit stack stop requires fresh settings, IDLE, connection and no active fleet operation (0.358291ms)
+✖ explicit stack stop posts once, blocks concurrent actions, then allows a new start from received down state (1.032417ms)
+✖ an external stack cannot be stopped from the UI or a queued click handler (0.453166ms)
+✔ reconnect reload discards the old roster confirmation and uses the new physical assignment (1.682125ms)
+✔ an older settings response cannot overwrite a newer hello reload (0.433875ms)
+✔ failed settings refresh keeps writes locked and late events cannot submit outside IDLE (0.369541ms)
+✔ leaving IDLE closes an open review and rejects a queued confirmation event (0.259334ms)
+✔ a recommendation from before reconnect cannot replace the freshly loaded roster draft (0.294166ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 6
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.760458
+
+✖ failing tests:
+
+test at dashboard/tests/test_fleet_ui.mjs:44:1
+✖ explicit stack stop requires fresh settings, IDLE, connection and no active fleet operation (0.358291ms)
+  TypeError: Cannot read properties of undefined (reading 'disabled')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_fleet_ui.mjs:46:33)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at dashboard/tests/test_fleet_ui.mjs:63:1
+✖ explicit stack stop posts once, blocks concurrent actions, then allows a new start from received down state (1.032417ms)
+  TypeError: Cannot read properties of undefined (reading 'disabled')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_fleet_ui.mjs:66:33)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at dashboard/tests/test_fleet_ui.mjs:78:1
+✖ an external stack cannot be stopped from the UI or a queued click handler (0.453166ms)
+  TypeError: Cannot read properties of undefined (reading 'disabled')
+      at TestContext.<anonymous> (file:///Users/hoseon_mini/Documents/ChatGPT/'26%20CO-SHOW%20DEMO/COSHOW_Sim/dashboard/tests/test_fleet_ui.mjs:81:33)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

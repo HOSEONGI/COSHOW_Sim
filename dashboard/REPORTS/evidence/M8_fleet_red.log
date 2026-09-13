@@ -1,0 +1,139 @@
+...................F......................FFFFFFF                        [100%]
+=================================== FAILURES ===================================
+______ test_bootstrap_persists_template_roles_regardless_of_enabled_flag _______
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb686e1bdc0>
+
+    def test_bootstrap_persists_template_roles_regardless_of_enabled_flag(fleet_cfg):
+        fleet = fleet_module()
+        path = fleet_cfg.resolve(fleet_cfg.raw['crazyflies_template'])
+        template = yaml.safe_load(path.read_text())
+        template['robots'][fleet_cfg.drones[1]]['enabled'] = False
+        path.write_text(yaml.safe_dump(template))
+        cfg = load_config(fleet_cfg.path)
+        store = TelemetryStore(cfg)
+        manager = fleet.FleetManager(cfg, store)
+        persisted = yaml.safe_load(cfg.resolve(cfg.raw['roster_file']).read_text())
+        assert persisted == cfg.roster
+>       assert persisted == fleet_cfg.roster
+E       AssertionError: assert {'cf230': 'CF...f233': 'CF04'} == {'cf230': 'CF...f233': 'CF04'}
+E         Omitting 3 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'cf231': 'CF02'}
+E         Full diff:
+E         - {'cf230': 'CF01', 'cf231': 'CF02', 'cf232': 'CF03', 'cf233': 'CF04'}
+E         ?                  -----------------
+E         + {'cf230': 'CF01', 'cf232': 'CF03', 'cf233': 'CF04'}
+
+dashboard/tests/test_fleet.py:250: AssertionError
+____ test_uri_less_spare_is_excluded_with_warning_but_remains_in_inventory _____
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb68699d2a0>
+
+    def test_uri_less_spare_is_excluded_with_warning_but_remains_in_inventory(fleet_cfg):
+        fleet_cfg.raw['fleet']['drones'][-1]['uri'] = None
+>       generated = fleet_module().generate_config(fleet_cfg)
+
+dashboard/tests/test_fleet.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+dashboard/fleet.py:137: in generate_config
+    radio = _radio(uri, physical)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+uri = None, label = 'CF10'
+
+    def _radio(uri, label):
+        if not isinstance(uri, str):
+>           raise ValueError(label + ': radio URI 미설정 또는 형식 오류')
+E           ValueError: CF10: radio URI 미설정 또는 형식 오류
+
+dashboard/fleet.py:45: ValueError
+________ test_role_type_comes_from_template_and_spare_type_from_config _________
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb6869d3b80>
+
+    def test_role_type_comes_from_template_and_spare_type_from_config(fleet_cfg):
+        path = fleet_cfg.resolve(fleet_cfg.raw['crazyflies_template'])
+        template = yaml.safe_load(path.read_text())
+        template['robot_types']['custom_role'] = copy.deepcopy(template['robot_types']['cf21'])
+        template['robot_types']['custom_spare'] = copy.deepcopy(template['robot_types']['cf21'])
+        template['robots'][fleet_cfg.drones[0]]['type'] = 'custom_role'
+        template['robots'][fleet_cfg.drones[1]].pop('type')
+        fleet_cfg.raw['fleet']['robot_type'] = 'custom_spare'
+        path.write_text(yaml.safe_dump(template))
+        generated = fleet_module().generate_config(fleet_cfg)
+        robots = yaml.safe_load(generated.files['crazyflies.generated.yaml'])['robots']
+>       assert robots[fleet_cfg.drones[0]]['type'] == 'custom_role'
+E       AssertionError: assert 'cf21' == 'custom_role'
+E         - custom_role
+E         + cf21
+
+dashboard/tests/test_fleet.py:539: AssertionError
+____________ test_selected_robot_type_must_exist_in_template_types _____________
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb6869d2bc0>
+
+    def test_selected_robot_type_must_exist_in_template_types(fleet_cfg):
+        fleet_cfg.raw['fleet']['robot_type'] = 'absent'
+>       with pytest.raises(ValueError, match='absent'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+dashboard/tests/test_fleet.py:546: Failed
+___________ test_aideck_template_is_explicit_required_configuration ____________
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb685409780>
+
+    def test_aideck_template_is_explicit_required_configuration(fleet_cfg):
+        del fleet_cfg.raw['aideck_template']
+>       with pytest.raises(ValueError, match='aideck_template'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+dashboard/tests/test_fleet.py:552: Failed
+___________ test_save_rejects_missing_expected_hash_before_any_write ___________
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb6854091b0>
+
+    def test_save_rejects_missing_expected_hash_before_any_write(fleet_cfg):
+        manager = fleet_module().FleetManager(fleet_cfg, TelemetryStore(fleet_cfg))
+        before = manager.roster_path.read_bytes()
+>       with pytest.raises(ValueError, match='expected_hash'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+dashboard/tests/test_fleet.py:559: Failed
+________ test_fleet_operation_runner_guard_precedes_busy_and_disk_write ________
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb68540af50>
+
+    def test_fleet_operation_runner_guard_precedes_busy_and_disk_write(fleet_cfg):
+        store = TelemetryStore(fleet_cfg)
+        observed = []
+        def guard():
+            observed.append(store.stack.get('busy'))
+            raise ValueError('live preflight child')
+>       manager = fleet_module().FleetManager(fleet_cfg, store, operation_guard=guard)
+E       TypeError: FleetManager.__init__() got an unexpected keyword argument 'operation_guard'
+
+dashboard/tests/test_fleet.py:570: TypeError
+___ test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy ___
+
+fleet_cfg = <dashboard.config.Config object at 0xfcb685dc2c50>
+
+    def test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy(fleet_cfg):
+        cfg = load_config(mock=True)
+>       assert cfg.raw['nodes']['aideck'] == '/aideck/aideck_aruco_node'
+E       AssertionError: assert 'aideck_aruco_node' == '/aideck/aideck_aruco_node'
+E         - /aideck/aideck_aruco_node
+E         ? --------
+E         + aideck_aruco_node
+
+dashboard/tests/test_fleet.py:580: AssertionError
+=========================== short test summary info ============================
+FAILED dashboard/tests/test_fleet.py::test_bootstrap_persists_template_roles_regardless_of_enabled_flag
+FAILED dashboard/tests/test_fleet.py::test_uri_less_spare_is_excluded_with_warning_but_remains_in_inventory
+FAILED dashboard/tests/test_fleet.py::test_role_type_comes_from_template_and_spare_type_from_config
+FAILED dashboard/tests/test_fleet.py::test_selected_robot_type_must_exist_in_template_types
+FAILED dashboard/tests/test_fleet.py::test_aideck_template_is_explicit_required_configuration
+FAILED dashboard/tests/test_fleet.py::test_save_rejects_missing_expected_hash_before_any_write
+FAILED dashboard/tests/test_fleet.py::test_fleet_operation_runner_guard_precedes_busy_and_disk_write
+FAILED dashboard/tests/test_fleet.py::test_bundled_aideck_fqn_detects_actual_namespace_as_external_and_healthy
+8 failed, 41 passed in 2.35s
